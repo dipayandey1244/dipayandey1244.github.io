@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🌟 Dipayan Dey | Portfolio</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      color: #333;
+    }
+    header {
+      text-align: center;
+      padding: 80px 20px 20px;
+    }
+    h1 {
+      font-size: 3em;
+      color: #2c3e50;
+    }
+    p {
+      font-size: 1.2em;
+      color: #555;
+    }
+    .projects {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 40px 20px;
+      gap: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+      width: 300px;
+      transition: transform 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .card h3 {
+      color: #007acc;
+      margin-top: 0;
+    }
+    .card a {
+      text-decoration: none;
+      color: #007acc;
+      font-weight: bold;
+    }
+    .card a:hover {
+      text-decoration: underline;
+    }
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      font-size: 0.9em;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Dipayan Dey</h1>
+    <p>💻 Developer • 🚀 Explorer • 🎨 Creative Thinker</p>
+    <p><a href="https://github.com/dipayandey1244" target="_blank">🌐 github.com/dipayandey1244</a></p>
+  </header>
+
+  <section class="projects">
+    <div class="card">
+      <h3>📘 Ghibli Generator</h3>
+      <p>A cool project to transform photos into Ghibli-style art.<br>
+      <a href="https://github.com/dipayandey1244" target="_blank">View on GitHub →</a></p>
+    </div>
+    <div class="card">
+      <h3>📗 Finance AI Projects</h3>
+      <p>Models that blend AI + finance risk systems like a pro.<br>
+      <a href="https://github.com/dipayandey1244" target="_blank">Check it out →</a></p>
+    </div>
+    <div class="card">
+      <h3>📕 Life in Markdown</h3>
+      <p>A minimalist writing system to log thoughts & feelings.<br>
+      <a href="https://github.com/dipayandey1244" target="_blank">Read more →</a></p>
+    </div>
+  </section>
+
+  <footer>
+    <p>Made with ❤️ by <strong>Dipayan Dey</strong> • © 2025</p>
+  </footer>
+</body>
+</html>
