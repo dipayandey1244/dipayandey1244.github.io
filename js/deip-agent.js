@@ -20,7 +20,7 @@ You have deep knowledge about Dipayan Dey:
 2. Education:
    - M.Sc. in Statistics from IIT Kanpur (2019-2021), providing deep mathematical and statistical rigor.
 3. Projects & Links (always suggest these links when asked):
-   - AetherCrawl Autonomous Web Crawler & Search Engine: A visual crawler simulator and Google-style search engine that maps link hierarchies dynamically, explains step-by-step crawler mechanics, and indexes crawl data to search results (located at '/web-crawler/'). Mention his local python package 'distributed-web-crawler'.
+   - AetherCrawl Web Crawler & Academy: A visual crawler simulator and Web Crawling Academy that maps link hierarchies dynamically, explains step-by-step crawler mechanics, shares amazing historical trivia (like Lego server cases, origin of robots.txt), and explains SOTA modern crawling techniques (located at '/web-crawler/'). Mention his local python package 'distributed-web-crawler'.
    - Institutional Risk Engine: Real-time Basel III & IFRS 9 stress dashboard (located at '/risk-analytics-dashboard/').
    - Open Source Contributions: Core patches and interactive showcases for PyTorch (differentiable Expected Shortfall Loss), LangGraph (cycles), LightGBM, FastAPI, and Pydantic (located at '/contributions/'). Mention his custom package 'pytorch-risk-extensions' for differentiable tail-risk.
    - Systemic Business Cases: Audit reports detailing XGBoost surveillance, BNY LangGraph councils, and Morgan Stanley spoofing audits (located at '/cases/').
@@ -674,13 +674,14 @@ const hideTyping = () => {
 const localFallbackReply = (input) => {
     const clean = input.toLowerCase().trim();
     
-    if (clean.includes("crawler") || clean.includes("spider") || clean.includes("aethercrawl") || clean.includes("crawl") || clean.includes("search engine") || clean.includes("search")) {
+    if (clean.includes("crawler") || clean.includes("spider") || clean.includes("aethercrawl") || clean.includes("crawl")) {
         return `*A spider web made of fuchsia light appears:*
-Dipayan developed **AetherCrawl**, an autonomous high-performance web crawler and Google-style search engine dashboard!
-- It simulates an asynchronous crawler engine that crawls websites, displays real-time link-state node graphs, outputs terminal logs, and indexes data into an SQLite database representation.
-- **Google-Style Search Engine**: You can search the crawl database directly in the **[AetherSearch](/web-crawler/)** tab! It scores and highlights search terms dynamically, presenting results similar to Google.
-- **How It Works Stepper**: Details step-by-step crawler mechanics (Robots.txt, polite async sleep delays, BFS link queues, and database schemas).
-- You can explore it live at **[AetherCrawl Analyzer](/web-crawler/)** or inspect the backend async Python implementation in `/Users/dipayan/.gemini/antigravity/scratch/distributed-web-crawler`.
+Dipayan developed **AetherCrawl**, an autonomous high-performance web crawler and **Crawler Academy** dashboard!
+- It simulates an asynchronous crawler engine that crawls websites, displays real-time link-state node graphs, and outputs terminal logs.
+- **Crawler Academy & Evolution**: Trace web crawling history from Matthew Gray's 1993 WWW Wanderer (MIT) and the 1994 robots.txt birth, all the way to 2020s LLM-driven AI agentic scrapers.
+- **Amazing Trivia & SOTA Tech**: Learn about BackRub's Duplo/Lego storage cases, crawl budgets, Bloom Filters for O(1) deduplication, and headless Playwright execution.
+- **How It Works Stepper**: Walk through step-by-step crawler mechanics (Robots.txt, polite async sleep delays, BFS link queues, and SQLite database tables).
+- You can explore it live at **[AetherCrawl Academy](/web-crawler/)** or inspect the backend async Python implementation in `/Users/dipayan/.gemini/antigravity/scratch/distributed-web-crawler`.
 
 *(Note: Currently running in offline fallback mode)*`;
     }
@@ -706,7 +707,7 @@ Dipayan created a custom PyTorch package called **pytorch-risk-extensions** whic
     if (clean.includes("project") || clean.includes("dashboard") || clean.includes("portfolio") || clean.includes("contribution") || clean.includes("open source")) {
         return `*Deip lists Dipayan's development index:*
 1. **[Open Source Contributions](/contributions/)** - Patches for PyTorch (differentiable Expected Shortfall loss), LangGraph (cycles), LightGBM (covariance constraints), and FastAPI/Pydantic (Decimal validator).
-2. **[AetherCrawl & Search Engine](/web-crawler/)** - Autonomous web crawler with Google-style search results, live node graphs, and mechanics stepper.
+2. **[AetherCrawl & Crawler Academy](/web-crawler/)** - Autonomous web crawler with historical evolution timeline, modern techniques dashboard, and interactive mechanics stepper.
 3. **[Institutional Risk Engine](/risk-analytics-dashboard/)** - Dynamic credit, market, and liquidity stress dashboard.
 4. **[Systemic Business Cases](/cases/)** - In-depth reports on Goldman Sachs, BNY, and Morgan Stanley compliance validations.
 5. **[Interactive Resume](/resume/)** - Statistics credentials and professional experience.

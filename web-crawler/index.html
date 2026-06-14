@@ -645,6 +645,11 @@
         footer strong {
             color: var(--text-primary);
         }
+
+        .timeline-btn:hover {
+            border-color: rgba(217, 70, 239, 0.45) !important;
+            background: rgba(217, 70, 239, 0.03) !important;
+        }
     </style>
 </head>
 <body>
@@ -795,8 +800,7 @@
             <div class="glass-card">
                 <div class="tabs-header">
                     <button class="tab-btn active" onclick="switchTab(event, 'tab-index')"><i class="fa-solid fa-list-check"></i> Crawled Index</button>
-                    <button class="tab-btn" onclick="switchTab(event, 'tab-search')"><i class="fa-solid fa-magnifying-glass"></i> Google-Style Search</button>
-                    <button class="tab-btn" onclick="switchTab(event, 'tab-mechanics')"><i class="fa-solid fa-gears"></i> How It Works</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'tab-mechanics')"><i class="fa-solid fa-graduation-cap"></i> Crawler Academy</button>
                     <button class="tab-btn" onclick="switchTab(event, 'tab-code')"><i class="fa-solid fa-code"></i> Python Crawler Code</button>
                 </div>
 
@@ -827,94 +831,212 @@
                     </div>
                 </div>
 
-                <!-- Search Engine Tab -->
-                <div class="tab-content" id="tab-search">
-                    <div style="text-align: center; padding: 30px 10px; max-width: 650px; margin: 0 auto;">
-                        <h2 style="font-size: 2.2rem; font-weight: 800; background: linear-gradient(135deg, #ffffff 30%, #d946ef 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; letter-spacing: -1px; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                            <i class="fa-solid fa-spider" style="color: var(--color-crawler);"></i> AetherSearch
-                        </h2>
-                        
-                        <div style="position: relative; display: flex; align-items: center; margin-bottom: 16px;">
-                            <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 16px; color: var(--text-secondary); font-size: 15px;"></i>
-                            <input type="text" id="engine-search-bar" class="form-input" placeholder="Search crawled pages..." style="padding: 12px 16px 12px 48px; font-size: 14px; border-radius: 24px; border-color: rgba(217, 70, 239, 0.25);">
-                        </div>
-                        
-                        <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;">
-                            <button class="btn btn-secondary" onclick="triggerSearchEngine()" style="padding: 8px 18px; border-radius: 20px; font-size: 12.5px;"><i class="fa-solid fa-search"></i> Aether Search</button>
-                            <button class="btn btn-secondary" onclick="triggerFeelingLucky()" style="padding: 8px 18px; border-radius: 20px; font-size: 12.5px;"><i class="fa-solid fa-wand-magic-sparkles"></i> I'm Feeling Lucky</button>
-                        </div>
-                    </div>
-
-                    <!-- Search Stats -->
-                    <div id="search-stats" style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 16px; display: none; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
-                        About <span id="search-count" style="font-weight: 600; color: white;">0</span> results found (<span id="search-duration" style="font-family: var(--font-mono);">0.00</span> seconds)
-                    </div>
-
-                    <!-- Google Style Search Results Container -->
-                    <div id="search-results-list" style="display: flex; flex-direction: column; gap: 24px; max-width: 800px;">
-                        <!-- Default Search State -->
-                        <div id="search-empty-state" style="text-align: center; color: var(--text-secondary); padding: 40px 20px; border: 1px dashed var(--border-color); border-radius: 12px; background: rgba(0,0,0,0.15);">
-                            <i class="fa-solid fa-database" style="font-size: 36px; color: var(--color-crawler); margin-bottom: 12px; opacity: 0.5;"></i>
-                            <h4 style="color: white; font-weight: 700; margin-bottom: 6px;">Search Engine Offline</h4>
-                            <p style="font-size: 13px; max-width: 460px; margin: 0 auto; line-height: 1.5;">Type a query above to search. If you haven't run a crawl yet, start the orchestrator above to crawl <strong>https://dipayandey1244.github.io</strong> and build the search database!</p>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Mechanics / Stepper Tab -->
                 <div class="tab-content" id="tab-mechanics">
-                    <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 20px; color: white; display: flex; align-items: center; gap: 8px;">
-                        <i class="fa-solid fa-gears" style="color: var(--color-crawler);"></i> Web Crawler Inner Mechanics
-                    </h3>
-
-                    <!-- Mechanics Stepper Visual -->
-                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; position: relative;">
-                        <!-- Stepper Line -->
-                        <div style="position: absolute; top: 28px; left: 12%; right: 12%; height: 2px; background-color: rgba(217, 70, 239, 0.15); z-index: 1;"></div>
-                        
-                        <!-- Step 1 -->
-                        <div class="glass-card" onclick="activeStepMechanics(1)" id="step-card-1" style="z-index: 2; cursor: pointer; text-align: center; padding: 16px; border-color: var(--color-crawler);">
-                            <div style="width: 26px; height: 26px; border-radius: 50%; background-color: var(--color-crawler); color: var(--bg-primary); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; margin: 0 auto 12px auto; box-shadow: 0 0 10px var(--color-crawler);" id="step-num-1">1</div>
-                            <h4 style="font-size: 13px; font-weight: 700; color: white; margin-bottom: 4px;">Seed & robots.txt</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Rule conformance checking</p>
-                        </div>
-
-                        <!-- Step 2 -->
-                        <div class="glass-card" onclick="activeStepMechanics(2)" id="step-card-2" style="z-index: 2; cursor: pointer; text-align: center; padding: 16px;">
-                            <div style="width: 26px; height: 26px; border-radius: 50%; background-color: #64748b; color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; margin: 0 auto 12px auto;" id="step-num-2">2</div>
-                            <h4 style="font-size: 13px; font-weight: 700; color: white; margin-bottom: 4px;">Async Fetching</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Non-blocking thread workers</p>
-                        </div>
-
-                        <!-- Step 3 -->
-                        <div class="glass-card" onclick="activeStepMechanics(3)" id="step-card-3" style="z-index: 2; cursor: pointer; text-align: center; padding: 16px;">
-                            <div style="width: 26px; height: 26px; border-radius: 50%; background-color: #64748b; color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; margin: 0 auto 12px auto;" id="step-num-3">3</div>
-                            <h4 style="font-size: 13px; font-weight: 700; color: white; margin-bottom: 4px;">HTML Parsing</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Links extract & filter</p>
-                        </div>
-
-                        <!-- Step 4 -->
-                        <div class="glass-card" onclick="activeStepMechanics(4)" id="step-card-4" style="z-index: 2; cursor: pointer; text-align: center; padding: 16px;">
-                            <div style="width: 26px; height: 26px; border-radius: 50%; background-color: #64748b; color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; margin: 0 auto 12px auto;" id="step-num-4">4</div>
-                            <h4 style="font-size: 13px; font-weight: 700; color: white; margin-bottom: 4px;">SQLite Database</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Structured index table</p>
-                        </div>
+                    <div style="margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
+                        <h3 style="font-size: 20px; font-weight: 800; color: white; display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                            <i class="fa-solid fa-graduation-cap" style="color: var(--color-crawler);"></i> Web Crawling Academy & Evolution
+                        </h3>
+                        <p style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.5;">
+                            Web crawlers are the backbone of search engines, content indexers, and modern LLM aggregators. Explore how crawlers evolved from single-threaded Perl scripts in 1993 to autonomous, dynamic AI agents today.
+                        </p>
                     </div>
 
-                    <!-- Step Explanation Box -->
-                    <div class="glass-card" id="step-explanation-box" style="border-left: 4px solid var(--color-crawler); background-color: rgba(217, 70, 239, 0.02);">
-                        <h4 id="step-expl-title" style="font-size: 14.5px; font-weight: 700; color: white; margin-bottom: 8px;">Phase 1: Seed URL & robots.txt Checking</h4>
-                        <p id="step-expl-text" style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
-                            The crawl cycle begins by submitting a seed URL. Before any fetching tasks are scheduled, the orchestrator requests the domain's <code>/robots.txt</code> file and parses its contents. This file defines directory accessibility rules for automated agents. The orchestrator checks if path targets are allowed by user-agent rules (like <code>Disallow: /admin/</code>) before adding links to the active crawl queue, guaranteeing safety and compliance.
-                        </p>
-                        
-                        <div style="display: flex; gap: 8px; margin-top: 16px;" id="step-expl-code-container">
-                            <span style="font-size: 11px; font-weight: 700; color: var(--color-crawler); text-transform: uppercase;">Python code equivalent:</span>
-                            <pre style="width: 100%; overflow-x: auto; background-color: #030509; border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; font-family: var(--font-mono); font-size: 11px; color: #a78bfa; margin-top: 6px;" id="step-expl-code">rp = urllib.robotparser.RobotFileParser()
+                    <!-- Layout: Grid containing Panels -->
+                    <div style="display: flex; flex-direction: column; gap: 24px;">
+
+                        <!-- Panel A: Evolution Timeline -->
+                        <div class="glass-card" style="padding: 24px;">
+                            <h4 style="font-size: 15px; font-weight: 700; color: white; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fa-solid fa-timeline" style="color: var(--color-crawler);"></i> Panel A: Historical Evolution Timeline (1993 – Present)
+                            </h4>
+                            <p style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 20px;">
+                                Select a milestone below to see how crawling architectures evolved across decades:
+                            </p>
+                            
+                            <!-- Timeline Buttons Row -->
+                            <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; border-bottom: 1px solid rgba(217, 70, 239, 0.1); padding-bottom: 16px; margin-bottom: 20px;">
+                                <button class="timeline-btn" onclick="activeTimelineStep(1993)" id="tl-btn-1993" style="flex: 1; min-width: 100px; padding: 10px; border-radius: 8px; background: rgba(217, 70, 239, 0.05); border: 1px solid var(--color-crawler); color: white; font-weight: 700; cursor: pointer; transition: var(--transition); text-align: center;">
+                                    <div style="font-size: 14px; margin-bottom: 4px;">1993</div>
+                                    <div style="font-size: 10px; opacity: 0.8; font-weight: 500;">WWW Wanderer</div>
+                                </button>
+                                <button class="timeline-btn" onclick="activeTimelineStep(1994)" id="tl-btn-1994" style="flex: 1; min-width: 100px; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); color: var(--text-secondary); font-weight: 700; cursor: pointer; transition: var(--transition); text-align: center;">
+                                    <div style="font-size: 14px; margin-bottom: 4px;">1994</div>
+                                    <div style="font-size: 10px; opacity: 0.8; font-weight: 500;">WebCrawler</div>
+                                </button>
+                                <button class="timeline-btn" onclick="activeTimelineStep(1996)" id="tl-btn-1996" style="flex: 1; min-width: 100px; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); color: var(--text-secondary); font-weight: 700; cursor: pointer; transition: var(--transition); text-align: center;">
+                                    <div style="font-size: 14px; margin-bottom: 4px;">1996</div>
+                                    <div style="font-size: 10px; opacity: 0.8; font-weight: 500;">BackRub / PageRank</div>
+                                </button>
+                                <button class="timeline-btn" onclick="activeTimelineStep(2000)" id="tl-btn-2000" style="flex: 1; min-width: 100px; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); color: var(--text-secondary); font-weight: 700; cursor: pointer; transition: var(--transition); text-align: center;">
+                                    <div style="font-size: 14px; margin-bottom: 4px;">2000s</div>
+                                    <div style="font-size: 10px; opacity: 0.8; font-weight: 500;">Mercator Scale</div>
+                                </button>
+                                <button class="timeline-btn" onclick="activeTimelineStep(2010)" id="tl-btn-2010" style="flex: 1; min-width: 100px; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); color: var(--text-secondary); font-weight: 700; cursor: pointer; transition: var(--transition); text-align: center;">
+                                    <div style="font-size: 14px; margin-bottom: 4px;">2010s</div>
+                                    <div style="font-size: 10px; opacity: 0.8; font-weight: 500;">Headless DOM</div>
+                                </button>
+                                <button class="timeline-btn" onclick="activeTimelineStep(2020)" id="tl-btn-2020" style="flex: 1; min-width: 100px; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); color: var(--text-secondary); font-weight: 700; cursor: pointer; transition: var(--transition); text-align: center;">
+                                    <div style="font-size: 14px; margin-bottom: 4px;">2020s</div>
+                                    <div style="font-size: 10px; opacity: 0.8; font-weight: 500;">AI Agentic</div>
+                                </button>
+                            </div>
+
+                            <!-- Timeline Detail Panel -->
+                            <div id="timeline-detail-panel" style="padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.01); display: flex; flex-direction: column; gap: 12px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+                                    <h5 id="tl-detail-title" style="font-size: 16px; font-weight: 700; color: white;">1993: WWW Wanderer</h5>
+                                    <span id="tl-detail-badge" style="font-family: var(--font-mono); font-size: 11px; padding: 3px 8px; border-radius: 4px; background: rgba(217, 70, 239, 0.15); color: var(--color-crawler); border: 1px solid rgba(217, 70, 239, 0.25);">Single-Threaded Perl</span>
+                                </div>
+                                <p id="tl-detail-desc" style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.6;">
+                                    Developed by Matthew Gray at MIT, the World Wide Web Wanderer was a serial robot designed to measure the size of the early web. Written in Perl, it traversed link networks node-by-node. Since it had no concept of concurrency, rate limits, or checking robots.txt rules, it ran sequentially and often brought down small HTTP servers under the load.
+                                </p>
+                                <div id="tl-detail-architecture" style="margin-top: 10px; font-size: 12.5px; color: var(--text-muted); background: rgba(0,0,0,0.15); padding: 12px; border-radius: 6px; border-left: 3px solid var(--color-crawler);">
+                                    <strong>Key Architecture:</strong> Breadth-first search (BFS) queue in-memory, synchronous HTTP requests, Perl regex link parser.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Panel B: Core Mechanics Stepper -->
+                        <div class="glass-card" style="padding: 24px;">
+                            <h4 style="font-size: 15px; font-weight: 700; color: white; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fa-solid fa-list-ol" style="color: var(--color-crawler);"></i> Panel B: Interactive Core Mechanics Stepper
+                            </h4>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; position: relative;">
+                                <!-- Stepper Line -->
+                                <div style="position: absolute; top: 28px; left: 12%; right: 12%; height: 2px; background-color: rgba(217, 70, 239, 0.15); z-index: 1;"></div>
+                                
+                                <!-- Step 1 -->
+                                <div class="glass-card" onclick="activeStepMechanics(1)" id="step-card-1" style="z-index: 2; cursor: pointer; text-align: center; padding: 16px; border-color: var(--color-crawler); background-color: rgba(217, 70, 239, 0.02); transition: var(--transition);">
+                                    <div style="width: 26px; height: 26px; border-radius: 50%; background-color: var(--color-crawler); color: var(--bg-primary); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; margin: 0 auto 12px auto; box-shadow: 0 0 10px var(--color-crawler);" id="step-num-1">1</div>
+                                    <h4 style="font-size: 13px; font-weight: 700; color: white; margin-bottom: 4px;">Seed & robots.txt</h4>
+                                    <p style="font-size: 11px; color: var(--text-secondary);">Rule conformance checking</p>
+                                </div>
+
+                                <!-- Step 2 -->
+                                <div class="glass-card" onclick="activeStepMechanics(2)" id="step-card-2" style="z-index: 2; cursor: pointer; text-align: center; padding: 16px; transition: var(--transition);">
+                                    <div style="width: 26px; height: 26px; border-radius: 50%; background-color: #64748b; color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; margin: 0 auto 12px auto;" id="step-num-2">2</div>
+                                    <h4 style="font-size: 13px; font-weight: 700; color: white; margin-bottom: 4px;">Async Fetching</h4>
+                                    <p style="font-size: 11px; color: var(--text-secondary);">Non-blocking thread workers</p>
+                                </div>
+
+                                <!-- Step 3 -->
+                                <div class="glass-card" onclick="activeStepMechanics(3)" id="step-card-3" style="z-index: 2; cursor: pointer; text-align: center; padding: 16px; transition: var(--transition);">
+                                    <div style="width: 26px; height: 26px; border-radius: 50%; background-color: #64748b; color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; margin: 0 auto 12px auto;" id="step-num-3">3</div>
+                                    <h4 style="font-size: 13px; font-weight: 700; color: white; margin-bottom: 4px;">HTML Parsing</h4>
+                                    <p style="font-size: 11px; color: var(--text-secondary);">Links extract & filter</p>
+                                </div>
+
+                                <!-- Step 4 -->
+                                <div class="glass-card" onclick="activeStepMechanics(4)" id="step-card-4" style="z-index: 2; cursor: pointer; text-align: center; padding: 16px; transition: var(--transition);">
+                                    <div style="width: 26px; height: 26px; border-radius: 50%; background-color: #64748b; color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; margin: 0 auto 12px auto;" id="step-num-4">4</div>
+                                    <h4 style="font-size: 13px; font-weight: 700; color: white; margin-bottom: 4px;">SQLite Database</h4>
+                                    <p style="font-size: 11px; color: var(--text-secondary);">Structured index table</p>
+                                </div>
+                            </div>
+
+                            <!-- Step Explanation Box -->
+                            <div class="glass-card" id="step-explanation-box" style="border-left: 4px solid var(--color-crawler); background-color: rgba(217, 70, 239, 0.02); padding: 16px;">
+                                <h4 id="step-expl-title" style="font-size: 14.5px; font-weight: 700; color: white; margin-bottom: 8px;">Phase 1: Seed URL & robots.txt Checking</h4>
+                                <p id="step-expl-text" style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+                                    The crawl cycle begins by submitting a seed URL. Before any fetching tasks are scheduled, the orchestrator requests the domain's <code>/robots.txt</code> file and parses its contents. This file defines directory accessibility rules for automated agents. The orchestrator checks if path targets are allowed by user-agent rules (like <code>Disallow: /admin/</code>) before adding links to the active crawl queue, guaranteeing safety and compliance.
+                                </p>
+                                
+                                <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 16px;" id="step-expl-code-container">
+                                    <span style="font-size: 11px; font-weight: 700; color: var(--color-crawler); text-transform: uppercase;">Python code equivalent:</span>
+                                    <pre style="width: 100%; overflow-x: auto; background-color: #030509; border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; font-family: var(--font-mono); font-size: 11px; color: #a78bfa; margin-top: 6px;" id="step-expl-code">rp = urllib.robotparser.RobotFileParser()
 rp.set_url(seed_url + "/robots.txt")
 rp.read()
 is_allowed = rp.can_fetch("*", target_url)</pre>
+                                </div>
+                            </div>
                         </div>
+
+                        <!-- Panel C: Historical Facts & Trivia -->
+                        <div class="glass-card" style="padding: 24px;">
+                            <h4 style="font-size: 15px; font-weight: 700; color: white; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fa-solid fa-lightbulb" style="color: var(--color-crawler);"></i> Panel C: Amazing Historical Facts & Trivia
+                            </h4>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                                <!-- Fact 1 -->
+                                <div class="glass-card" style="padding: 16px; border-color: rgba(217, 70, 239, 0.08); background: rgba(255,255,255,0.01);">
+                                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                        <span style="width: 28px; height: 28px; border-radius: 50%; background: rgba(217, 70, 239, 0.15); display: flex; align-items: center; justify-content: center; color: var(--color-crawler);"><i class="fa-solid fa-ban" style="font-size: 12px;"></i></span>
+                                        <h5 style="font-size: 13.5px; font-weight: 700; color: white;">The Birth of robots.txt (1994)</h5>
+                                    </div>
+                                    <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+                                        After Matthew Gray's WWW Wanderer and other early crawlers caused extensive network congestion and server crashes, Dutch engineer Martijn Koster proposed a standardized text file (<code>robots.txt</code>) to allow webmasters to politely ask automated scrapers to stay away from sensitive resource directories. Almost all reputable search indexers have complied with this voluntary protocol since mid-1994.
+                                    </p>
+                                </div>
+                                
+                                <!-- Fact 2 -->
+                                <div class="glass-card" style="padding: 16px; border-color: rgba(217, 70, 239, 0.08); background: rgba(255,255,255,0.01);">
+                                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                        <span style="width: 28px; height: 28px; border-radius: 50%; background: rgba(217, 70, 239, 0.15); display: flex; align-items: center; justify-content: center; color: var(--color-crawler);"><i class="fa-solid fa-cubes" style="font-size: 12px;"></i></span>
+                                        <h5 style="font-size: 13.5px; font-weight: 700; color: white;">Google's Lego Server Cases (1996)</h5>
+                                    </div>
+                                    <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+                                        When Larry Page and Sergey Brin began running Stanford's **BackRub** web crawler, they ran out of disk space rapidly. They bought ten 4GB hard disk drives and mounted them into a customized tower enclosure made entirely of colorful Lego / Duplo bricks. They chose Lego because it was cheap, modular, and allowed easy modification to route cables and ventilation fans!
+                                    </p>
+                                </div>
+
+                                <!-- Fact 3 -->
+                                <div class="glass-card" style="padding: 16px; border-color: rgba(217, 70, 239, 0.08); background: rgba(255,255,255,0.01);">
+                                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                        <span style="width: 28px; height: 28px; border-radius: 50%; background: rgba(217, 70, 239, 0.15); display: flex; align-items: center; justify-content: center; color: var(--color-crawler);"><i class="fa-solid fa-gauge-high" style="font-size: 12px;"></i></span>
+                                        <h5 style="font-size: 13.5px; font-weight: 700; color: white;">What is a "Crawl Budget"?</h5>
+                                    </div>
+                                    <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+                                        Search engines do not crawl every single page on the internet. Instead, they assign a **crawl budget** to each site. This budget is based on: 1) **Crawl rate limit** (how many requests the host can handle without throwing 5xx errors) and 2) **Crawl demand** (how popular the pages are and how frequently they change). Low-authority, infrequently updated sites are visited far less often.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Panel D: Modern Techniques Dashboard -->
+                        <div class="glass-card" style="padding: 24px;">
+                            <h4 style="font-size: 15px; font-weight: 700; color: white; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fa-solid fa-microchip" style="color: var(--color-crawler);"></i> Panel D: State-of-the-Art Modern Crawling Techniques
+                            </h4>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                                <!-- Tech 1 -->
+                                <div class="glass-card" style="padding: 16px; border-color: rgba(217, 70, 239, 0.08); background: rgba(255,255,255,0.01);">
+                                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                        <span style="width: 28px; height: 28px; border-radius: 50%; background: rgba(217, 70, 239, 0.15); display: flex; align-items: center; justify-content: center; color: var(--color-crawler);"><i class="fa-solid fa-filter" style="font-size: 12px;"></i></span>
+                                        <h5 style="font-size: 13.5px; font-weight: 700; color: white;">Bloom Filters & O(1) Deduplication</h5>
+                                    </div>
+                                    <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+                                        When crawling at scale (billions of pages), standard hash tables or database lookups for URL deduplication become memory bottlenecks. Modern web crawlers use space-efficient **Bloom Filters**—a probabilistic data structure that can check if a URL has already been visited in \(O(1)\) time. If the filter returns 'not present', the URL is definitely unvisited; false positives (rare) are managed using secondary checks.
+                                    </p>
+                                </div>
+                                
+                                <!-- Tech 2 -->
+                                <div class="glass-card" style="padding: 16px; border-color: rgba(217, 70, 239, 0.08); background: rgba(255,255,255,0.01);">
+                                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                        <span style="width: 28px; height: 28px; border-radius: 50%; background: rgba(217, 70, 239, 0.15); display: flex; align-items: center; justify-content: center; color: var(--color-crawler);"><i class="fa-solid fa-desktop" style="font-size: 12px;"></i></span>
+                                        <h5 style="font-size: 13.5px; font-weight: 700; color: white;">Headless JS Execution</h5>
+                                    </div>
+                                    <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+                                        Historically, crawlers parsed simple static HTML strings. However, modern Single Page Applications (SPAs) built with React, Vue, or Angular display empty shells on first load and hydrate pages via client-side API requests. Web crawlers now spawn headless web browsers (Chromium/Firefox) managed by automation layers like Puppeteer or Playwright to wait for DOM hydration before parsing links.
+                                    </p>
+                                </div>
+
+                                <!-- Tech 3 -->
+                                <div class="glass-card" style="padding: 16px; border-color: rgba(217, 70, 239, 0.08); background: rgba(255,255,255,0.01);">
+                                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                        <span style="width: 28px; height: 28px; border-radius: 50%; background: rgba(217, 70, 239, 0.15); display: flex; align-items: center; justify-content: center; color: var(--color-crawler);"><i class="fa-solid fa-brain" style="font-size: 12px;"></i></span>
+                                        <h5 style="font-size: 13.5px; font-weight: 700; color: white;">AI-Agentic Scrapers</h5>
+                                    </div>
+                                    <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+                                        CSS selectors and XPath rules break whenever a website updates its design layout. The state of the art involves AI-agentic scrapers. Powered by large language models (LLMs) and computer vision, these crawlers visually parse page content like a human, click page paginations autonomously, bypass Captchas through semantic interaction, and map messy DOM trees directly to structured API JSON schemas.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -1791,151 +1913,69 @@ is_allowed = rp.can_fetch("*", target_url)</pre>
             });
         });
 
-        // Google-style Search Engine Implementation
-        function triggerSearchEngine() {
-            const query = document.getElementById("engine-search-bar").value.trim().toLowerCase();
-            const resultsList = document.getElementById("search-results-list");
-            const statsDiv = document.getElementById("search-stats");
-            
-            if (!query) {
-                resultsList.innerHTML = `
-                    <div style="text-align: center; color: var(--text-secondary); padding: 30px;">
-                        <p>Please type a search query in the input bar above.</p>
-                    </div>
-                `;
-                statsDiv.style.display = "none";
-                return;
+        // Timeline data for Crawler Academy
+        const timelineData = {
+            1993: {
+                title: "1993: WWW Wanderer",
+                badge: "Single-Threaded Perl",
+                desc: "Developed by Matthew Gray at MIT, the World Wide Web Wanderer was a serial robot designed to measure the size of the early web. Written in Perl, it traversed link networks node-by-node. Since it had no concept of concurrency, rate limits, or checking robots.txt rules, it ran sequentially and often brought down small HTTP servers under the load.",
+                architecture: "Breadth-first search (BFS) queue in-memory, synchronous HTTP requests, Perl regex link parser."
+            },
+            1994: {
+                title: "1994: WebCrawler & Robots.txt",
+                badge: "Full-Text Indexing",
+                desc: "Created by Brian Pinkerton at the University of Washington, WebCrawler was the first crawler to index page text content in full, enabling users to search for any word on a page rather than just titles or URLs. This rapid scraping expansion motivated Martijn Koster to lead consensus on the robots.txt standard, ensuring server administrators could block bots from demanding sensitive paths.",
+                architecture: "C-based scraper daemon, full-text index database, robots.txt parsing engine."
+            },
+            1996: {
+                title: "1996: BackRub & PageRank",
+                badge: "Lego Stanford Cluster",
+                desc: "Developed by Larry Page and Sergey Brin at Stanford, BackRub was the crawler that powered the early Google search engine. It revolutionized crawler priorities by incorporating PageRank (analyzing backlinks to determine authority), ensuring high-quality resources were indexed first. Because they lacked funding, Stanford's server cases housing the storage drives were constructed from Lego blocks.",
+                architecture: "Distributed multi-machine downloader in Python/C++, URL authority queue, Lego-brick drive towers."
+            },
+            2000: {
+                title: "2000s: Mercator Distributed Crawler",
+                badge: "Enterprise Scale Java",
+                desc: "Developed by Compaq Systems Research Center, Mercator became the blueprint for modern web crawling at industrial scales. Written in Java, it introduced modular distributed downloader threads, Bloom Filters for O(1) deduplication of billions of crawled URLs, domain-based FIFO queues to guarantee politeness, and structured crawl budget limits.",
+                architecture: "Distributed Java clusters, Bloom Filters for seen-state check, host-level priority queueing."
+            },
+            2010: {
+                title: "2010s: Headless Browser Rendering",
+                badge: "Puppeteer & Playwright",
+                desc: "With the massive adoption of Single Page Applications (SPAs) built with React, Vue, and Angular, server-returned HTML became empty shells with Javascript hydration scripts. Web crawlers evolved to run headless browsers (headless Chrome/Firefox via Selenium, Puppeteer, or Playwright) to execute client-side JS and render dynamic content before scraping.",
+                architecture: "Headless Chromium clusters, dynamic DOM observation, client-side dynamic content hydration."
+            },
+            2020: {
+                title: "2020s: LLM & AI-Agentic Scrapers",
+                badge: "Semantic Agentic Scrapers",
+                desc: "Modern websites employ advanced bot-detection, Cloudflare protection, and fast-changing layouts. 2020s crawlers utilize AI agents with vision and LLMs to understand website layouts without CSS selectors, navigate paginations like humans, solve Captchas using semantic context, and automatically output structured JSON schemas from arbitrary unstructured layouts.",
+                architecture: "Agentic LLMs, computer vision layout segmentation, auto-correcting CSS pipelines, captcha-solving agents."
             }
+        };
 
-            const startTime = performance.now();
-
-            // Filter nodes that have crawled metadata
-            const searchIndex = nodes.filter(n => n.state === "completed" && n.title);
-
-            if (searchIndex.length === 0) {
-                resultsList.innerHTML = `
-                    <div id="search-empty-state" style="text-align: center; color: var(--text-secondary); padding: 40px 20px; border: 1px dashed var(--border-color); border-radius: 12px; background: rgba(0,0,0,0.15);">
-                        <i class="fa-solid fa-database" style="font-size: 36px; color: var(--color-crawler); margin-bottom: 12px; opacity: 0.5;"></i>
-                        <h4 style="color: white; font-weight: 700; margin-bottom: 6px;">Empty Search Index</h4>
-                        <p style="font-size: 13px; max-width: 440px; margin: 0 auto; line-height: 1.5;">The search engine index is currently empty. Run a crawl from the <strong>Crawl Orchestrator</strong> panel to build a searchable website index!</p>
-                    </div>
-                `;
-                statsDiv.style.display = "none";
-                return;
-            }
-
-            // Calculate search scores
-            const results = [];
-            searchIndex.forEach(page => {
-                let score = 0;
-                const titleLower = page.title.toLowerCase();
-                const urlLower = page.url.toLowerCase();
-                
-                // Matches title (highly weighted)
-                if (titleLower.includes(query)) score += 100;
-                // Matches url
-                if (urlLower.includes(query)) score += 50;
-                
-                // If any match or score is greater than 0
-                if (score > 0 || page.url.includes(query) || (page.matches > 0 && page.title.toLowerCase().includes(query))) {
-                    results.push({
-                        page: page,
-                        score: score + (page.matches || 0)
-                    });
+        function activeTimelineStep(year) {
+            // Update active state on timeline buttons
+            const buttons = document.querySelectorAll(".timeline-btn");
+            buttons.forEach(btn => {
+                const buttonYear = parseInt(btn.id.replace("tl-btn-", ""));
+                if (buttonYear === year) {
+                    btn.style.background = "rgba(217, 70, 239, 0.05)";
+                    btn.style.borderColor = "var(--color-crawler)";
+                    btn.style.color = "white";
+                } else {
+                    btn.style.background = "rgba(255,255,255,0.02)";
+                    btn.style.borderColor = "var(--border-color)";
+                    btn.style.color = "var(--text-secondary)";
                 }
             });
 
-            // Sort results by score desc
-            results.sort((a, b) => b.score - a.score);
-
-            const duration = ((performance.now() - startTime) / 1000).toFixed(4);
-
-            // Display stats
-            statsDiv.style.display = "block";
-            document.getElementById("search-count").innerText = results.length;
-            document.getElementById("search-duration").innerText = duration;
-
-            if (results.length === 0) {
-                resultsList.innerHTML = `
-                    <div style="text-align: center; color: var(--text-secondary); padding: 40px 20px; border: 1px dashed var(--border-color); border-radius: 12px; background: rgba(0,0,0,0.15);">
-                        <i class="fa-solid fa-magnifying-glass-minus" style="font-size: 32px; color: var(--text-secondary); margin-bottom: 12px;"></i>
-                        <h4 style="color: white; font-weight: 700; margin-bottom: 6px;">No Results Found</h4>
-                        <p style="font-size: 13px; max-width: 400px; margin: 0 auto; line-height: 1.5;">No pages matched your query "<strong>${query}</strong>". Try searching for keywords like <strong>"risk"</strong>, <strong>"cases"</strong>, <strong>"resume"</strong>, or <strong>"pytorch"</strong>.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            // Render search cards
-            resultsList.innerHTML = "";
-            results.forEach(res => {
-                const page = res.page;
-                const card = document.createElement("div");
-                card.style.display = "flex";
-                card.style.flexDirection = "column";
-                card.style.gap = "4px";
-                card.style.padding = "16px";
-                card.style.background = "rgba(255,255,255,0.02)";
-                card.style.border = "1px solid rgba(217, 70, 239, 0.08)";
-                card.style.borderRadius = "8px";
-                card.style.transition = "border-color 0.2s";
-                card.addEventListener("mouseenter", () => card.style.borderColor = "var(--color-crawler)");
-                card.addEventListener("mouseleave", () => card.style.borderColor = "rgba(217, 70, 239, 0.08)");
-
-                // Generate snippet highlights
-                let snippet = `This page was crawled by AetherCrawl. It contains ${page.words} words of text content and provides key technical information relating to Dipayan Dey's portfolio.`;
-                if (page.url.includes("/risk-analytics-dashboard/")) {
-                    snippet = `Launch the Institutional Risk Engine. Features Basel III LCR and Net Stable Funding Ratio stress testing models, expected credit loss provisioning, and Expected Shortfall calculations under extreme scenarios.`;
-                } else if (page.url.includes("/resume/")) {
-                    snippet = `View Dipayan Dey's professional timeline, including VP Risk & Compliance at BNY, model validation associate at Goldman Sachs, education from IIT Kanpur, and core analytical stats.`;
-                } else if (page.url.includes("/cases/")) {
-                    snippet = `Systemic financial case studies. Audit findings covering trade surveillance model alerts, multi-agent RAG LLM council consensus, and re-engineered LightGBM covariance parameters.`;
-                } else if (page.url.includes("/contributions/")) {
-                    snippet = `Open source contribution registry. Inspect real code diffs and visual showcases for merged pull requests across PyTorch expected shortfall loss modules, LangGraph state cycles, and FastAPI validators.`;
-                }
-
-                // Highlight searched term in snippet
-                const queryRegex = new RegExp(`(${query})`, "gi");
-                const highlightedSnippet = snippet.replace(queryRegex, `<mark style="background-color: rgba(217, 70, 239, 0.35); color: white; padding: 1px 4px; border-radius: 3px;">$1</mark>`);
-                const highlightedTitle = page.title.replace(queryRegex, `<mark style="background-color: rgba(217, 70, 239, 0.35); color: white; padding: 1px 4px; border-radius: 3px;">$1</mark>`);
-
-                card.innerHTML = `
-                    <div style="font-size: 11px; color: #f472b6; font-family: var(--font-mono); text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">${page.url}</div>
-                    <a href="${page.url}" target="_blank" style="font-size: 16px; font-weight: 700; color: #a855f7; text-decoration: none; hover: text-decoration: underline;">${highlightedTitle}</a>
-                    <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; margin: 4px 0 8px 0;">${highlightedSnippet}</p>
-                    <div style="display: flex; gap: 12px; font-size: 11px; color: var(--text-muted); font-family: var(--font-mono);">
-                        <span>Status: <strong style="color:var(--color-success);">${page.status} OK</strong></span>
-                        <span>Size: <strong>${page.size.toFixed(1)} KB</strong></span>
-                        <span>Latency: <strong>${page.latency} ms</strong></span>
-                        <span>Score: <strong>${res.score}</strong></span>
-                    </div>
-                `;
-                resultsList.appendChild(card);
-            });
+            // Update content in detail panel
+            const data = timelineData[year];
+            document.getElementById("tl-detail-title").innerText = data.title;
+            document.getElementById("tl-detail-badge").innerText = data.badge;
+            document.getElementById("tl-detail-desc").innerText = data.desc;
+            document.getElementById("tl-detail-architecture").innerHTML = `<strong>Key Architecture:</strong> ${data.architecture}`;
         }
-
-        // I'm feeling lucky
-        function triggerFeelingLucky() {
-            const query = document.getElementById("engine-search-bar").value.trim();
-            if (!query) {
-                // Open home seed URL
-                window.open("https://dipayandey1244.github.io", "_blank");
-                return;
-            }
-            triggerSearchEngine();
-            setTimeout(() => {
-                const resultsList = document.getElementById("search-results-list");
-                const firstLink = resultsList.querySelector("a");
-                if (firstLink) {
-                    firstLink.click();
-                }
-            }, 300);
-        }
-
-        // Enter key bindings for search bar
-        document.getElementById("engine-search-bar").addEventListener("keydown", (e) => {
-            if (e.key === "Enter") triggerSearchEngine();
-        });
 
         // Mechanics step description contents
         const mechanicsSteps = {
