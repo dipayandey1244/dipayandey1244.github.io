@@ -681,6 +681,14 @@
                 </div>
                 
                 <div class="form-group">
+                    <label for="crawler-scope">Crawl Scope</label>
+                    <select id="crawler-scope" class="form-input" style="background-color: rgba(7, 10, 19, 0.6); color: white; border: 1px solid var(--border-color); border-radius: 8px;">
+                        <option value="domain">Single Domain (Scoped)</option>
+                        <option value="entire">Entire Web Database (Wide Scoped)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
                     <label for="crawler-keyword">Search Keyword Filter</label>
                     <input type="text" id="crawler-keyword" class="form-input" placeholder="e.g. Risk, AI, Basel (optional)">
                 </div>
@@ -1005,7 +1013,8 @@ is_allowed = rp.can_fetch("*", target_url)</pre>
                     "https://dipayandey1244.github.io/cases/",
                     "https://dipayandey1244.github.io/contributions/",
                     "https://dipayandey1244.github.io/risk-analytics-dashboard/",
-                    "https://dipayandey1244.github.io/web-crawler/"
+                    "https://dipayandey1244.github.io/web-crawler/",
+                    "https://github.com/dipayandey1244"
                 ]
             },
             "https://dipayandey1244.github.io/resume/": {
@@ -1069,7 +1078,8 @@ is_allowed = rp.can_fetch("*", target_url)</pre>
                     "https://dipayandey1244.github.io/",
                     "https://dipayandey1244.github.io/contributions/patches/pytorch_es_loss.py",
                     "https://dipayandey1244.github.io/contributions/patches/langgraph_state_patch.py",
-                    "https://dipayandey1244.github.io/contributions/patches/pydantic_decimal_validation.py"
+                    "https://dipayandey1244.github.io/contributions/patches/pydantic_decimal_validation.py",
+                    "https://github.com/dipayandey1244"
                 ]
             },
             "https://dipayandey1244.github.io/contributions/patches/pytorch_es_loss.py": {
@@ -1079,7 +1089,11 @@ is_allowed = rp.can_fetch("*", target_url)</pre>
                 words: 230,
                 size: 1.6,
                 latency: 75,
-                links: ["https://dipayandey1244.github.io/contributions/"]
+                links: [
+                    "https://dipayandey1244.github.io/contributions/",
+                    "https://pytorch.org/docs/stable/nn.html",
+                    "https://www.bis.org/publ/bcbs.pdf"
+                ]
             },
             "https://dipayandey1244.github.io/contributions/patches/langgraph_state_patch.py": {
                 url: "https://dipayandey1244.github.io/contributions/patches/langgraph_state_patch.py",
@@ -1088,7 +1102,10 @@ is_allowed = rp.can_fetch("*", target_url)</pre>
                 words: 190,
                 size: 1.1,
                 latency: 60,
-                links: ["https://dipayandey1244.github.io/contributions/"]
+                links: [
+                    "https://dipayandey1244.github.io/contributions/",
+                    "https://github.com/langchain-ai/langgraph"
+                ]
             },
             "https://dipayandey1244.github.io/contributions/patches/pydantic_decimal_validation.py": {
                 url: "https://dipayandey1244.github.io/contributions/patches/pydantic_decimal_validation.py",
@@ -1116,6 +1133,54 @@ is_allowed = rp.can_fetch("*", target_url)</pre>
                 size: 15.2,
                 latency: 95,
                 links: ["https://dipayandey1244.github.io/"]
+            },
+            "https://pytorch.org/docs/stable/nn.html": {
+                url: "https://pytorch.org/docs/stable/nn.html",
+                title: "PyTorch Neural Network Loss Modules & Expected Shortfall",
+                status: 200,
+                words: 980,
+                size: 21.6,
+                latency: 180,
+                links: ["https://github.com/dipayandey1244"]
+            },
+            "https://github.com/langchain-ai/langgraph": {
+                url: "https://github.com/langchain-ai/langgraph",
+                title: "LangGraph: Multi-agent Cyclic Graph Memory Orchestrator",
+                status: 200,
+                words: 1400,
+                size: 38.4,
+                latency: 290,
+                links: ["https://github.com/dipayandey1244"]
+            },
+            "https://www.bis.org/publ/bcbs.pdf": {
+                url: "https://www.bis.org/publ/bcbs.pdf",
+                title: "Basel Committee: Expected Shortfall & Risk Guidelines",
+                status: 200,
+                words: 3400,
+                size: 145.2,
+                latency: 340,
+                links: []
+            },
+            "https://arxiv.org/abs/2006.01244": {
+                url: "https://arxiv.org/abs/2006.01244",
+                title: "Expected Shortfall Differentiable Quantile Optimization Paper",
+                status: 200,
+                words: 2400,
+                size: 89.1,
+                latency: 220,
+                links: []
+            },
+            "https://github.com/dipayandey1244": {
+                url: "https://github.com/dipayandey1244",
+                title: "GitHub - dipayandey1244 (Dipayan Dey's Open Source contributions)",
+                status: 200,
+                words: 320,
+                size: 4.8,
+                latency: 120,
+                links: [
+                    "https://pytorch.org/docs/stable/nn.html",
+                    "https://github.com/langchain-ai/langgraph"
+                ]
             }
         };
 
@@ -1397,24 +1462,14 @@ is_allowed = rp.can_fetch("*", target_url)</pre>
 
                 // Node coloring & status tags mapping
                 node.state = "completed";
-                node.status = pageMock.status;
-                node.title = pageMock.title;
-                node.words = pageMock.words;
-                node.size = pageMock.size;
-                node.depth = depth;
-                node.latency = pageMock.latency;
-                
-                // Keyword matches count
-                let matchCount = 0;
-                if (filterKeyword) {
-                    const regex = new RegExp(filterKeyword, "gi");
-                    const titleMatches = (pageMock.title.match(regex) || []).length;
-                    const urlMatches = (pageMock.url.match(regex) || []).length;
-                    matchCount = titleMatches + urlMatches + Math.floor(Math.random() * 5 * (pageMock.words > 0 ? 1 : 0));
-                }
-                node.matches = matchCount;
+                const seedDomain = new URL(startSeedUrl).netloc;
+                const currentDomain = new URL(url).netloc;
+                const isExternalNode = seedDomain !== currentDomain;
 
-                if (pageMock.status === 200) {
+                if (isExternalNode) {
+                    node.color = "#ec4899"; // Neon Pink for external sites
+                    printLog("tag-success", "200 EXT", `Crawled external domain page: "${pageMock.title}"`);
+                } else if (pageMock.status === 200) {
                     node.color = varColorHex("success");
                     printLog("tag-success", "200 OK", `Parsed title: "${pageMock.title}" | Word count: ${pageMock.words}`);
                 } else if (pageMock.status === 301 || pageMock.status === 302) {
@@ -1441,13 +1496,13 @@ is_allowed = rp.can_fetch("*", target_url)</pre>
 
                 // Queue child links
                 const maxDepthSetting = parseInt(document.getElementById("depth-slider").value);
+                const crawlScopeMode = document.getElementById("crawler-scope").value;
                 if (depth < maxDepthSetting && pageMock.status === 200) {
                     pageMock.links.forEach(child => {
-                        // Scope to same domain filter check
-                        const seedDomain = new URL(startSeedUrl).netloc;
                         const childDomain = new URL(child).netloc;
+                        const isExternal = seedDomain !== childDomain;
                         
-                        if (seedDomain === childDomain) {
+                        if (crawlScopeMode === "entire" || !isExternal) {
                             if (!visitedSet.has(child) && !crawlQueue.some(item => item.url === child)) {
                                 crawlQueue.push({ url: child, depth: depth + 1, parentUrl: url });
                                 
@@ -1461,7 +1516,7 @@ is_allowed = rp.can_fetch("*", target_url)</pre>
                                         vy: 0,
                                         isSeed: false,
                                         state: "pending",
-                                        color: "#64748b"
+                                        color: isExternal ? "#ec4899" : "#64748b"
                                     });
                                     links.push({ source: url, target: child });
                                     discoveredLinksCount++;
@@ -1950,6 +2005,69 @@ for link_tag in soup.find_all('a', href=True):
             document.getElementById("step-expl-text").innerHTML = details.text;
             document.getElementById("step-expl-code").innerText = details.code;
         }
+
+        // Pre-seed Search Index on load
+        function preSeedSearchIndex() {
+            nodes = [];
+            links = [];
+            
+            let index = 0;
+            const keys = Object.keys(mockSiteMap);
+            for (let url of keys) {
+                const page = mockSiteMap[url];
+                const angle = (index / keys.length) * Math.PI * 2;
+                const radius = 130 + (index % 2) * 50;
+                
+                nodes.push({
+                    url: url,
+                    x: width / 2 + Math.cos(angle) * radius,
+                    y: height / 2 + Math.sin(angle) * radius,
+                    vx: 0,
+                    vy: 0,
+                    isSeed: url === "https://dipayandey1244.github.io",
+                    state: "completed",
+                    status: page.status,
+                    title: page.title,
+                    words: page.words,
+                    size: page.size,
+                    depth: url === "https://dipayandey1244.github.io" ? 0 : 1,
+                    latency: page.latency,
+                    matches: 0,
+                    color: url === "https://dipayandey1244.github.io" ? varColorHex("crawler") : (new URL(url).netloc !== "dipayandey1244.github.io" ? "#ec4899" : varColorHex("success"))
+                });
+                
+                index++;
+            }
+            
+            for (let url of keys) {
+                const page = mockSiteMap[url];
+                if (page.links) {
+                    page.links.forEach(child => {
+                        if (mockSiteMap[child]) {
+                            links.push({ source: url, target: child });
+                        }
+                    });
+                }
+            }
+            
+            visitedSet = new Set(keys.filter(u => mockSiteMap[u].status === 200));
+            discoveredLinksCount = links.length;
+            totalDataFetched = keys.reduce((sum, u) => sum + mockSiteMap[u].size, 0);
+            fetchTimes = keys.map(u => mockSiteMap[u].latency);
+            updateStatsPanel();
+            
+            const tbody = document.getElementById("index-table-body");
+            tbody.innerHTML = "";
+            keys.forEach(url => {
+                const page = mockSiteMap[url];
+                appendRowToIndexTable(page, url === "https://dipayandey1244.github.io" ? 0 : 1);
+            });
+            
+            printLog("tag-success", "INDEX", "Pre-seeded local index successfully loaded. 17 pages cached in search database.");
+        }
+        
+        // Initialize preseed on load
+        preSeedSearchIndex();
     </script>
 </body>
 </html>
