@@ -703,7 +703,7 @@ Dipayan developed **AetherCrawl**, an autonomous high-performance web crawler an
 - **Crawler Academy & Evolution**: Trace web crawling history from Matthew Gray's 1993 WWW Wanderer (MIT) and the 1994 robots.txt birth, all the way to 2020s LLM-driven AI agentic scrapers.
 - **Amazing Trivia & SOTA Tech**: Learn about BackRub's Duplo/Lego storage cases, crawl budgets, Bloom Filters for O(1) deduplication, and headless Playwright execution.
 - **How It Works Stepper**: Walk through step-by-step crawler mechanics (Robots.txt, polite async sleep delays, BFS link queues, and SQLite database tables).
-- You can explore it live at **[AetherCrawl Academy](/web-crawler/)** or inspect the backend async Python implementation in `/Users/dipayan/.gemini/antigravity/scratch/distributed-web-crawler`.
+- You can explore it live at **[AetherCrawl Academy](/web-crawler/)** or inspect the backend async Python implementation in '/Users/dipayan/.gemini/antigravity/scratch/distributed-web-crawler'.
 
 *(Note: Currently running in offline fallback mode)*`;
     }
