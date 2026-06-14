@@ -564,12 +564,15 @@ const formatMarkdown = (text) => {
     let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     html = html.replace(/\[(.*?)\]\((.*?)\)/g, (match, label, url) => {
         let targetUrl = url;
-        const path = window.location.pathname;
-        if (path.includes("/resume/") || path.includes("/cases/") || path.includes("/risk-analytics-dashboard/")) {
-            if (url.startsWith("/")) {
-                targetUrl = `..${url}`;
-            } else if (url.startsWith("./")) {
-                targetUrl = `../${url.substring(2)}`;
+        if (url.startsWith("/")) {
+            const path = window.location.pathname;
+            const cleanPath = path.replace(/^\/|\/$/g, "");
+            if (cleanPath !== "" && cleanPath !== "index.html") {
+                const parts = cleanPath.split("/");
+                const depth = parts.filter(p => p !== "index.html" && p !== "").length;
+                if (depth > 0) {
+                    targetUrl = "../".repeat(depth) + url.substring(1);
+                }
             }
         }
         return `<a href="${targetUrl}">${label}</a>`;
