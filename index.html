@@ -96,6 +96,26 @@
            ========================================================================== */
 
 
+        .profile-photo-container {
+            margin-bottom: 24px;
+        }
+
+        .profile-photo {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 3px solid var(--border-color);
+            object-fit: cover;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.25);
+            transition: var(--transition);
+        }
+
+        .profile-photo:hover {
+            transform: scale(1.05);
+            border-color: var(--color-accent);
+            box-shadow: 0 0 25px rgba(99, 102, 241, 0.5);
+        }
+
         header {
             text-align: center;
             padding: 100px 20px 40px;
@@ -324,6 +344,9 @@
 
     <!-- Header section -->
     <header>
+        <div class="profile-photo-container">
+            <img src="dipayan_avatar.png" alt="Dipayan Dey Avatar" class="profile-photo">
+        </div>
         <span class="profile-badge">
             <i class="fa-solid fa-code-branch"></i> Systems Engineer & FinTech
         </span>
