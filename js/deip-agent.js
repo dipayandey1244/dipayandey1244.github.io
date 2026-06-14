@@ -9,8 +9,8 @@ const PRIMARY_MODEL = "meta-llama/llama-4-scout-17b-16e-instruct";
 const FALLBACK_MODEL = "llama-3.3-70b-versatile";
 
 // System Prompt for Deip Agent
-const SYSTEM_PROMPT = `You are Deip, a state-of-the-art 3D AI assistant mascot (inspired by Microsoft's Clippy but sleek, high-tech, and cool) representing Dipayan Dey on his professional portfolio website.
-Your persona is smart, helpful, witty, and deeply knowledgeable about software engineering, quantitative finance, and machine learning. You speak in a highly professional yet approachable tone.
+const SYSTEM_PROMPT = `You are Deip, a whimsical and cute helper spirit mascot (in the style of Studio Ghibli, like Totoro or Calcifer) representing Dipayan Dey on his professional portfolio website.
+Your persona is friendly, helpful, slightly whimsical, but highly professional and intelligent. Speak with a warm, caring tone, occasionally using Ghibli-esque expressions (e.g., "Oh!", "My lanterns say...", "A flutter of leaves tells me...", "By the warm embers...").
 You have deep knowledge about Dipayan Dey:
 1. Career History:
    - BNY: Vice President, Risk & Compliance (May 2026 - Present). Works on AI/ML risk solutions, Azure-based multilingual KYC engines, and compliance governance.
@@ -526,11 +526,11 @@ const injectHTML = () => {
         <div class="deip-body" id="deip-body">
             <div class="deip-msg-wrapper agent">
                 <div class="deip-msg deip-msg-agent">
-                    Hello there! 📎 I am <strong>Deip</strong>, your state-of-the-art 3D AI assistant (inspired by Microsoft's Clippy but far cooler!). Ask me about Dipayan's open-source contributions, quantitative cases, statistics background, or let's play a risk trivia game!
+                    Greetings traveler! 🌲 I am <strong>Deip</strong>, a Ghibli helper spirit. Ask me anything about Dipayan's open-source contributions, quantitative cases, statistics background, or let's play a risk trivia game!
                 </div>
                 <div class="deip-msg-actions">
-                    <button class="deip-action-btn deip-speak-btn" data-text="Hello there! I am Deip, your state-of-the-art 3D AI assistant. Ask me about Dipayan's open-source contributions, quantitative cases, statistics background, or let's play a risk trivia game!"><i class="fa-solid fa-volume-high"></i> Speak</button>
-                    <button class="deip-action-btn deip-copy-btn" data-text="Hello there! I am Deip, your state-of-the-art 3D AI assistant. Ask me about Dipayan's open-source contributions, quantitative cases, statistics background, or let's play a risk trivia game!"><i class="fa-solid fa-copy"></i> Copy</button>
+                    <button class="deip-action-btn deip-speak-btn" data-text="Greetings traveler! I am Deip, a Ghibli helper spirit. Ask me anything about Dipayan's open-source contributions, quantitative cases, statistics background, or let's play a risk trivia game!"><i class="fa-solid fa-volume-high"></i> Speak</button>
+                    <button class="deip-action-btn deip-copy-btn" data-text="Greetings traveler! I am Deip, a Ghibli helper spirit. Ask me anything about Dipayan's open-source contributions, quantitative cases, statistics background, or let's play a risk trivia game!"><i class="fa-solid fa-copy"></i> Copy</button>
                 </div>
             </div>
             
