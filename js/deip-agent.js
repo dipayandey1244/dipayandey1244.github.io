@@ -227,6 +227,31 @@ const injectStyles = () => {
             transform: translateY(0) scale(1);
             pointer-events: auto;
         }
+
+        /* Docked Copilot Style for Homepage */
+        @media (min-width: 1025px) {
+            #deip-chat-box.deip-copilot-docked {
+                top: 0;
+                right: 0;
+                bottom: 0;
+                width: 400px;
+                height: 100vh;
+                border-radius: 0;
+                border-left: 2px solid #dfb15b;
+                border-top: none;
+                border-right: none;
+                border-bottom: none;
+                box-shadow: -5px 0 30px rgba(0, 0, 0, 0.4);
+                transform: none !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
+                z-index: 9999;
+            }
+            body.deip-copilot-active {
+                padding-right: 400px;
+                transition: padding-right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            }
+        }
         
         /* Chat Header */
         .deip-header {
@@ -954,16 +979,38 @@ const setupListeners = () => {
     const body = document.getElementById("deip-body");
     const scrollBottomBtn = document.getElementById("deip-scroll-bottom");
     
+    const isHomepage = () => {
+        const path = window.location.pathname;
+        const cleanPath = path.replace(/^\/|\/$/g, "");
+        return cleanPath === "" || cleanPath === "index.html";
+    };
+
     const openChat = () => {
         chatOpen = true;
         chatBox.classList.add("open");
         speechBubble.classList.remove("show");
+        
+        if (isHomepage() && window.innerWidth > 1024) {
+            chatBox.classList.add("deip-copilot-docked");
+            document.body.classList.add("deip-copilot-active");
+            const bubbleContainer = document.getElementById("deip-bubble-container");
+            if (bubbleContainer) bubbleContainer.style.display = "none";
+        }
+        
         inputField.focus();
     };
     
     const closeChat = () => {
         chatOpen = false;
         chatBox.classList.remove("open");
+        
+        if (isHomepage()) {
+            chatBox.classList.remove("deip-copilot-docked");
+            document.body.classList.remove("deip-copilot-active");
+            const bubbleContainer = document.getElementById("deip-bubble-container");
+            if (bubbleContainer) bubbleContainer.style.display = "flex";
+        }
+        
         window.speechSynthesis.cancel();
     };
     
@@ -1073,6 +1120,18 @@ const init = () => {
     injectHTML();
     setupListeners();
     initSpeechBubblePrompts();
+    
+    // Auto-dock Copilot on homepage desktop screen
+    const isHomepage = () => {
+        const path = window.location.pathname;
+        const cleanPath = path.replace(/^\/|\/$/g, "");
+        return cleanPath === "" || cleanPath === "index.html";
+    };
+    
+    if (isHomepage() && window.innerWidth > 1024) {
+        const bubble = document.getElementById("deip-bubble");
+        if (bubble) bubble.click();
+    }
 };
 
 if (document.readyState === "loading") {
