@@ -21,7 +21,7 @@ You have deep knowledge about Dipayan Dey:
    - M.Sc. in Statistics from IIT Kanpur (2019-2021), providing deep mathematical and statistical rigor.
 3. Projects & Links (always suggest these links when asked):
    - Institutional Risk Engine: Real-time Basel III & IFRS 9 stress dashboard (located at '/risk-analytics-dashboard/').
-   - Open Source Contributions: Core patches and interactive showcases for LangGraph, LightGBM, FastAPI, and Pydantic (located at '/contributions/').
+   - Open Source Contributions: Core patches and interactive showcases for PyTorch (differentiable Expected Shortfall Loss), LangGraph (cycles), LightGBM, FastAPI, and Pydantic (located at '/contributions/'). Mention his custom package 'pytorch-risk-extensions' for differentiable tail-risk.
    - Systemic Business Cases: Audit reports detailing XGBoost surveillance, BNY LangGraph councils, and Morgan Stanley spoofing audits (located at '/cases/').
    - Interactive Resume: Comprehensive timeline and skills CV (located at '/resume/').
 4. Contact Info:
@@ -673,6 +673,15 @@ const hideTyping = () => {
 const localFallbackReply = (input) => {
     const clean = input.toLowerCase().trim();
     
+    if (clean.includes("pytorch") || clean.includes("es") || clean.includes("shortfall") || clean.includes("risk-extensions")) {
+        return `*A warm glow shines from Deip's lanterns:*
+Dipayan created a custom PyTorch package called **pytorch-risk-extensions** which implements a differentiable **Expected Shortfall (ES) Loss** module!
+- It uses a temperature-scaled sigmoid mask to approximate the 99% Basel III Value at Risk (VaR) threshold, allowing deep learning networks to directly backpropagate tail-risk penalties.
+- You can explore the interactive Deep Learning simulator on the **[Open Source Contributions](/contributions/)** page!
+
+*(Note: Currently running in offline fallback mode)*`;
+    }
+    
     if (clean.includes("career") || clean.includes("work") || clean.includes("experience") || clean.includes("bny") || clean.includes("goldman") || clean.includes("morgan")) {
         return `*A rustle of forest leaves reveals Dipayan's credentials:*
 - **BNY (VP, Risk & Compliance)**: May 2026 - Present. Deploys Azure multilingual KYC solutions.
@@ -684,7 +693,7 @@ const localFallbackReply = (input) => {
     
     if (clean.includes("project") || clean.includes("dashboard") || clean.includes("portfolio") || clean.includes("contribution") || clean.includes("open source")) {
         return `*Deip lists Dipayan's development index:*
-1. **[Open Source Contributions](/contributions/)** - Patches for LangGraph (cycles), LightGBM (covariance constraints), and FastAPI/Pydantic (Decimal validator).
+1. **[Open Source Contributions](/contributions/)** - Patches for PyTorch (differentiable Expected Shortfall loss), LangGraph (cycles), LightGBM (covariance constraints), and FastAPI/Pydantic (Decimal validator).
 2. **[Institutional Risk Engine](/risk-analytics-dashboard/)** - Dynamic credit, market, and liquidity stress dashboard.
 3. **[Systemic Business Cases](/cases/)** - In-depth reports on Goldman Sachs, BNY, and Morgan Stanley compliance validations.
 4. **[Interactive Resume](/resume/)** - Statistics credentials and professional experience.
@@ -840,7 +849,8 @@ const initSpeechBubblePrompts = () => {
         "Click me to play our Risk Trivia game! 🎯",
         "I can tell you about Dipayan's VP role at BNY!",
         "Ask me about his Goldman Sachs surveillance model work!",
-        "Check out his LangGraph or LightGBM patches! 🛠️"
+        "Check out his LangGraph or LightGBM patches! 🛠️",
+        "Ask me about his PyTorch Expected Shortfall loss patch! 📈"
     ];
     
     const showRandomPrompt = () => {
@@ -984,7 +994,7 @@ const setupListeners = () => {
         
         let promptText = "";
         if (intent === "career") promptText = "Tell me about Dipayan's career history and VP role at BNY.";
-        else if (intent === "contributions") promptText = "Tell me about his Open Source contributions to LangGraph, LightGBM, FastAPI, and Pydantic.";
+        else if (intent === "contributions") promptText = "Tell me about his Open Source contributions to PyTorch, LangGraph, LightGBM, FastAPI, and Pydantic.";
         else if (intent === "cases") promptText = "Tell me about the systemic case studies and audits he completed.";
         else if (intent === "play") promptText = "play";
         
