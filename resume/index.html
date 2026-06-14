@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dipayan Dey | Professional Resume</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ==========================================================================
+           DESIGN SYSTEM & VARIABLES (Web Theme)
+           ========================================================================== */
+        :root {
+            --bg-primary: #070a13;
+            --bg-secondary: #0e1320;
+            --bg-card: rgba(18, 25, 47, 0.55);
+            --bg-card-hover: rgba(25, 35, 65, 0.75);
+            --border-color: rgba(255, 255, 255, 0.08);
+            
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #8e9cb2;
+            
+            --color-info: #38bdf8;
+            --color-info-glow: rgba(56, 189, 248, 0.15);
+            --color-accent: #6366f1;
+            --color-accent-glow: rgba(99, 102, 241, 0.2);
+            --color-success: #10b981;
+            
+            --font-sans: 'Outfit', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* ==========================================================================
+           BASE STYLES
+           ========================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Background glows */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -20%;
+            left: -15%;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, rgba(99, 102, 241, 0) 70%);
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(80px);
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -20%;
+            right: -15%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.08) 0%, rgba(56, 189, 248, 0) 70%);
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(80px);
+        }
+
+        /* ==========================================================================
+           CONTROLS BAR (Actions)
+           ========================================================================== */
+        .controls-panel {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 24px 10px 24px;
+            z-index: 10;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.04);
+            color: var(--text-primary);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-primary {
+            background-color: var(--color-accent);
+            color: var(--text-primary);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+        }
+
+        .btn-primary:hover {
+            background-color: #5558e6;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.45);
+            transform: translateY(-2px);
+        }
+
+        /* ==========================================================================
+           RESUME CONTENT CONTAINER
+           ========================================================================== */
+        .resume-container {
+            width: 100%;
+            max-width: 900px;
+            padding: 40px 24px 100px 24px;
+            z-index: 10;
+        }
+
+        .resume-sheet {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 50px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        /* ==========================================================================
+           HEADER / INFO SECTION
+           ========================================================================== */
+        .resume-header {
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 30px;
+            margin-bottom: 35px;
+            text-align: center;
+        }
+
+        .resume-header h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ffffff 40%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            font-size: 13.5px;
+            color: var(--text-secondary);
+        }
+
+        .contact-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.2s;
+        }
+
+        .contact-item:hover {
+            color: var(--text-primary);
+        }
+
+        .contact-item i {
+            color: var(--color-info);
+        }
+
+        /* ==========================================================================
+           RESUME SECTIONS
+           ========================================================================== */
+        .resume-section {
+            margin-bottom: 40px;
+        }
+
+        .resume-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--color-info);
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 8px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title i {
+            font-size: 14px;
+        }
+
+        /* ==========================================================================
+           TIMELINE EXPERIENCE LAYOUT
+           ========================================================================== */
+        .timeline {
+            position: relative;
+            border-left: 2px solid rgba(255, 255, 255, 0.06);
+            margin-left: 12px;
+            padding-left: 28px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 35px;
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Glowing node */
+        .timeline-node {
+            position: absolute;
+            left: -37px;
+            top: 2px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: var(--bg-primary);
+            border: 2px solid var(--color-accent);
+            box-shadow: 0 0 8px var(--color-accent);
+            transition: var(--transition);
+        }
+
+        .timeline-item:hover .timeline-node {
+            background-color: var(--color-info);
+            border-color: #ffffff;
+            box-shadow: 0 0 12px var(--color-info-glow);
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .company-role h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .company-role .company {
+            color: var(--color-accent);
+            font-weight: 600;
+            font-size: 14px;
+            margin-top: 2px;
+        }
+
+        .location-date {
+            text-align: right;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .location-date .date {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-top: 2px;
+        }
+
+        /* Sub-sections within GS */
+        .timeline-sub-section {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .timeline-sub-section h4 {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            letter-spacing: 0.2px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .timeline-sub-section h4 i {
+            color: var(--color-info);
+            font-size: 11px;
+        }
+
+        .timeline-list {
+            list-style: none;
+            padding-left: 4px;
+        }
+
+        .timeline-list li {
+            font-size: 13.5px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 16px;
+        }
+
+        .timeline-list li::before {
+            content: '–';
+            position: absolute;
+            left: 0;
+            color: var(--color-info);
+            font-weight: bold;
+        }
+
+        /* ==========================================================================
+           EDUCATION & SKILLS SPECIFICS
+           ========================================================================== */
+        .edu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .edu-details h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .edu-details p {
+            font-size: 13.5px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .skills-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .skill-category {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .skill-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .skill-tag {
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 12.5px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .skill-tag:hover {
+            color: var(--text-primary);
+            background-color: var(--color-accent-glow);
+            border-color: var(--color-accent);
+            transform: translateY(-2px);
+        }
+
+        /* ==========================================================================
+           PRINT STYLESHEET (High-Quality PDF output)
+           ========================================================================== */
+        @media print {
+            body {
+                background: #ffffff !important;
+                color: #1e293b !important;
+                font-family: Georgia, 'Times New Roman', serif;
+                font-size: 10.5pt;
+                line-height: 1.5;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            
+            body::before, body::after, .controls-panel {
+                display: none !important;
+            }
+            
+            .resume-container {
+                padding: 0 !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+            }
+            
+            .resume-sheet {
+                background: #ffffff !important;
+                border: none !important;
+                border-radius: 0 !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                backdrop-filter: none !important;
+            }
+            
+            .resume-header {
+                border-bottom: 1px solid #1e293b !important;
+                padding-bottom: 15px !important;
+                margin-bottom: 20px !important;
+            }
+            
+            .resume-header h1 {
+                font-size: 24pt !important;
+                color: #0f172a !important;
+                background: none !important;
+                -webkit-text-fill-color: initial !important;
+                margin-bottom: 6px !important;
+            }
+            
+            .contact-info {
+                color: #475569 !important;
+                gap: 15px !important;
+                font-size: 9.5pt !important;
+            }
+            
+            .contact-item i {
+                display: none !important; /* hide icons in clean print version */
+            }
+            
+            .section-title {
+                color: #0f172a !important;
+                font-size: 11pt !important;
+                border-bottom: 1.5px solid #0f172a !important;
+                margin-bottom: 14px !important;
+                padding-bottom: 4px !important;
+                font-family: Arial, sans-serif !important;
+            }
+            
+            .section-title i {
+                display: none !important;
+            }
+            
+            .timeline {
+                border-left: none !important;
+                margin-left: 0 !important;
+                padding-left: 0 !important;
+            }
+            
+            .timeline-node {
+                display: none !important;
+            }
+            
+            .timeline-item {
+                margin-bottom: 20px !important;
+                page-break-inside: avoid;
+            }
+            
+            .timeline-header {
+                margin-bottom: 6px !important;
+            }
+            
+            .company-role h3 {
+                font-size: 12pt !important;
+                color: #0f172a !important;
+            }
+            
+            .company-role .company {
+                color: #0f172a !important;
+                font-size: 10pt !important;
+                font-weight: bold !important;
+            }
+            
+            .location-date {
+                font-size: 9.5pt !important;
+                color: #475569 !important;
+            }
+            
+            .location-date .date {
+                font-family: Arial, sans-serif !important;
+                color: #0f172a !important;
+                font-weight: bold !important;
+            }
+
+            .timeline-sub-section {
+                margin-top: 8px !important;
+                margin-bottom: 8px !important;
+            }
+
+            .timeline-sub-section h4 {
+                font-size: 10pt !important;
+                color: #0f172a !important;
+            }
+
+            .timeline-sub-section h4 i {
+                display: none !important;
+            }
+            
+            .timeline-list li {
+                font-size: 9.5pt !important;
+                color: #334155 !important;
+                line-height: 1.4 !important;
+                margin-bottom: 4px !important;
+                padding-left: 12px !important;
+            }
+            
+            .timeline-list li::before {
+                content: '•' !important;
+                color: #0f172a !important;
+            }
+            
+            .edu-item {
+                font-size: 9.5pt !important;
+            }
+            
+            .edu-details h3 {
+                font-size: 11pt !important;
+                color: #0f172a !important;
+            }
+            
+            .edu-details p {
+                color: #334155 !important;
+            }
+            
+            .skill-tags {
+                gap: 6px !important;
+            }
+            
+            .skill-tag {
+                background: none !important;
+                border: none !important;
+                color: #1e293b !important;
+                padding: 0 !important;
+                font-size: 9.5pt !important;
+            }
+            
+            .skill-tag::after {
+                content: ',' !important;
+            }
+            
+            .skill-tag:last-child::after {
+                content: '' !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Controls panel -->
+    <div class="controls-panel">
+        <a href="../" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Back to Portfolio</a>
+        <button class="btn btn-primary" onclick="window.print()"><i class="fa-solid fa-print"></i> Print / Save PDF</button>
+    </div>
+
+    <!-- Resume container -->
+    <div class="resume-container">
+        <div class="resume-sheet">
+            <!-- Header Section -->
+            <div class="resume-header">
+                <h1>Dipayan Dey</h1>
+                <div class="contact-info">
+                    <span class="contact-item"><i class="fa-solid fa-phone"></i> +91-7364969780</span>
+                    <a href="mailto:dipayandey44@gmail.com" class="contact-item"><i class="fa-solid fa-envelope"></i> dipayandey44@gmail.com</a>
+                    <a href="https://linkedin.com/in/dipayandey12" target="_blank" class="contact-item"><i class="fa-brands fa-linkedin"></i> linkedin.com/in/dipayandey12</a>
+                </div>
+            </div>
+            
+            <!-- Education Section -->
+            <div class="resume-section">
+                <h2 class="section-title"><i class="fa-solid fa-graduation-cap"></i> Education</h2>
+                <div class="edu-item">
+                    <div class="edu-details">
+                        <h3>Indian Institute of Technology (IIT), Kanpur</h3>
+                        <p>M.Sc. in Statistics</p>
+                    </div>
+                    <div class="location-date">
+                        <div>Kanpur, India</div>
+                        <div class="date">2019 – 2021</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Experience Section -->
+            <div class="resume-section">
+                <h2 class="section-title"><i class="fa-solid fa-briefcase"></i> Experience</h2>
+                <div class="timeline">
+                    
+                    <!-- BNY -->
+                    <div class="timeline-item">
+                        <div class="timeline-node"></div>
+                        <div class="timeline-header">
+                            <div class="company-role">
+                                <h3>Vice President</h3>
+                                <div class="company">BNY</div>
+                            </div>
+                            <div class="location-date">
+                                <div>New York, USA (Remote)</div>
+                                <div class="date">May 2026 – Present</div>
+                            </div>
+                        </div>
+                        <ul class="timeline-list">
+                            <li>Leading development of firmwide AI/ML solutions within the Risk & Compliance division; spearheading an Azure-based transcription and translation system for KYC document processing, enabling automated multilingual extraction at scale across regulatory workflows.</li>
+                            <li>Serving on the AI/ML Council for Risk & Compliance, shaping the strategic evaluation, governance, and adoption of AI/ML initiatives across the division.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Goldman Sachs -->
+                    <div class="timeline-item">
+                        <div class="timeline-node"></div>
+                        <div class="timeline-header">
+                            <div class="company-role">
+                                <h3>Associate</h3>
+                                <div class="company">Goldman Sachs</div>
+                            </div>
+                            <div class="location-date">
+                                <div>Bengaluru, India</div>
+                                <div class="date">Nov 2024 – Apr 2026</div>
+                            </div>
+                        </div>
+                        
+                        <!-- GS Sub Section I -->
+                        <div class="timeline-sub-section">
+                            <h4><i class="fa-solid fa-circle-chevron-right"></i> I. Compliance & Trade Surveillance</h4>
+                            <ul class="timeline-list">
+                                <li>Spearheaded the validation of the Intra-Market Manipulation Model; issued a High-Severity finding on model design, institutionalized a firm-wide performance monitoring framework, and benchmarked production methodology against 67 alternatives — developing two superior approaches adopted into production.</li>
+                                <li>Led evaluation of the primary Insider Trading model (XGBoost); identified and remediated critical data leakage flaws and established input/output monitoring protocols to ensure production integrity.</li>
+                                <li>Directed a high-stakes regulatory uplift addressing mandated findings; mentored two analysts across validation workstreams, identifying thematic gaps in monitoring methodologies.</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- GS Sub Section II -->
+                        <div class="timeline-sub-section">
+                            <h4><i class="fa-solid fa-circle-chevron-right"></i> II. Generative AI & Technical Leadership</h4>
+                            <ul class="timeline-list">
+                                <li>Validated Matryoshka-based embedding models; issued a High-Severity finding on loss function design and engineered a truncation-based benchmark that matched production performance.</li>
+                                <li>Architected the “LLM Council” — a multi-agent calibration framework spanning Anthropic, Google, and OpenAI — for automated ground-truth performance matching across semantic retrieval systems.</li>
+                                <li>Established a department-wide LLM-as-a-Judge evaluation framework on the Marquee platform; led risk assessments for Hybrid Search architectures adopted across the MRM division.</li>
+                                <li>Built a Validation Doc Writer Agent and Regression Agent via LangChain, reducing manual reporting cycles by 25%; drove division-wide adoption through structured knowledge-sharing sessions.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Morgan Stanley -->
+                    <div class="timeline-item">
+                        <div class="timeline-node"></div>
+                        <div class="timeline-header">
+                            <div class="company-role">
+                                <h3>Associate</h3>
+                                <div class="company">Morgan Stanley</div>
+                            </div>
+                            <div class="location-date">
+                                <div>Mumbai, India</div>
+                                <div class="date">Jan 2022 – Nov 2024</div>
+                            </div>
+                        </div>
+                        <ul class="timeline-list">
+                            <li>Served as Primary Validator for a portfolio of flagship AI/ML compliance models, including Customer Transaction Monitoring and Sanction/PEP Classification systems; ensured strict adherence to global AML mandates.</li>
+                            <li>Executed comprehensive independent validations to identify critical model limitations, identifying efficiency losses in production XGBoost models and enhancing risk-score precision via LightGBM benchmarking.</li>
+                            <li>Engineered a standardized benchmarking framework to validate vendor-developed Sanction models utilizing synthetic datasets and Fuzzy Matching; conducted deep-dive logic assessments and integrated distilBERT-based NLP to challenge and enhance precision in Sanction screening.</li>
+                        </ul>
+                    </div>
+
+                    <!-- ICICI Bank -->
+                    <div class="timeline-item">
+                        <div class="timeline-node"></div>
+                        <div class="timeline-header">
+                            <div class="company-role">
+                                <h3>Management Trainee</h3>
+                                <div class="company">ICICI Bank</div>
+                            </div>
+                            <div class="location-date">
+                                <div>Bengaluru, India</div>
+                                <div class="date">Aug 2021 – Dec 2021</div>
+                            </div>
+                        </div>
+                        <ul class="timeline-list">
+                            <li>Developed and validated XGBoost propensity models for digital product targeting, contributing to a 13% improvement in campaign efficiency.</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+            
+            <!-- Skills Section -->
+            <div class="resume-section">
+                <h2 class="section-title"><i class="fa-solid fa-sliders"></i> Technical Expertise</h2>
+                <div class="skills-grid">
+                    
+                    <div class="skill-category">
+                        <span class="skill-label">AI/ML Architecture</span>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Multi-Agent Systems</span>
+                            <span class="skill-tag">LangChain</span>
+                            <span class="skill-tag">LangGraph</span>
+                            <span class="skill-tag">RAG</span>
+                            <span class="skill-tag">LLM-as-a-Judge</span>
+                            <span class="skill-tag">Matryoshka Embeddings</span>
+                            <span class="skill-tag">XGBoost</span>
+                            <span class="skill-tag">distilBERT</span>
+                            <span class="skill-tag">LightGBM</span>
+                            <span class="skill-tag">Random Forest</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <span class="skill-label">Programming & Tools</span>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Python</span>
+                            <span class="skill-tag">SQL</span>
+                            <span class="skill-tag">R</span>
+                            <span class="skill-tag">PyTorch</span>
+                            <span class="skill-tag">scikit-learn</span>
+                            <span class="skill-tag">pandas</span>
+                            <span class="skill-tag">HuggingFace</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+</body>
+</html>
