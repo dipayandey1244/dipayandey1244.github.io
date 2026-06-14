@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Institutional Risk Analytics & Reporting Dashboard</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Style Sheet -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- html2pdf.js CDN for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div class="logo-text">
+                    <h2>ANTIGRAV</h2>
+                    <span>RISK ENGINE</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item active" data-tab="overview">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Executive Summary</span>
+                    </li>
+                    <li class="nav-header">Risk Verticals</li>
+                    <li class="nav-item" data-tab="market">
+                        <i class="fa-solid fa-chart-area"></i>
+                        <span>Market Risk</span>
+                    </li>
+                    <li class="nav-item" data-tab="credit">
+                        <i class="fa-solid fa-building-columns"></i>
+                        <span>Credit Risk</span>
+                    </li>
+                    <li class="nav-item" data-tab="liquidity">
+                        <i class="fa-solid fa-droplet"></i>
+                        <span>Liquidity Risk</span>
+                    </li>
+                    <li class="nav-item" data-tab="operational">
+                        <i class="fa-solid fa-gears"></i>
+                        <span>Operational Risk</span>
+                    </li>
+                    <li class="nav-header">Tools & Reporting</li>
+                    <li class="nav-item" data-tab="simulator">
+                        <i class="fa-solid fa-sliders"></i>
+                        <span>Scenario Simulator</span>
+                    </li>
+                    <li class="nav-item" data-tab="report">
+                        <i class="fa-solid fa-file-invoice-dollar"></i>
+                        <span>Executive Briefing</span>
+                    </li>
+                    <li class="nav-item" data-tab="methodology">
+                        <i class="fa-solid fa-book-bookmark"></i>
+                        <span>Methodology & References</span>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100&h=100" alt="MD Profile" class="avatar">
+                    <div class="user-info">
+                        <h4>Dipayan Sengupta</h4>
+                        <span>Managing Director</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Header Bar -->
+            <header class="top-bar">
+                <div class="page-title-area">
+                    <h1 id="active-tab-title">Executive Summary</h1>
+                    <p id="active-tab-desc">Comprehensive view of institutional risk metrics and limits.</p>
+                </div>
+                
+                <div class="top-bar-stats">
+                    <div class="header-stat">
+                        <span class="stat-label">MARKET RISK STATUS</span>
+                        <span class="stat-value text-success" id="market-status-indicator">
+                            <i class="fa-solid fa-circle-check"></i> Within Limits
+                        </span>
+                    </div>
+                    <div class="header-stat">
+                        <span class="stat-label">ACTIVE ALERTS</span>
+                        <span class="stat-value text-warning" id="alerts-count-indicator">
+                            <i class="fa-solid fa-triangle-exclamation"></i> 2 Warnings
+                        </span>
+                    </div>
+                    <div class="header-stat">
+                        <span class="stat-label">SIMULATION MODE</span>
+                        <span class="stat-badge badge-neutral" id="simulation-status-badge">Baseline</span>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Dynamic Viewport Container -->
+            <div class="viewport" id="viewport">
+                <!-- Content will be injected dynamically via JS -->
+                <div class="loading-spinner">
+                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    <p>Loading Risk Analytics Engine...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Application Script Entrypoint -->
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "risk-analytics-dashboard",
+  "version": "1.0.0",
+  "description": "Premium Institutional Risk Analytics & Reporting Dashboard for Managing Director Review",
+  "scripts": {
+    "dev": "npx -y serve -l 3000 ."
+  },
+  "keywords": [
+    "risk-management",
+    "financial-analytics",
+    "var",
+    "liquidity-stress",
+    "credit-risk"
+  ],
+  "author": "Dipayan Sengupta",
+  "license": "ISC"
+}
