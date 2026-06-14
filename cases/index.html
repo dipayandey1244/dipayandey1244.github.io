@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dipayan Dey | Business Case Studies</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ==========================================================================
+           DESIGN SYSTEM & VARIABLES
+           ========================================================================== */
+        :root {
+            --bg-primary: #070a13;
+            --bg-secondary: #0e1320;
+            --bg-card: rgba(18, 25, 47, 0.55);
+            --bg-card-hover: rgba(25, 35, 65, 0.75);
+            --border-color: rgba(255, 255, 255, 0.08);
+            
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #8e9cb2;
+            
+            --color-info: #38bdf8;
+            --color-info-glow: rgba(56, 189, 248, 0.15);
+            --color-accent: #6366f1;
+            --color-accent-glow: rgba(99, 102, 241, 0.2);
+            --color-success: #10b981;
+            
+            --font-sans: 'Outfit', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* ==========================================================================
+           BASE STYLES
+           ========================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            position: relative;
+        }
+
+        /* Background glows */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -20%;
+            left: -15%;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, rgba(99, 102, 241, 0) 70%);
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(80px);
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -20%;
+            right: -15%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.08) 0%, rgba(56, 189, 248, 0) 70%);
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(80px);
+        }
+
+        /* ==========================================================================
+           CONTROLS BAR
+           ========================================================================== */
+        .controls-panel {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 24px 10px 24px;
+            z-index: 10;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.04);
+            color: var(--text-primary);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* ==========================================================================
+           CASE STUDIES SHEET
+           ========================================================================== */
+        .cases-container {
+            width: 100%;
+            max-width: 900px;
+            padding: 40px 24px 100px 24px;
+            z-index: 10;
+        }
+
+        .cases-sheet {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 50px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .cases-title-header {
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 24px;
+            margin-bottom: 35px;
+        }
+
+        .cases-title-header h1 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #ffffff 40%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cases-title-header p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* ==========================================================================
+           INDIVIDUAL CASE STUDY CARDS
+           ========================================================================== */
+        .case-study {
+            margin-bottom: 48px;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 36px;
+        }
+
+        .case-study:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .case-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 18px;
+        }
+
+        .case-number-title h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .case-number-title span {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--color-info);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .case-badge {
+            background-color: var(--color-accent-glow);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #a5b4fc;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* Case study breakdown layout */
+        .case-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .case-grid { grid-template-columns: 1fr; }
+        }
+
+        .case-block h3 {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .case-block h3 i {
+            color: var(--color-info);
+        }
+
+        .case-block p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.55;
+        }
+
+        /* Highlight block for results */
+        .results-box {
+            grid-column: span 2;
+            background-color: rgba(16, 185, 129, 0.03);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .results-box { grid-column: span 1; }
+        }
+
+        .results-box h3 {
+            color: var(--color-success);
+        }
+
+        .results-box h3 i {
+            color: var(--color-success);
+        }
+
+        .results-box p {
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.55;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Controls panel -->
+    <div class="controls-panel">
+        <a href="../" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Back to Portfolio</a>
+    </div>
+
+    <!-- Cases container -->
+    <div class="cases-container">
+        <div class="cases-sheet">
+            <!-- Header Title -->
+            <div class="cases-title-header">
+                <h1>Systemic Business Case Studies</h1>
+                <p>An audit register of quantitative, structural, and artificial intelligence risk solutions implemented across investment banking and compliance operations.</p>
+            </div>
+            
+            <!-- Case Study 1 -->
+            <div class="case-study">
+                <div class="case-header">
+                    <div class="case-number-title">
+                        <span>Case Study I</span>
+                        <h2>Algorithmic Insider Trading Surveillance</h2>
+                    </div>
+                    <div class="case-badge">Trade Surveillance</div>
+                </div>
+                
+                <div class="case-grid">
+                    <div class="case-block">
+                        <h3><i class="fa-solid fa-triangle-exclamation"></i> Business Problem</h3>
+                        <p>Legacy rule-based transaction surveillance pipelines generated a 98% false-positive rate on insider trading alerts. This massive alert backlog delayed reporting times and forced analysts into repetitive, manual trade audit loops.</p>
+                    </div>
+                    <div class="case-block">
+                        <h3><i class="fa-solid fa-cogs"></i> Technical Solution</h3>
+                        <p>Architected and validated a downstream staging filter utilizing XGBoost. The model ingests raw surveillance alerts alongside historical volume profiles, order book imbalances, and market news vectors to score alert urgency. Explanations were structured using SHAP to ensure model auditability.</p>
+                    </div>
+                    <div class="results-box">
+                        <h3><i class="fa-solid fa-square-check"></i> Measured Business Impact</h3>
+                        <p>Reduced the false-positive alert backlog by <strong>64%</strong> while retaining a 100% historical recall rate of actual regulatory inquiries. This system uplift saved over 1,200 analyst clearing-hours annually and expedited regulatory reporting cycles.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Case Study 2 -->
+            <div class="case-study">
+                <div class="case-header">
+                    <div class="case-number-title">
+                        <span>Case Study II</span>
+                        <h2>Multi-Agent "LLM Council" Validation</h2>
+                    </div>
+                    <div class="case-badge">Generative AI Validation</div>
+                </div>
+                
+                <div class="case-grid">
+                    <div class="case-block">
+                        <h3><i class="fa-solid fa-triangle-exclamation"></i> Business Problem</h3>
+                        <p>The institutional adoption of Large Language Models (LLMs) for KYC and AML search was bottlenecked by model validation cycles. Compliance auditors lacked a scalable, automated framework to verify retrieval outputs (RAG) for hallucinations.</p>
+                    </div>
+                    <div class="case-block">
+                        <h3><i class="fa-solid fa-cogs"></i> Technical Solution</h3>
+                        <p>Designed a multi-agent validation engine using LangGraph. The framework deploys three independent "council" validator agents (representing Anthropic, Google, and OpenAI models) to score KYC outputs on factual alignment. Discrepancies are negotiated by a mediator agent before human sign-off.</p>
+                    </div>
+                    <div class="results-box">
+                        <h3><i class="fa-solid fa-square-check"></i> Measured Business Impact</h3>
+                        <p>Reduced model validation cycle times by <strong>75%</strong> and decreased manual reporting labor by <strong>25%</strong>. This framework established the department-wide benchmark for LLM-as-a-Judge validation adopted across the MRM division.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Case Study 3 -->
+            <div class="case-study">
+                <div class="case-header">
+                    <div class="case-number-title">
+                        <span>Case Study III</span>
+                        <h2>Intra-Market Manipulation Model Audit</h2>
+                    </div>
+                    <div class="case-badge">Model Risk Management</div>
+                </div>
+                
+                <div class="case-grid">
+                    <div class="case-block">
+                        <h3><i class="fa-solid fa-triangle-exclamation"></i> Business Problem</h3>
+                        <p>An audit of an intra-market manipulation model (designed to detect spoofing/layering) revealed severe data leakage within look-ahead features and significant model drift. This vulnerability exposed the bank to potential regulatory findings.</p>
+                    </div>
+                    <div class="case-block">
+                        <h3><i class="fa-solid fa-cogs"></i> Technical Solution</h3>
+                        <p>Conducted a mathematical re-engineering of the training matrix to enforce causal temporal splitting. Re-benchmarked the production pipeline against 67 alternative algorithms, validating a robust LightGBM implementation with structured covariance constraints.</p>
+                    </div>
+                    <div class="results-box">
+                        <h3><i class="fa-solid fa-square-check"></i> Measured Business Impact</h3>
+                        <p>Successfully remediated all regulatory findings. The updated LightGBM model improved alert precision by <strong>18%</strong>, while the validation methodology led to the institutionalization of a firm-wide performance monitoring framework.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- PERSISTENT DEIP AI AGENT -->
+    <script type="module" src="../js/deip-agent.js"></script>
+
+</body>
+</html>
