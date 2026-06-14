@@ -69,8 +69,14 @@ const TRIVIA_QUESTIONS = [
 // Helper to get relative path based on current location
 const getAssetPath = (filename) => {
     const path = window.location.pathname;
-    if (path.includes("/resume/") || path.includes("/cases/") || path.includes("/risk-analytics-dashboard/")) {
-        return `../${filename}`;
+    const cleanPath = path.replace(/^\/|\/$/g, "");
+    if (cleanPath === "" || cleanPath === "index.html") {
+        return `./${filename}`;
+    }
+    const parts = cleanPath.split("/");
+    const depth = parts.filter(p => p !== "index.html" && p !== "").length;
+    if (depth > 0) {
+        return "../".repeat(depth) + filename;
     }
     return `./${filename}`;
 };
