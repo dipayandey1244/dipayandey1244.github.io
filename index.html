@@ -1,98 +1,405 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🌟 Dipayan Dey | Portfolio</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-      color: #333;
-    }
-    header {
-      text-align: center;
-      padding: 80px 20px 20px;
-    }
-    h1 {
-      font-size: 3em;
-      color: #2c3e50;
-    }
-    p {
-      font-size: 1.2em;
-      color: #555;
-    }
-    .projects {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      padding: 40px 20px;
-      gap: 20px;
-    }
-    .card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      padding: 20px;
-      width: 300px;
-      transition: transform 0.2s ease;
-    }
-    .card:hover {
-      transform: translateY(-5px);
-    }
-    .card h3 {
-      color: #007acc;
-      margin-top: 0;
-    }
-    .card a {
-      text-decoration: none;
-      color: #007acc;
-      font-weight: bold;
-    }
-    .card a:hover {
-      text-decoration: underline;
-    }
-    footer {
-      text-align: center;
-      padding: 40px 20px;
-      font-size: 0.9em;
-      color: #666;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dipayan Dey | FinTech Developer & Portfolio</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ==========================================================================
+           DESIGN SYSTEM & VARIABLES
+           ========================================================================== */
+        :root {
+            --bg-primary: #070a13;
+            --bg-card: rgba(18, 25, 47, 0.55);
+            --bg-card-hover: rgba(25, 35, 65, 0.75);
+            --border-color: rgba(255, 255, 255, 0.08);
+            
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #8e9cb2;
+            
+            --color-info: #38bdf8;
+            --color-info-glow: rgba(56, 189, 248, 0.15);
+            --color-accent: #6366f1;
+            --color-accent-glow: rgba(99, 102, 241, 0.2);
+            --color-success: #10b981;
+            --color-success-glow: rgba(16, 185, 129, 0.15);
+            --color-warning: #f59e0b;
+            --color-warning-glow: rgba(245, 158, 11, 0.15);
+            
+            --font-sans: 'Outfit', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* ==========================================================================
+           GLOBAL BASE STYLES
+           ========================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            position: relative;
+        }
+
+        /* Ambient Glowing Blobs */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -25%;
+            left: -15%;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.14) 0%, rgba(99, 102, 241, 0) 70%);
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(100px);
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -20%;
+            right: -15%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.1) 0%, rgba(56, 189, 248, 0) 70%);
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(100px);
+        }
+
+        /* ==========================================================================
+           HERO HEADER SECTION
+           ========================================================================== */
+        header {
+            text-align: center;
+            padding: 100px 20px 40px;
+            max-width: 800px;
+            z-index: 10;
+        }
+
+        .profile-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: var(--color-accent-glow);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #a5b4fc;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #ffffff 30%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+            line-height: 1.5;
+        }
+
+        /* Social links bar */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 18px;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-btn:hover {
+            color: var(--text-primary);
+            background-color: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ==========================================================================
+           PROJECTS GRID SECTION
+           ========================================================================== */
+        .projects-section {
+            width: 100%;
+            max-width: 1200px;
+            padding: 40px 24px;
+            z-index: 10;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: var(--transition);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            min-height: 220px;
+        }
+
+        /* Category accent hovers */
+        .card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(255, 255, 255, 0.18);
+            background: var(--bg-card-hover);
+        }
+
+        .card-ghibli:hover { box-shadow: 0 12px 35px rgba(56, 189, 248, 0.12); }
+        .card-risk:hover { box-shadow: 0 12px 35px rgba(16, 185, 129, 0.14); }
+        .card-finance:hover { box-shadow: 0 12px 35px rgba(99, 102, 241, 0.12); }
+        .card-markdown:hover { box-shadow: 0 12px 35px rgba(245, 158, 11, 0.12); }
+
+        /* Icon headers */
+        .card-icon {
+            font-size: 28px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .card-ghibli .card-icon { color: var(--color-info); }
+        .card-risk .card-icon { color: var(--color-success); }
+        .card-finance .card-icon { color: var(--color-accent); }
+        .card-markdown .card-icon { color: var(--color-warning); }
+
+        .card-content h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: -0.2px;
+        }
+
+        .card-content p {
+            font-size: 13.5px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+
+        .card-footer {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: gap 0.2s;
+        }
+
+        .card:hover .card-footer {
+            gap: 10px;
+        }
+
+        .card-ghibli .card-footer { color: var(--color-info); }
+        .card-risk .card-footer { color: var(--color-success); }
+        .card-finance .card-footer { color: var(--color-accent); }
+        .card-markdown .card-footer { color: var(--color-warning); }
+
+        /* Featured project badge */
+        .featured-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background-color: var(--color-success-glow);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #6ee7b7;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* ==========================================================================
+           FOOTER SECTION
+           ========================================================================== */
+        footer {
+            text-align: center;
+            padding: 60px 20px 40px;
+            font-size: 13px;
+            color: var(--text-muted);
+            width: 100%;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            background-color: rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        footer strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* ==========================================================================
+           RESPONSIVE MOBILE STYLES
+           ========================================================================== */
+        @media (max-width: 768px) {
+            header {
+                padding: 60px 20px 20px;
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            .projects-section {
+                padding: 20px 16px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Dipayan Dey</h1>
-    <p>💻 Developer • 🚀 Explorer • 🎨 Creative Thinker</p>
-    <p><a href="https://github.com/dipayandey1244" target="_blank">🌐 github.com/dipayandey1244</a></p>
-  </header>
 
-  <section class="projects">
-    <div class="card">
-      <h3>📘 Ghibli Generator</h3>
-      <p>A cool project to transform photos into Ghibli-style art.<br>
-      <a href="https://github.com/dipayandey1244" target="_blank">View on GitHub →</a></p>
-    </div>
-    <div class="card">
-      <h3>📊 Institutional Risk Analytics</h3>
-      <p>A high-fidelity risk simulation engine based on Basel III & IFRS 9 guidelines.<br>
-      <a href="./risk-analytics-dashboard/" target="_blank">Launch Dashboard →</a></p>
-    </div>
-    <div class="card">
-      <h3>📗 Finance AI Projects</h3>
-      <p>Models that blend AI + finance risk systems like a pro.<br>
-      <a href="https://github.com/dipayandey1244" target="_blank">Check it out →</a></p>
-    </div>
-    <div class="card">
-      <h3>📕 Life in Markdown</h3>
-      <p>A minimalist writing system to log thoughts & feelings.<br>
-      <a href="https://github.com/dipayandey1244" target="_blank">Read more →</a></p>
-    </div>
-  </section>
+    <!-- Header section -->
+    <header>
+        <span class="profile-badge">
+            <i class="fa-solid fa-code-branch"></i> Systems Engineer & FinTech
+        </span>
+        <h1>Dipayan Dey</h1>
+        <p class="subtitle">Designing high-fidelity, quantitative risk engines and beautiful financial technology platforms that blend theoretical rigor with elite usability.</p>
+        
+        <!-- Social links bar -->
+        <div class="social-links">
+            <a href="https://github.com/dipayandey1244" target="_blank" class="social-btn" title="GitHub Profile">
+                <i class="fa-brands fa-github"></i>
+            </a>
+            <a href="mailto:dipayandresearchwork@gmail.com" class="social-btn" title="Email Me">
+                <i class="fa-solid fa-envelope"></i>
+            </a>
+            <a href="Dipayan_Dey_Resume.pdf" target="_blank" class="social-btn" title="View Resume">
+                <i class="fa-solid fa-file-pdf"></i>
+            </a>
+        </div>
+    </header>
 
-  <footer>
-    <p>Made with ❤️ by <strong>Dipayan Dey</strong> • © 2025</p>
-  </footer>
+    <!-- Projects Grid Section -->
+    <section class="projects-section">
+        <div class="projects-grid">
+            <!-- Ghibli Generator -->
+            <a href="https://github.com/dipayandey1244" target="_blank" class="card card-ghibli">
+                <div class="card-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                <div class="card-content">
+                    <h3>Ghibli Generator</h3>
+                    <p>A computer vision art pipeline that transforms static scenery photos into beautiful Ghibli-style digital paintings.</p>
+                </div>
+                <div class="card-footer">
+                    <span>View Repository</span> <i class="fa-solid fa-arrow-right-long"></i>
+                </div>
+            </a>
+
+            <!-- Risk Engine (Featured Dashboard) -->
+            <a href="./risk-analytics-dashboard/" target="_blank" class="card card-risk">
+                <span class="featured-badge">Featured System</span>
+                <div class="card-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="card-content">
+                    <h3>Institutional Risk Engine</h3>
+                    <p>Basel III & IFRS 9 compliant risk dashboard. Includes Value at Risk, Expected Shortfall modeling, and dynamic stress scenario simulators.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Launch Application</span> <i class="fa-solid fa-arrow-right-long"></i>
+                </div>
+            </a>
+
+            <!-- Finance AI Projects -->
+            <a href="https://github.com/dipayandey1244" target="_blank" class="card card-finance">
+                <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
+                <div class="card-content">
+                    <h3>Finance AI Projects</h3>
+                    <p>Machine learning classification and forecasting models deployed to analyze financial time-series data and credit migration.</p>
+                </div>
+                <div class="card-footer">
+                    <span>View Repository</span> <i class="fa-solid fa-arrow-right-long"></i>
+                </div>
+            </a>
+
+            <!-- Life in Markdown -->
+            <a href="https://github.com/dipayandey1244" target="_blank" class="card card-markdown">
+                <div class="card-icon"><i class="fa-solid fa-feather"></i></div>
+                <div class="card-content">
+                    <h3>Life in Markdown</h3>
+                    <p>A minimalist writing framework and journaling template optimized for markdown editing, speed, and privacy.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Read More</span> <i class="fa-solid fa-arrow-right-long"></i>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>Crafted with pride by <strong>Dipayan Dey</strong> • © 2026</p>
+    </footer>
+
 </body>
 </html>
