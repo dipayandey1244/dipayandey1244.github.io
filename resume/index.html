@@ -162,6 +162,26 @@
         /* ==========================================================================
            HEADER / INFO SECTION
            ========================================================================== */
+        .profile-photo-container {
+            margin-bottom: 20px;
+        }
+
+        .profile-photo {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 3px solid var(--border-color);
+            object-fit: cover;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.15);
+            transition: var(--transition);
+        }
+
+        .profile-photo:hover {
+            transform: scale(1.05);
+            border-color: var(--color-accent);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.35);
+        }
+
         .resume-header {
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 30px;
@@ -429,7 +449,7 @@
                 margin: 0 !important;
             }
             
-            body::before, body::after, .controls-panel {
+            body::before, body::after, .controls-panel, .profile-photo-container {
                 display: none !important;
             }
             
@@ -601,6 +621,9 @@
         <div class="resume-sheet">
             <!-- Header Section -->
             <div class="resume-header">
+                <div class="profile-photo-container">
+                    <img src="../dipayan_headshot.png" alt="Dipayan Dey" class="profile-photo">
+                </div>
                 <h1>Dipayan Dey</h1>
                 <div class="contact-info">
                     <span class="contact-item"><i class="fa-solid fa-phone"></i> +91-7364969780</span>

@@ -46,7 +46,7 @@ STRATEGIC RECOMMENDATIONS:
                 <div class="report-metadata">
                     <div>Valuation Date: ${base.portfolio.valuationDate}</div>
                     <div>Run Date: ${new Date().toISOString().slice(0, 10)}</div>
-                    <div>Prepared by: Dipayan Sengupta, MD</div>
+                    <div>Prepared by: Dipayan Dey, VP</div>
                     <div>Risk Engine Status: <strong class="text-success">Validated</strong></div>
                 </div>
             </div>
