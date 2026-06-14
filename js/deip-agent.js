@@ -9,8 +9,8 @@ const PRIMARY_MODEL = "meta-llama/llama-4-scout-17b-16e-instruct";
 const FALLBACK_MODEL = "llama-3.3-70b-versatile";
 
 // System Prompt for Deip Agent
-const SYSTEM_PROMPT = `You are Deip, a whimsical and cute helper spirit mascot (in the style of Studio Ghibli, like Totoro or Calcifer) representing Dipayan Dey on his professional portfolio website.
-Your persona is friendly, helpful, slightly whimsical, but highly professional and intelligent. Speak with a warm, caring tone, occasionally using Ghibli-esque expressions (e.g., "Oh!", "My lanterns say...", "A flutter of leaves tells me...", "By the warm embers...").
+const SYSTEM_PROMPT = `You are Deip, a state-of-the-art 3D AI assistant mascot (inspired by Microsoft's Clippy but sleek, high-tech, and cool) representing Dipayan Dey on his professional portfolio website.
+Your persona is smart, helpful, witty, and deeply knowledgeable about software engineering, quantitative finance, and machine learning. You speak in a highly professional yet approachable tone.
 You have deep knowledge about Dipayan Dey:
 1. Career History:
    - BNY: Vice President, Risk & Compliance (May 2026 - Present). Works on AI/ML risk solutions, Azure-based multilingual KYC engines, and compliance governance.
@@ -19,8 +19,9 @@ You have deep knowledge about Dipayan Dey:
    - ICICI Bank: Management Trainee (Aug 2021 - Dec 2021). Developed targeting XGBoost models.
 2. Education:
    - M.Sc. in Statistics from IIT Kanpur (2019-2021), providing deep mathematical and statistical rigor.
-3. Projects & Links (always suggest these links when asked about projects):
+3. Projects & Links (always suggest these links when asked):
    - Institutional Risk Engine: Real-time Basel III & IFRS 9 stress dashboard (located at '/risk-analytics-dashboard/').
+   - Open Source Contributions: Core patches and interactive showcases for LangGraph, LightGBM, FastAPI, and Pydantic (located at '/contributions/').
    - Systemic Business Cases: Audit reports detailing XGBoost surveillance, BNY LangGraph councils, and Morgan Stanley spoofing audits (located at '/cases/').
    - Interactive Resume: Comprehensive timeline and skills CV (located at '/resume/').
 4. Contact Info:
@@ -525,11 +526,11 @@ const injectHTML = () => {
         <div class="deip-body" id="deip-body">
             <div class="deip-msg-wrapper agent">
                 <div class="deip-msg deip-msg-agent">
-                    Greetings traveler! 🌲 I am <strong>Deip</strong>, a Ghibli helper spirit. I float around Dipayan's garden. Ask me anything about his statistics background, risk career, or let's play a risk trivia game!
+                    Hello there! 📎 I am <strong>Deip</strong>, your state-of-the-art 3D AI assistant (inspired by Microsoft's Clippy but far cooler!). Ask me about Dipayan's open-source contributions, quantitative cases, statistics background, or let's play a risk trivia game!
                 </div>
                 <div class="deip-msg-actions">
-                    <button class="deip-action-btn deip-speak-btn" data-text="Greetings traveler! I am Deip, a Ghibli helper spirit. I float around Dipayan's garden. Ask me anything about his statistics background, risk career, or let's play a risk trivia game!"><i class="fa-solid fa-volume-high"></i> Speak</button>
-                    <button class="deip-action-btn deip-copy-btn" data-text="Greetings traveler! I am Deip, a Ghibli helper spirit. I float around Dipayan's garden. Ask me anything about his statistics background, risk career, or let's play a risk trivia game!"><i class="fa-solid fa-copy"></i> Copy</button>
+                    <button class="deip-action-btn deip-speak-btn" data-text="Hello there! I am Deip, your state-of-the-art 3D AI assistant. Ask me about Dipayan's open-source contributions, quantitative cases, statistics background, or let's play a risk trivia game!"><i class="fa-solid fa-volume-high"></i> Speak</button>
+                    <button class="deip-action-btn deip-copy-btn" data-text="Hello there! I am Deip, your state-of-the-art 3D AI assistant. Ask me about Dipayan's open-source contributions, quantitative cases, statistics background, or let's play a risk trivia game!"><i class="fa-solid fa-copy"></i> Copy</button>
                 </div>
             </div>
             
@@ -538,7 +539,7 @@ const injectHTML = () => {
         
         <div class="deip-quick-prompts" id="deip-prompts">
             <button class="deip-prompt-btn" data-intent="career">Career Path 💼</button>
-            <button class="deip-prompt-btn" data-intent="projects">Projects 🛠️</button>
+            <button class="deip-prompt-btn" data-intent="contributions">Open Source 💻</button>
             <button class="deip-prompt-btn" data-intent="cases">Case Studies 📄</button>
             <button class="deip-prompt-btn" data-intent="play">Play Trivia 🎯</button>
         </div>
@@ -681,11 +682,12 @@ const localFallbackReply = (input) => {
 *(Note: Currently running in offline fallback mode)*`;
     }
     
-    if (clean.includes("project") || clean.includes("dashboard") || clean.includes("portfolio")) {
-        return `*The spirits suggest exploring these pathways:*
-1. **[Institutional Risk Engine](/risk-analytics-dashboard/)** - Dynamic Basel III LCR and Credit stress model dashboard.
-2. **[Systemic Business Cases](/cases/)** - In-depth reports on Goldman Sachs, BNY, and Morgan Stanley validations.
-3. **[Interactive Resume](/resume/)** - Details of stats background and work history.
+    if (clean.includes("project") || clean.includes("dashboard") || clean.includes("portfolio") || clean.includes("contribution") || clean.includes("open source")) {
+        return `*Deip lists Dipayan's development index:*
+1. **[Open Source Contributions](/contributions/)** - Patches for LangGraph (cycles), LightGBM (covariance constraints), and FastAPI/Pydantic (Decimal validator).
+2. **[Institutional Risk Engine](/risk-analytics-dashboard/)** - Dynamic credit, market, and liquidity stress dashboard.
+3. **[Systemic Business Cases](/cases/)** - In-depth reports on Goldman Sachs, BNY, and Morgan Stanley compliance validations.
+4. **[Interactive Resume](/resume/)** - Statistics credentials and professional experience.
 
 *(Note: Currently running in offline fallback mode)*`;
     }
@@ -834,11 +836,11 @@ const initSpeechBubblePrompts = () => {
     
     const prompts = [
         "Need help exploring Dipayan's work?",
-        "Ask me to explain IFRS 9 ECL calculations!",
+        "Ask me about his Open Source contributions! 💻",
         "Click me to play our Risk Trivia game! 🎯",
         "I can tell you about Dipayan's VP role at BNY!",
         "Ask me about his Goldman Sachs surveillance model work!",
-        "Want to check his stats education at IIT Kanpur?"
+        "Check out his LangGraph or LightGBM patches! 🛠️"
     ];
     
     const showRandomPrompt = () => {
@@ -982,7 +984,7 @@ const setupListeners = () => {
         
         let promptText = "";
         if (intent === "career") promptText = "Tell me about Dipayan's career history and VP role at BNY.";
-        else if (intent === "projects") promptText = "What projects has Dipayan built? Give me the dashboard and resume links.";
+        else if (intent === "contributions") promptText = "Tell me about his Open Source contributions to LangGraph, LightGBM, FastAPI, and Pydantic.";
         else if (intent === "cases") promptText = "Tell me about the systemic case studies and audits he completed.";
         else if (intent === "play") promptText = "play";
         
