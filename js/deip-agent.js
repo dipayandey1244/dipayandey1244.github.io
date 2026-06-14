@@ -68,17 +68,22 @@ const TRIVIA_QUESTIONS = [
 
 // Helper to get relative path based on current location
 const getAssetPath = (filename) => {
-    const path = window.location.pathname;
-    const cleanPath = path.replace(/^\/|\/$/g, "");
-    if (cleanPath === "" || cleanPath === "index.html") {
-        return `./${filename}`;
+    const scripts = document.getElementsByTagName("script");
+    let relativeRoot = "./";
+    for (let script of scripts) {
+        const src = script.getAttribute("src") || "";
+        if (src.includes("deip-agent.js")) {
+            const idx = src.indexOf("js/deip-agent.js");
+            if (idx !== -1) {
+                relativeRoot = src.substring(0, idx);
+            }
+            break;
+        }
     }
-    const parts = cleanPath.split("/");
-    const depth = parts.filter(p => p !== "index.html" && p !== "").length;
-    if (depth > 0) {
-        return "../".repeat(depth) + filename;
+    if (!relativeRoot) {
+        relativeRoot = "./";
     }
-    return `./${filename}`;
+    return relativeRoot + filename;
 };
 
 // Inline Styles Injection
@@ -562,18 +567,26 @@ const injectHTML = () => {
 // Formats basic Markdown links and bold text
 const formatMarkdown = (text) => {
     let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    
+    // Find relative root from script tag
+    const scripts = document.getElementsByTagName("script");
+    let relativeRoot = "./";
+    for (let script of scripts) {
+        const src = script.getAttribute("src") || "";
+        if (src.includes("deip-agent.js")) {
+            const idx = src.indexOf("js/deip-agent.js");
+            if (idx !== -1) {
+                relativeRoot = src.substring(0, idx);
+            }
+            break;
+        }
+    }
+    if (!relativeRoot) relativeRoot = "./";
+
     html = html.replace(/\[(.*?)\]\((.*?)\)/g, (match, label, url) => {
         let targetUrl = url;
         if (url.startsWith("/")) {
-            const path = window.location.pathname;
-            const cleanPath = path.replace(/^\/|\/$/g, "");
-            if (cleanPath !== "" && cleanPath !== "index.html") {
-                const parts = cleanPath.split("/");
-                const depth = parts.filter(p => p !== "index.html" && p !== "").length;
-                if (depth > 0) {
-                    targetUrl = "../".repeat(depth) + url.substring(1);
-                }
-            }
+            targetUrl = relativeRoot + url.substring(1);
         }
         return `<a href="${targetUrl}">${label}</a>`;
     });
