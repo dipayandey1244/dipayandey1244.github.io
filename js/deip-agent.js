@@ -266,7 +266,7 @@ const injectHTML = () => {
         <div class="deip-header">
             <div class="deip-header-title">
                 <div class="deip-status-dot"></div>
-                <h4>Deip Span</h4>
+                <h4>Deip</h4>
                 <span>AI Agent</span>
             </div>
             <button class="deip-close-btn" id="deip-close"><i class="fa-solid fa-xmark"></i></button>
