@@ -20,6 +20,7 @@ You have deep knowledge about Dipayan Dey:
 2. Education:
    - M.Sc. in Statistics from IIT Kanpur (2019-2021), providing deep mathematical and statistical rigor.
 3. Projects & Links (always suggest these links when asked):
+   - AetherCrawl Autonomous Web Crawler: A visual crawler simulator that maps link hierarchies dynamically and indexes crawl data (located at '/web-crawler/'). Mention his local python package 'distributed-web-crawler'.
    - Institutional Risk Engine: Real-time Basel III & IFRS 9 stress dashboard (located at '/risk-analytics-dashboard/').
    - Open Source Contributions: Core patches and interactive showcases for PyTorch (differentiable Expected Shortfall Loss), LangGraph (cycles), LightGBM, FastAPI, and Pydantic (located at '/contributions/'). Mention his custom package 'pytorch-risk-extensions' for differentiable tail-risk.
    - Systemic Business Cases: Audit reports detailing XGBoost surveillance, BNY LangGraph councils, and Morgan Stanley spoofing audits (located at '/cases/').
@@ -673,6 +674,16 @@ const hideTyping = () => {
 const localFallbackReply = (input) => {
     const clean = input.toLowerCase().trim();
     
+    if (clean.includes("crawler") || clean.includes("spider") || clean.includes("aethercrawl") || clean.includes("crawl")) {
+        return `*A spider web made of fuchsia light appears:*
+Dipayan developed **AetherCrawl**, an autonomous high-performance web crawler and analyzer dashboard!
+- It simulates an asynchronous crawler engine that crawls websites, displays real-time link-state node graphs, outputs terminal logs, and indexes data into an SQLite database representation.
+- You can interact with the live orchestrator at **[AetherCrawl Analyzer](/web-crawler/)**!
+- You can also view the local code repository \`/Users/dipayan/.gemini/antigravity/scratch/distributed-web-crawler\` containing the backend async Python implementation.
+
+*(Note: Currently running in offline fallback mode)*`;
+    }
+    
     if (clean.includes("pytorch") || clean.includes("es") || clean.includes("shortfall") || clean.includes("risk-extensions")) {
         return `*A warm glow shines from Deip's lanterns:*
 Dipayan created a custom PyTorch package called **pytorch-risk-extensions** which implements a differentiable **Expected Shortfall (ES) Loss** module!
@@ -694,9 +705,10 @@ Dipayan created a custom PyTorch package called **pytorch-risk-extensions** whic
     if (clean.includes("project") || clean.includes("dashboard") || clean.includes("portfolio") || clean.includes("contribution") || clean.includes("open source")) {
         return `*Deip lists Dipayan's development index:*
 1. **[Open Source Contributions](/contributions/)** - Patches for PyTorch (differentiable Expected Shortfall loss), LangGraph (cycles), LightGBM (covariance constraints), and FastAPI/Pydantic (Decimal validator).
-2. **[Institutional Risk Engine](/risk-analytics-dashboard/)** - Dynamic credit, market, and liquidity stress dashboard.
-3. **[Systemic Business Cases](/cases/)** - In-depth reports on Goldman Sachs, BNY, and Morgan Stanley compliance validations.
-4. **[Interactive Resume](/resume/)** - Statistics credentials and professional experience.
+2. **[AetherCrawl Analyzer](/web-crawler/)** - Autonomous web crawler with real-time node graphs and SQLite database outputs.
+3. **[Institutional Risk Engine](/risk-analytics-dashboard/)** - Dynamic credit, market, and liquidity stress dashboard.
+4. **[Systemic Business Cases](/cases/)** - In-depth reports on Goldman Sachs, BNY, and Morgan Stanley compliance validations.
+5. **[Interactive Resume](/resume/)** - Statistics credentials and professional experience.
 
 *(Note: Currently running in offline fallback mode)*`;
     }
@@ -850,7 +862,8 @@ const initSpeechBubblePrompts = () => {
         "I can tell you about Dipayan's VP role at BNY!",
         "Ask me about his Goldman Sachs surveillance model work!",
         "Check out his LangGraph or LightGBM patches! 🛠️",
-        "Ask me about his PyTorch Expected Shortfall loss patch! 📈"
+        "Ask me about his PyTorch Expected Shortfall loss patch! 📈",
+        "Check out his autonomous Web Crawler engine! 🕷️"
     ];
     
     const showRandomPrompt = () => {

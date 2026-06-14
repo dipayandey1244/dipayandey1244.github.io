@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AetherCrawl | Autonomous Asynchronous Web Crawler & Analyzer</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Design Tokens & Variables */
+        :root {
+            --bg-primary: #070a13;
+            --bg-card: rgba(22, 17, 36, 0.6);
+            --bg-card-hover: rgba(36, 25, 59, 0.75);
+            --border-color: rgba(217, 70, 239, 0.12);
+            --border-color-hover: rgba(217, 70, 239, 0.3);
+            
+            --text-primary: #f8fafc;
+            --text-secondary: #c084fc;
+            --text-muted: #9333ea;
+            
+            --color-crawler: #d946ef;
+            --color-crawler-glow: rgba(217, 70, 239, 0.2);
+            --color-success: #10b981;
+            --color-success-glow: rgba(16, 185, 129, 0.15);
+            --color-warning: #f59e0b;
+            --color-error: #ef4444;
+            
+            --font-sans: 'Outfit', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Ambient glows */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -10%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(217, 70, 239, 0.12) 0%, rgba(217, 70, 239, 0) 70%);
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(100px);
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -10%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, rgba(99, 102, 241, 0) 70%);
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(100px);
+        }
+
+        /* Navigation Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 40px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: rgba(7, 10, 19, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+            position: sticky;
+            top: 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo i {
+            font-size: 26px;
+            color: var(--color-crawler);
+            text-shadow: 0 0 12px var(--color-crawler-glow);
+        }
+
+        .logo h1 {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffffff 40%, #f472b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-btn {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-btn:hover {
+            color: var(--color-crawler);
+        }
+
+        .nav-btn.primary {
+            background-color: var(--color-crawler-glow);
+            border: 1px solid rgba(217, 70, 239, 0.4);
+            color: #f472b6;
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+
+        .nav-btn.primary:hover {
+            background-color: var(--color-crawler);
+            color: var(--bg-primary);
+            box-shadow: 0 0 15px var(--color-crawler-glow);
+        }
+
+        /* Container Layout */
+        .workspace {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 24px;
+            flex: 1;
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 24px;
+        }
+
+        /* Left Control Panel */
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .glass-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: var(--transition);
+        }
+
+        .glass-card:hover {
+            border-color: var(--border-color-hover);
+        }
+
+        .panel-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .panel-title i {
+            color: var(--color-crawler);
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input {
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            font-size: 13.5px;
+            transition: var(--transition);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-crawler);
+            box-shadow: 0 0 10px rgba(217, 70, 239, 0.2);
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .slider-container input[type="range"] {
+            flex: 1;
+            accent-color: var(--color-crawler);
+            height: 4px;
+            border-radius: 2px;
+        }
+
+        .slider-value {
+            font-family: var(--font-mono);
+            font-size: 12.5px;
+            color: var(--text-primary);
+            min-width: 45px;
+            text-align: right;
+        }
+
+        /* Action Buttons */
+        .btn-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            font-size: 13.5px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--color-crawler);
+            color: var(--bg-primary);
+            grid-column: span 2;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 20px rgba(217, 70, 239, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: var(--color-crawler);
+        }
+
+        .btn-danger {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: var(--color-error);
+        }
+
+        .btn-danger:hover {
+            background-color: var(--color-error);
+            color: var(--text-primary);
+        }
+
+        /* Right Content Panel */
+        .main-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Analytics Stats Row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: var(--color-crawler);
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Visual Canvas */
+        .visualization-box {
+            position: relative;
+            height: 480px;
+            overflow: hidden;
+            background: rgba(7, 10, 19, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #crawler-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            cursor: grab;
+        }
+
+        #crawler-canvas:active {
+            cursor: grabbing;
+        }
+
+        .canvas-overlay {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .badge-legend {
+            background-color: rgba(7, 10, 19, 0.85);
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            pointer-events: auto;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .dot-seed { background-color: var(--color-crawler); box-shadow: 0 0 6px var(--color-crawler); }
+        .dot-ok { background-color: var(--color-success); box-shadow: 0 0 6px var(--color-success); }
+        .dot-redirect { background-color: var(--color-warning); box-shadow: 0 0 6px var(--color-warning); }
+        .dot-error { background-color: var(--color-error); box-shadow: 0 0 6px var(--color-error); }
+        .dot-pending { background-color: #64748b; }
+
+        /* Detail Sidebar Panel overlay */
+        .node-details-overlay {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 280px;
+            background-color: rgba(7, 10, 19, 0.9);
+            border: 1px solid var(--border-color-hover);
+            border-radius: 12px;
+            padding: 16px;
+            backdrop-filter: blur(8px);
+            font-size: 12px;
+            transform: translateX(310px);
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 5;
+        }
+
+        .node-details-overlay.open {
+            transform: translateX(0);
+        }
+
+        .details-title {
+            font-weight: 700;
+            font-size: 13.5px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 6px;
+            color: var(--color-crawler);
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .details-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            color: var(--text-secondary);
+        }
+
+        .details-row span {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .details-url {
+            word-break: break-all;
+            background-color: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 6px;
+            border-radius: 6px;
+            margin-top: 8px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            max-height: 80px;
+            overflow-y: auto;
+        }
+
+        /* Console Terminal */
+        .terminal-box {
+            background-color: #030509;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: #a78bfa;
+            height: 180px;
+            overflow-y: auto;
+            box-shadow: inset 0 2px 15px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .terminal-line {
+            line-height: 1.4;
+            white-space: pre-wrap;
+        }
+
+        .terminal-line span.timestamp {
+            color: #5b21b6;
+        }
+
+        .terminal-line span.tag-fetch { color: #38bdf8; }
+        .terminal-line span.tag-parse { color: #a855f7; }
+        .terminal-line span.tag-queue { color: #f472b6; }
+        .terminal-line span.tag-error { color: var(--color-error); }
+        .terminal-line span.tag-success { color: var(--color-success); }
+
+        /* TABS layout */
+        .tabs-header {
+            display: flex;
+            gap: 12px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 12px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-family: var(--font-sans);
+            font-weight: 600;
+            font-size: 14px;
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab-btn:hover {
+            color: var(--color-crawler);
+        }
+
+        .tab-btn.active {
+            color: var(--color-crawler);
+            border-bottom-color: var(--color-crawler);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Table design */
+        .table-wrapper {
+            background-color: rgba(22, 17, 36, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12.5px;
+            text-align: left;
+        }
+
+        th {
+            background-color: rgba(7, 10, 19, 0.7);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 16px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 10.5px;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            color: var(--text-primary);
+        }
+
+        tr:hover td {
+            background-color: rgba(217, 70, 239, 0.02);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-200 { background-color: rgba(16, 185, 129, 0.1); color: var(--color-success); border: 1px solid rgba(16, 185, 129, 0.3); }
+        .badge-300 { background-color: rgba(245, 158, 11, 0.1); color: var(--color-warning); border: 1px solid rgba(245, 158, 11, 0.3); }
+        .badge-400, .badge-500 { background-color: rgba(239, 68, 68, 0.1); color: var(--color-error); border: 1px solid rgba(239, 68, 68, 0.3); }
+
+        /* Code block diff representation */
+        .code-container {
+            position: relative;
+        }
+
+        .code-block {
+            background-color: #030509 !important;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: #d8b4fe;
+            overflow-x: auto;
+            max-height: 400px;
+            white-space: pre;
+            line-height: 1.5;
+        }
+
+        .keyword { color: #f472b6; font-weight: 700; }
+        .string { color: #38bdf8; }
+        .comment { color: #64748b; font-style: italic; }
+        .def { color: #c084fc; font-weight: 600; }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 24px;
+            font-size: 13px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            margin-top: 40px;
+            background-color: rgba(0, 0, 0, 0.15);
+        }
+
+        footer strong {
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Nav header -->
+    <header>
+        <a href="../" class="logo">
+            <i class="fa-solid fa-spider"></i>
+            <div>
+                <h1>AetherCrawl</h1>
+            </div>
+        </a>
+        <div class="nav-links">
+            <a href="../" class="nav-btn"><i class="fa-solid fa-chevron-left"></i> Portfolio Home</a>
+            <a href="../contributions/" class="nav-btn">Contributions</a>
+            <a href="https://github.com/dipayandey1244" target="_blank" class="nav-btn primary"><i class="fa-brands fa-github"></i> View GitHub</a>
+        </div>
+    </header>
+
+    <!-- Workspace Grid -->
+    <div class="workspace">
+        
+        <!-- Left configuration panel -->
+        <div class="control-panel">
+            <div class="glass-card">
+                <div class="panel-title">
+                    <i class="fa-solid fa-sliders"></i>
+                    Crawl Orchestrator
+                </div>
+                
+                <div class="form-group">
+                    <label for="crawler-seed">Seed URL (Target Domain)</label>
+                    <input type="text" id="crawler-seed" class="form-input" value="https://dipayandey1244.github.io">
+                </div>
+                
+                <div class="form-group">
+                    <label for="crawler-keyword">Search Keyword Filter</label>
+                    <input type="text" id="crawler-keyword" class="form-input" placeholder="e.g. Risk, AI, Basel (optional)">
+                </div>
+
+                <div class="form-group">
+                    <label>Max Crawl Depth</label>
+                    <div class="slider-container">
+                        <input type="range" id="depth-slider" min="1" max="3" value="2">
+                        <span class="slider-value" id="depth-val">2</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Polite Delay (ms)</label>
+                    <div class="slider-container">
+                        <input type="range" id="delay-slider" min="100" max="2000" step="100" value="300">
+                        <span class="slider-value" id="delay-val">300 ms</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Max Scoped Pages</label>
+                    <div class="slider-container">
+                        <input type="range" id="pages-slider" min="5" max="50" step="5" value="20">
+                        <span class="slider-value" id="pages-val">20</span>
+                    </div>
+                </div>
+
+                <div class="btn-grid">
+                    <button class="btn btn-primary" id="btn-start"><i class="fa-solid fa-play"></i> Start Crawling</button>
+                    <button class="btn btn-secondary" id="btn-pause" disabled><i class="fa-solid fa-pause"></i> Pause</button>
+                    <button class="btn btn-danger" id="btn-reset"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+                </div>
+            </div>
+            
+            <div class="glass-card">
+                <div class="panel-title">
+                    <i class="fa-solid fa-circle-info"></i>
+                    System Spec
+                </div>
+                <div style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.6;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">Engine: <span style="color: white; font-weight: 600;">AsyncIO / AioHTTP Mock</span></div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">Concurrency Limits: <span style="color: white; font-weight: 600;">5 Threads</span></div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">Link Deduplication: <span style="color: white; font-weight: 600;">Bloom Filter Set</span></div>
+                    <div style="display: flex; justify-content: space-between;">Storage Scheme: <span style="color: white; font-weight: 600;">SQLite Index</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right dashboards panel -->
+        <div class="main-panel">
+            
+            <!-- Real-time Stats -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-crawled">0</div>
+                    <div class="stat-label">Pages Crawled</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-links">0</div>
+                    <div class="stat-label">Discovered Links</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-data">0 KB</div>
+                    <div class="stat-label">Data Transferred</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-time">0 ms</div>
+                    <div class="stat-label">Avg Fetch Speed</div>
+                </div>
+            </div>
+
+            <!-- Visualization Workspace -->
+            <div class="visualization-box">
+                <canvas id="crawler-canvas"></canvas>
+                
+                <div class="canvas-overlay">
+                    <div class="badge-legend">
+                        <div class="legend-item"><div class="legend-dot dot-seed"></div> Seed</div>
+                        <div class="legend-item"><div class="legend-dot dot-ok"></div> 200 OK</div>
+                        <div class="legend-item"><div class="legend-dot dot-redirect"></div> Redirect</div>
+                        <div class="legend-item"><div class="legend-dot dot-error"></div> Error</div>
+                        <div class="legend-item"><div class="legend-dot dot-pending"></div> Pending</div>
+                    </div>
+                </div>
+
+                <div class="node-details-overlay" id="details-overlay">
+                    <div class="details-title" id="node-title">Page Title</div>
+                    <div class="details-row">HTTP Status: <span id="node-status" class="status-badge badge-200">200 OK</span></div>
+                    <div class="details-row">Size: <span id="node-size">12.4 KB</span></div>
+                    <div class="details-row">Word Count: <span id="node-words">352 words</span></div>
+                    <div class="details-row">Depth Level: <span id="node-depth">1</span></div>
+                    <div class="details-row">Keywords: <span id="node-matches" style="color: var(--color-success);">0 matches</span></div>
+                    <div class="details-url" id="node-url">https://dipayandey1244.github.io/</div>
+                </div>
+            </div>
+
+            <!-- Real-time Console Terminal -->
+            <div class="terminal-box" id="crawler-terminal">
+                <div class="terminal-line"><span class="timestamp">[15:00:00]</span> [AETHER] System idling. Awaiting seed URL configurations...</div>
+            </div>
+
+            <!-- Bottom Tabs Section -->
+            <div class="glass-card">
+                <div class="tabs-header">
+                    <button class="tab-btn active" onclick="switchTab(event, 'tab-index')"><i class="fa-solid fa-list-check"></i> Crawled Index</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'tab-code')"><i class="fa-solid fa-code"></i> Python Crawler Code</button>
+                </div>
+
+                <!-- Index Table Tab -->
+                <div class="tab-content active" id="tab-index">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <input type="text" id="index-search" class="form-input" placeholder="Search crawled records..." style="max-width: 300px; padding: 6px 12px; font-size: 12px;">
+                        <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" id="btn-export" disabled><i class="fa-solid fa-download"></i> Export JSON</button>
+                    </div>
+                    
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Page Title</th>
+                                    <th>Crawl URL</th>
+                                    <th>Status</th>
+                                    <th>Word Count</th>
+                                    <th>Latency</th>
+                                </tr>
+                            </thead>
+                            <tbody id="index-table-body">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; color: var(--text-secondary); padding: 20px;">No pages crawled yet. Run the orchestrator above to collect statistics.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Python Code Tab -->
+                <div class="tab-content" id="tab-code">
+                    <div class="code-container">
+                        <div class="code-block"><span class="comment"># crawler.py - Standalone Asynchronous High-Performance Web Crawler</span>
+<span class="keyword">import</span> asyncio
+<span class="keyword">import</span> aiohttp
+<span class="keyword">from</span> urllib.parse <span class="keyword">import</span> urlparse, urljoin
+<span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup
+<span class="keyword">import</span> sqlite3
+
+<span class="keyword">class</span> <span class="def">AsyncWebCrawler</span>:
+    <span class="keyword">def</span> <span class="def">__init__</span>(self, seed_url, max_depth=3, max_pages=50, concurrency=5):
+        self.seed_url = seed_url
+        self.target_domain = urlparse(seed_url).netloc
+        self.max_depth = max_depth
+        self.max_pages = max_pages
+        self.semaphore = asyncio.Semaphore(concurrency)
+        self.visited_urls = set()
+        self.queue = asyncio.Queue()
+
+    <span class="keyword">async def</span> <span class="def">fetch_and_parse</span>(self, url, depth):
+        <span class="keyword">async with</span> self.semaphore:
+            <span class="keyword">try</span>:
+                <span class="comment"># Polite concurrency requests & header parsing</span>
+                <span class="keyword">async with</span> self.session.get(url, timeout=10) <span class="keyword">as</span> response:
+                    html = <span class="keyword">await</span> response.text()
+                    self.visited_urls.add(url)
+                    
+                    soup = BeautifulSoup(html, <span class="string">'html.parser'</span>)
+                    title = soup.title.string <span class="keyword">if</span> soup.title <span class="keyword">else</span> url
+                    
+                    <span class="comment"># SQLite Indexing</span>
+                    self.save_database(url, title, response.status)
+
+                    <span class="keyword">if</span> depth < self.max_depth:
+                        <span class="keyword">for</span> link <span class="keyword">in</span> soup.find_all(<span class="string">'a'</span>, href=True):
+                            abs_link = urljoin(url, link[<span class="string">'href'</span>])
+                            <span class="keyword">if</span> urlparse(abs_link).netloc == self.target_domain:
+                                <span class="keyword">await</span> self.queue.put((abs_link, depth + 1))
+            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:
+                print(f"Fetch failure {url}: {e}")</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>AetherCrawl Engine • Designed by <strong>Dipayan Dey</strong> • © 2026</p>
+    </footer>
+
+    <!-- Crawl logic and Canvas Simulation -->
+    <script>
+        // Tab switching utility
+        function switchTab(evt, tabId) {
+            const contents = document.getElementsByClassName("tab-content");
+            for (let c of contents) {
+                c.classList.remove("active");
+            }
+            const buttons = document.getElementsByClassName("tab-btn");
+            for (let b of buttons) {
+                b.classList.remove("active");
+            }
+            document.getElementById(tabId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Live slider visual sync
+        document.getElementById("depth-slider").addEventListener("input", (e) => {
+            document.getElementById("depth-val").innerText = e.target.value;
+        });
+        document.getElementById("delay-slider").addEventListener("input", (e) => {
+            document.getElementById("delay-val").innerText = e.target.value + " ms";
+        });
+        document.getElementById("pages-slider").addEventListener("input", (e) => {
+            document.getElementById("pages-val").innerText = e.target.value;
+        });
+
+        // Predefined site hierarchies mapping mock data representation
+        const mockSiteMap = {
+            "https://dipayandey1244.github.io": {
+                url: "https://dipayandey1244.github.io/",
+                title: "Dipayan Dey | FinTech Developer & Portfolio",
+                status: 200,
+                words: 420,
+                size: 16.7,
+                latency: 85,
+                links: [
+                    "https://dipayandey1244.github.io/resume/",
+                    "https://dipayandey1244.github.io/cases/",
+                    "https://dipayandey1244.github.io/contributions/",
+                    "https://dipayandey1244.github.io/risk-analytics-dashboard/",
+                    "https://dipayandey1244.github.io/web-crawler/"
+                ]
+            },
+            "https://dipayandey1244.github.io/resume/": {
+                url: "https://dipayandey1244.github.io/resume/",
+                title: "Dipayan Dey | Interactive Resume",
+                status: 200,
+                words: 850,
+                size: 24.3,
+                latency: 140,
+                links: ["https://dipayandey1244.github.io/"]
+            },
+            "https://dipayandey1244.github.io/cases/": {
+                url: "https://dipayandey1244.github.io/cases/",
+                title: "Dipayan Dey | Systemic Business Cases",
+                status: 200,
+                words: 1200,
+                size: 32.1,
+                latency: 210,
+                links: [
+                    "https://dipayandey1244.github.io/",
+                    "https://dipayandey1244.github.io/cases/insider-trading",
+                    "https://dipayandey1244.github.io/cases/bny-councils",
+                    "https://dipayandey1244.github.io/cases/spoofing-audit"
+                ]
+            },
+            "https://dipayandey1244.github.io/cases/insider-trading": {
+                url: "https://dipayandey1244.github.io/cases/insider-trading",
+                title: "Audit: Insider Trading XGBoost Model Staging",
+                status: 200,
+                words: 950,
+                size: 19.8,
+                latency: 110,
+                links: ["https://dipayandey1244.github.io/cases/"]
+            },
+            "https://dipayandey1244.github.io/cases/bny-councils": {
+                url: "https://dipayandey1244.github.io/cases/bny-councils",
+                title: "Audit: LLM Council RAG Multi-Agent Consensus",
+                status: 200,
+                words: 1100,
+                size: 22.4,
+                latency: 155,
+                links: ["https://dipayandey1244.github.io/cases/"]
+            },
+            "https://dipayandey1244.github.io/cases/spoofing-audit": {
+                url: "https://dipayandey1244.github.io/cases/spoofing-audit",
+                title: "Audit: LightGBM Spoofing Model Covariance",
+                status: 404,
+                words: 0,
+                size: 0.8,
+                latency: 90,
+                links: []
+            },
+            "https://dipayandey1244.github.io/contributions/": {
+                url: "https://dipayandey1244.github.io/contributions/",
+                title: "Dipayan Dey | Open Source Contributions",
+                status: 200,
+                words: 650,
+                size: 18.2,
+                latency: 125,
+                links: [
+                    "https://dipayandey1244.github.io/",
+                    "https://dipayandey1244.github.io/contributions/patches/pytorch_es_loss.py",
+                    "https://dipayandey1244.github.io/contributions/patches/langgraph_state_patch.py",
+                    "https://dipayandey1244.github.io/contributions/patches/pydantic_decimal_validation.py"
+                ]
+            },
+            "https://dipayandey1244.github.io/contributions/patches/pytorch_es_loss.py": {
+                url: "https://dipayandey1244.github.io/contributions/patches/pytorch_es_loss.py",
+                title: "Code Patch: PyTorch Expected Shortfall Loss Wrapper",
+                status: 200,
+                words: 230,
+                size: 1.6,
+                latency: 75,
+                links: ["https://dipayandey1244.github.io/contributions/"]
+            },
+            "https://dipayandey1244.github.io/contributions/patches/langgraph_state_patch.py": {
+                url: "https://dipayandey1244.github.io/contributions/patches/langgraph_state_patch.py",
+                title: "Code Patch: LangGraph Cyclic Node Memory Fix",
+                status: 200,
+                words: 190,
+                size: 1.1,
+                latency: 60,
+                links: ["https://dipayandey1244.github.io/contributions/"]
+            },
+            "https://dipayandey1244.github.io/contributions/patches/pydantic_decimal_validation.py": {
+                url: "https://dipayandey1244.github.io/contributions/patches/pydantic_decimal_validation.py",
+                title: "Code Patch: Pydantic Strict Decimal Range Validation",
+                status: 200,
+                words: 210,
+                size: 1.2,
+                latency: 70,
+                links: ["https://dipayandey1244.github.io/contributions/"]
+            },
+            "https://dipayandey1244.github.io/risk-analytics-dashboard/": {
+                url: "https://dipayandey1244.github.io/risk-analytics-dashboard/",
+                title: "Dipayan Dey | Institutional Risk Dashboard",
+                status: 200,
+                words: 1350,
+                size: 44.5,
+                latency: 280,
+                links: ["https://dipayandey1244.github.io/"]
+            },
+            "https://dipayandey1244.github.io/web-crawler/": {
+                url: "https://dipayandey1244.github.io/web-crawler/",
+                title: "AetherCrawl | Autonomous Crawler Dashboard",
+                status: 200,
+                words: 540,
+                size: 15.2,
+                latency: 95,
+                links: ["https://dipayandey1244.github.io/"]
+            }
+        };
+
+        // Graph Simulation States
+        let nodes = [];
+        let links = [];
+        let isCrawling = false;
+        let crawlPaused = false;
+        let crawlQueue = [];
+        let visitedSet = new Set();
+        let totalDataFetched = 0;
+        let fetchTimes = [];
+        let discoveredLinksCount = 0;
+        let crawlInterval = null;
+        let activeNode = null;
+        let startSeedUrl = "";
+        let filterKeyword = "";
+        
+        // Canvas & Physics Config
+        const canvas = document.getElementById("crawler-canvas");
+        const ctx = canvas.getContext("2d");
+        let width = canvas.width = canvas.offsetWidth;
+        let height = canvas.height = canvas.offsetHeight;
+
+        window.addEventListener("resize", () => {
+            width = canvas.width = canvas.offsetWidth;
+            height = canvas.height = canvas.offsetHeight;
+        });
+
+        // Force-directed layout physics implementation
+        function updatePhysics() {
+            if (nodes.length === 0) return;
+            
+            const kRepel = 2400; // Node repulsion factor
+            const kLink = 0.05;  // Link spring stiffness
+            const friction = 0.82;
+            const gravity = 0.02;
+
+            // 1. Repel force between node pairs
+            for (let i = 0; i < nodes.length; i++) {
+                let n1 = nodes[i];
+                for (let j = i + 1; j < nodes.length; j++) {
+                    let n2 = nodes[j];
+                    let dx = n2.x - n1.x;
+                    let dy = n2.y - n1.y;
+                    if (dx === 0) dx = 0.1; // Prevent division by zero
+                    let dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist < 1) dist = 1;
+                    
+                    if (dist < 220) {
+                        let force = kRepel / (dist * dist);
+                        let fx = force * (dx / dist);
+                        let fy = force * (dy / dist);
+                        
+                        n1.vx -= fx;
+                        n1.vy -= fy;
+                        n2.vx += fx;
+                        n2.vy += fy;
+                    }
+                }
+            }
+
+            // 2. Attraction pull along active links
+            for (let link of links) {
+                let sourceNode = nodes.find(n => n.url === link.source);
+                let targetNode = nodes.find(n => n.url === link.target);
+                if (sourceNode && targetNode) {
+                    let dx = targetNode.x - sourceNode.x;
+                    let dy = targetNode.y - sourceNode.y;
+                    let dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist < 1) dist = 1;
+                    
+                    let targetLen = 80;
+                    let force = kLink * (dist - targetLen);
+                    let fx = force * (dx / dist);
+                    let fy = force * (dy / dist);
+                    
+                    sourceNode.vx += fx;
+                    sourceNode.vy += fy;
+                    targetNode.vx -= fx;
+                    targetNode.vy -= fy;
+                }
+            }
+
+            // 3. Gravity center pull and velocity updates
+            for (let node of nodes) {
+                let dx = width / 2 - node.x;
+                let dy = height / 2 - node.y;
+                node.vx += dx * gravity;
+                node.vy += dy * gravity;
+                
+                node.x += node.vx;
+                node.y += node.vy;
+                
+                node.vx *= friction;
+                node.vy *= friction;
+
+                // Screen boundaries constraint
+                node.x = Math.max(20, Math.min(width - 20, node.x));
+                node.y = Math.max(20, Math.min(height - 20, node.y));
+            }
+        }
+
+        // Draw node graph
+        function drawGraph() {
+            ctx.clearRect(0, 0, width, height);
+
+            // Draw links
+            ctx.strokeStyle = "rgba(147, 51, 234, 0.25)";
+            ctx.lineWidth = 1.5;
+            for (let link of links) {
+                let sourceNode = nodes.find(n => n.url === link.source);
+                let targetNode = nodes.find(n => n.url === link.target);
+                if (sourceNode && targetNode) {
+                    ctx.beginPath();
+                    ctx.moveTo(sourceNode.x, sourceNode.y);
+                    ctx.lineTo(targetNode.x, targetNode.y);
+                    ctx.stroke();
+                }
+            }
+
+            // Draw nodes
+            for (let node of nodes) {
+                let radius = node.isSeed ? 16 : 10;
+                
+                // Outer glow shadow
+                ctx.shadowBlur = node.active ? 15 : 6;
+                ctx.shadowColor = node.color;
+
+                // Border circle
+                ctx.fillStyle = node.color;
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Clear shadow for details overlay
+                ctx.shadowBlur = 0;
+
+                // Core inner circle
+                ctx.fillStyle = "#070a13";
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, radius - 3, 0, Math.PI * 2);
+                ctx.fill();
+
+                if (node.isSeed) {
+                    ctx.fillStyle = node.color;
+                    ctx.beginPath();
+                    ctx.arc(node.x, node.y, 4, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                // If active fetching state (outer blinking ring)
+                if (node.state === "fetching") {
+                    ctx.strokeStyle = varColorHex("crawler");
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(node.x, node.y, radius + 4 + Math.sin(Date.now() / 100) * 2, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+            }
+        }
+
+        function varColorHex(name) {
+            if (name === "crawler") return "#d946ef";
+            if (name === "success") return "#10b981";
+            if (name === "warning") return "#f59e0b";
+            if (name === "error") return "#ef4444";
+            return "#64748b";
+        }
+
+        // Animation Loop
+        function tick() {
+            updatePhysics();
+            drawGraph();
+            requestAnimationFrame(tick);
+        }
+        tick();
+
+        // Terminal Log printer helper
+        function printLog(tagClass, tagText, message) {
+            const term = document.getElementById("crawler-terminal");
+            const timeStr = new Date().toTimeString().split(' ')[0];
+            const line = document.createElement("div");
+            line.className = "terminal-line";
+            line.innerHTML = `<span class="timestamp">[${timeStr}]</span> <span class="${tagClass}">[${tagText}]</span> ${message}`;
+            term.appendChild(line);
+            term.scrollTop = term.scrollHeight;
+        }
+
+        // Seed generator for procedural external domain nodes (if user inputs a non-portfolio seed url)
+        function getPageMock(url) {
+            // Check portfolio map
+            if (mockSiteMap[url]) return mockSiteMap[url];
+            
+            // Otherwise generate dynamic mock node procedurally
+            const parsed = new URL(url);
+            const domain = parsed.origin;
+            const seedVal = url.split('/').pop() || 'index';
+            
+            // Create links dynamically
+            const paths = ["/about", "/features", "/api/v1", "/pricing", "/blog", "/docs", "/contact", "/status"];
+            const childLinks = [];
+            const linkCount = 2 + Math.floor(Math.random() * 3);
+            for (let i = 0; i < linkCount; i++) {
+                let childPath = paths[Math.floor(Math.random() * paths.length)] + `?session=${Math.floor(Math.random()*1000)}`;
+                childLinks.push(domain + childPath);
+            }
+            
+            // HTTP Status distribution
+            const rand = Math.random();
+            let status = 200;
+            if (rand > 0.93) status = 404;
+            else if (rand > 0.86) status = 301;
+            
+            const words = status === 200 ? 100 + Math.floor(Math.random() * 800) : 0;
+            const size = status === 200 ? parseFloat((2 + Math.random() * 18).toFixed(1)) : 0.8;
+            const title = seedVal.charAt(0).toUpperCase() + seedVal.slice(1) + " Page • Mock Crawled";
+
+            return {
+                url: url,
+                title: title,
+                status: status,
+                words: words,
+                size: size,
+                latency: 50 + Math.floor(Math.random() * 200),
+                links: childLinks
+            };
+        }
+
+        // Orchestration steps
+        function processNextQueueItem() {
+            if (!isCrawling || crawlPaused) return;
+
+            // Check if queue empty or max pages hit
+            const maxPagesLimit = parseInt(document.getElementById("pages-slider").value);
+            if (crawlQueue.length === 0 || visitedSet.size >= maxPagesLimit) {
+                stopCrawling("Finished successfully. Target constraints achieved.");
+                return;
+            }
+
+            // Dequeue url
+            const currentItem = crawlQueue.shift();
+            const { url, depth, parentUrl } = currentItem;
+
+            if (visitedSet.has(url)) {
+                processNextQueueItem();
+                return;
+            }
+
+            // Set current node to fetching state
+            const targetNode = nodes.find(n => n.url === url);
+            if (targetNode) {
+                targetNode.state = "fetching";
+            }
+
+            printLog("tag-fetch", "FETCH", `Thread-1: Requesting HTTP header parse: ${url}...`);
+
+            // Fetch Delay simulator
+            const delay = parseInt(document.getElementById("delay-slider").value);
+            
+            setTimeout(() => {
+                const pageMock = getPageMock(url);
+                visitedSet.add(url);
+                
+                // Update node representation in physics graph
+                let node = nodes.find(n => n.url === url);
+                if (!node) {
+                    node = {
+                        url: url,
+                        x: parentUrl ? (nodes.find(n => n.url === parentUrl)?.x || width/2) + (Math.random() - 0.5)*50 : width/2,
+                        y: parentUrl ? (nodes.find(n => n.url === parentUrl)?.y || height/2) + (Math.random() - 0.5)*50 : height/2,
+                        vx: 0,
+                        vy: 0,
+                        isSeed: url === startSeedUrl,
+                        state: "ready"
+                    };
+                    nodes.push(node);
+                }
+
+                // Node coloring & status tags mapping
+                node.state = "completed";
+                node.status = pageMock.status;
+                node.title = pageMock.title;
+                node.words = pageMock.words;
+                node.size = pageMock.size;
+                node.depth = depth;
+                node.latency = pageMock.latency;
+                
+                // Keyword matches count
+                let matchCount = 0;
+                if (filterKeyword) {
+                    const regex = new RegExp(filterKeyword, "gi");
+                    const titleMatches = (pageMock.title.match(regex) || []).length;
+                    const urlMatches = (pageMock.url.match(regex) || []).length;
+                    matchCount = titleMatches + urlMatches + Math.floor(Math.random() * 5 * (pageMock.words > 0 ? 1 : 0));
+                }
+                node.matches = matchCount;
+
+                if (pageMock.status === 200) {
+                    node.color = varColorHex("success");
+                    printLog("tag-success", "200 OK", `Parsed title: "${pageMock.title}" | Word count: ${pageMock.words}`);
+                } else if (pageMock.status === 301 || pageMock.status === 302) {
+                    node.color = varColorHex("warning");
+                    printLog("tag-queue", "301 RED", `Redirected link | Latency: ${pageMock.latency}ms`);
+                } else {
+                    node.color = varColorHex("error");
+                    printLog("tag-error", "404 ERR", `Page not found: ${url}`);
+                }
+
+                // Add link connecting parent to canvas model
+                if (parentUrl) {
+                    links.push({ source: parentUrl, target: url });
+                    discoveredLinksCount++;
+                }
+
+                // Update Stats
+                totalDataFetched += pageMock.size;
+                fetchTimes.push(pageMock.latency);
+                updateStatsPanel();
+                
+                // Add to index table
+                appendRowToIndexTable(pageMock, depth);
+
+                // Queue child links
+                const maxDepthSetting = parseInt(document.getElementById("depth-slider").value);
+                if (depth < maxDepthSetting && pageMock.status === 200) {
+                    pageMock.links.forEach(child => {
+                        // Scope to same domain filter check
+                        const seedDomain = new URL(startSeedUrl).netloc;
+                        const childDomain = new URL(child).netloc;
+                        
+                        if (seedDomain === childDomain) {
+                            if (!visitedSet.has(child) && !crawlQueue.some(item => item.url === child)) {
+                                crawlQueue.push({ url: child, depth: depth + 1, parentUrl: url });
+                                
+                                // Insert placeholder pending nodes on graph to visualize queue growth
+                                if (!nodes.some(n => n.url === child)) {
+                                    nodes.push({
+                                        url: child,
+                                        x: node.x + (Math.random() - 0.5) * 60,
+                                        y: node.y + (Math.random() - 0.5) * 60,
+                                        vx: 0,
+                                        vy: 0,
+                                        isSeed: false,
+                                        state: "pending",
+                                        color: "#64748b"
+                                    });
+                                    links.push({ source: url, target: child });
+                                    discoveredLinksCount++;
+                                }
+                            }
+                        }
+                    });
+                }
+
+                // Trigger next queue step
+                processNextQueueItem();
+            }, delay);
+        }
+
+        // Stats update
+        function updateStatsPanel() {
+            document.getElementById("stat-crawled").innerText = visitedSet.size;
+            document.getElementById("stat-links").innerText = discoveredLinksCount;
+            document.getElementById("stat-data").innerText = totalDataFetched.toFixed(1) + " KB";
+            
+            const avgSpeed = fetchTimes.reduce((a,b) => a+b, 0) / fetchTimes.length;
+            document.getElementById("stat-time").innerText = isNaN(avgSpeed) ? "0 ms" : Math.round(avgSpeed) + " ms";
+        }
+
+        // Add crawled rows
+        function appendRowToIndexTable(page, depth) {
+            const tbody = document.getElementById("index-table-body");
+            if (visitedSet.size === 1) {
+                tbody.innerHTML = ""; // Clear empty state placeholder
+            }
+
+            const tr = document.createElement("tr");
+            tr.id = `row-${btoa(page.url).replace(/=/g, '')}`;
+            tr.style.cursor = "pointer";
+            tr.addEventListener("click", () => showNodeDetailsByUrl(page.url));
+
+            let statusClass = "badge-200";
+            if (page.status >= 300 && page.status < 400) statusClass = "badge-300";
+            else if (page.status >= 400) statusClass = "badge-400";
+
+            tr.innerHTML = `
+                <td style="font-weight:600;">${page.title}</td>
+                <td style="font-family:var(--font-mono); font-size:11px; color:var(--text-secondary);">${page.url}</td>
+                <td><span class="status-badge ${statusClass}">${page.status}</span></td>
+                <td>${page.words}</td>
+                <td style="font-family:var(--font-mono);">${page.latency} ms</td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        // Show detailed node overlay sidebar
+        function showNodeDetailsByUrl(url) {
+            const node = nodes.find(n => n.url === url);
+            if (!node) return;
+
+            // Highlight clicked node on Canvas
+            nodes.forEach(n => n.active = false);
+            node.active = true;
+
+            const overlay = document.getElementById("details-overlay");
+            document.getElementById("node-title").innerText = node.title || "Pending URL in Queue";
+            document.getElementById("node-url").innerText = node.url;
+            document.getElementById("node-size").innerText = (node.size || 0).toFixed(1) + " KB";
+            document.getElementById("node-words").innerText = (node.words || 0) + " words";
+            document.getElementById("node-depth").innerText = node.depth !== undefined ? node.depth : "Queued";
+            document.getElementById("node-matches").innerText = (node.matches || 0) + " matches";
+
+            const statusBadge = document.getElementById("node-status");
+            statusBadge.className = "status-badge";
+            
+            if (node.status === 200) {
+                statusBadge.innerText = "200 OK";
+                statusBadge.classList.add("badge-200");
+            } else if (node.status >= 300 && node.status < 400) {
+                statusBadge.innerText = `${node.status} Redirect`;
+                statusBadge.classList.add("badge-300");
+            } else if (node.status >= 400) {
+                statusBadge.innerText = `${node.status} Error`;
+                statusBadge.classList.add("badge-400");
+            } else {
+                statusBadge.innerText = "Queued";
+                statusBadge.classList.add("badge-pending");
+            }
+
+            overlay.classList.add("open");
+        }
+
+        // Canvas Interaction (Click to inspect nodes)
+        canvas.addEventListener("click", (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const clickY = e.clientY - rect.top;
+
+            // Find clicked node
+            let clickedNode = null;
+            for (let n of nodes) {
+                let dist = Math.sqrt((n.x - clickX)**2 + (n.y - clickY)**2);
+                let radius = n.isSeed ? 16 : 10;
+                if (dist <= radius + 5) {
+                    clickedNode = n;
+                    break;
+                }
+            }
+
+            if (clickedNode) {
+                showNodeDetailsByUrl(clickedNode.url);
+            } else {
+                // Clicked blank space, close overlay details panel
+                document.getElementById("details-overlay").classList.remove("open");
+                nodes.forEach(n => n.active = false);
+            }
+        });
+
+        // Start Orchestrator
+        function startCrawling() {
+            if (isCrawling) return;
+
+            const seedInput = document.getElementById("crawler-seed").value.trim();
+            if (!seedInput) {
+                alert("Please specify a target seed URL.");
+                return;
+            }
+
+            try {
+                new URL(seedInput);
+            } catch (_) {
+                alert("Please specify a valid absolute URL (e.g. https://example.com)");
+                return;
+            }
+
+            startSeedUrl = seedInput;
+            filterKeyword = document.getElementById("crawler-keyword").value.trim();
+
+            isCrawling = true;
+            crawlPaused = false;
+            document.getElementById("btn-start").disabled = true;
+            document.getElementById("btn-pause").disabled = false;
+            document.getElementById("btn-pause").innerHTML = `<i class="fa-solid fa-pause"></i> Pause`;
+
+            // If resuming or clean start
+            if (visitedSet.size === 0) {
+                printLog("tag-success", "START", `Initializing AetherCrawl Engine on seed: ${startSeedUrl}`);
+                
+                // Add initial seed node
+                const seedNode = {
+                    url: startSeedUrl,
+                    x: width / 2,
+                    y: height / 2,
+                    vx: 0,
+                    vy: 0,
+                    isSeed: true,
+                    state: "fetching",
+                    color: varColorHex("crawler")
+                };
+                nodes.push(seedNode);
+                crawlQueue.push({ url: startSeedUrl, depth: 0, parentUrl: null });
+            } else {
+                printLog("tag-success", "RESUME", "Resuming thread workers...");
+            }
+
+            processNextQueueItem();
+            
+            // Enable exports button
+            document.getElementById("btn-export").disabled = false;
+        }
+
+        // Pause Crawling
+        function pauseCrawling() {
+            if (!isCrawling) return;
+            
+            if (!crawlPaused) {
+                crawlPaused = true;
+                document.getElementById("btn-pause").innerHTML = `<i class="fa-solid fa-play"></i> Resume`;
+                printLog("tag-queue", "PAUSE", "Thread crawler execution suspended.");
+            } else {
+                crawlPaused = false;
+                document.getElementById("btn-pause").innerHTML = `<i class="fa-solid fa-pause"></i> Pause`;
+                printLog("tag-success", "RESUME", "Resuming thread queue workers...");
+                processNextQueueItem();
+            }
+        }
+
+        // Stop crawling finished state
+        function stopCrawling(reason) {
+            isCrawling = false;
+            document.getElementById("btn-start").disabled = false;
+            document.getElementById("btn-pause").disabled = true;
+            printLog("tag-success", "DONE", `Crawler pipeline stopped. Reason: ${reason}`);
+        }
+
+        // Reset Engine
+        function resetEngine() {
+            isCrawling = false;
+            crawlPaused = false;
+            crawlQueue = [];
+            visitedSet.clear();
+            nodes = [];
+            links = [];
+            totalDataFetched = 0;
+            fetchTimes = [];
+            discoveredLinksCount = 0;
+            activeNode = null;
+
+            document.getElementById("btn-start").disabled = false;
+            document.getElementById("btn-pause").disabled = true;
+            document.getElementById("btn-pause").innerHTML = `<i class="fa-solid fa-pause"></i> Pause`;
+            document.getElementById("btn-export").disabled = true;
+            document.getElementById("details-overlay").classList.remove("open");
+
+            updateStatsPanel();
+            
+            // Clear console terminal
+            const term = document.getElementById("crawler-terminal");
+            term.innerHTML = `<div class="terminal-line"><span class="timestamp">[${new Date().toTimeString().split(' ')[0]}]</span> [AETHER] System reset. Ready for seed URL input...</div>`;
+
+            // Reset table index
+            document.getElementById("index-table-body").innerHTML = `
+                <tr>
+                    <td colspan="5" style="text-align: center; color: var(--text-secondary); padding: 20px;">No pages crawled yet. Run the orchestrator above to collect statistics.</td>
+                </tr>
+            `;
+        }
+
+        document.getElementById("btn-start").addEventListener("click", startCrawling);
+        document.getElementById("btn-pause").addEventListener("click", pauseCrawling);
+        document.getElementById("btn-reset").addEventListener("click", resetEngine);
+
+        // Export JSON handler
+        document.getElementById("btn-export").addEventListener("click", () => {
+            if (visitedSet.size === 0) return;
+            
+            const results = {
+                seed: startSeedUrl,
+                crawled_at: new Date().toISOString(),
+                stats: {
+                    pages_crawled: visitedSet.size,
+                    links_discovered: discoveredLinksCount,
+                    total_data_kb: totalDataFetched
+                },
+                crawled_index: nodes.map(n => ({
+                    url: n.url,
+                    title: n.title,
+                    status: n.status,
+                    size_kb: n.size,
+                    words: n.words,
+                    depth: n.depth,
+                    keyword_matches: n.matches
+                }))
+            };
+
+            const blob = new Blob([JSON.stringify(results, null, 2)], { type: "application/json" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `crawl_report_${new URL(startSeedUrl).netloc}.json`;
+            link.click();
+        });
+
+        // Search in Index Table
+        document.getElementById("index-search").addEventListener("input", (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            const rows = document.querySelectorAll("#index-table-body tr");
+            
+            rows.forEach(row => {
+                if (row.cells.length < 2) return; // Skip empty message
+                const title = row.cells[0].innerText.toLowerCase();
+                const url = row.cells[1].innerText.toLowerCase();
+                if (title.includes(query) || url.includes(query)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
