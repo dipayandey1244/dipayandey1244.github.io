@@ -758,7 +758,8 @@
                     <div class="panel-description">
                         <h2><i class="fa-solid fa-circle-nodes"></i> PyTorch Deep Learning Core</h2>
                         <p>Standard neural network training optimization relies on loss functions like MSE (Mean Squared Error), which only optimize for average performance. This ignores the risk of tail events, leading to severe under-estimation of capital requirements.</p>
-                        <p>Our work introduces a differentiable <strong>Expected Shortfall (ES) Loss</strong> module. By approximating the 99% VaR threshold dynamically via a temperature-scaled sigmoid mask, it backpropagates tail penalty gradients directly to network weights.</p>
+                        <p><strong>Paper Implementation</strong>: Implemented the core math from <em>"Expected Shortfall Differentiable Quantile Optimization"</em> (<a href="https://arxiv.org/abs/2006.01244" target="_blank" style="color: var(--color-info); text-decoration: underline;">ArXiv:2006.01244</a>). By approximating the 99% VaR threshold dynamically via a temperature-scaled sigmoid mask, our custom PyTorch loss backpropagates tail penalty gradients directly to network weights.</p>
+                        <p><strong>Use Case</strong>: Backpropagating Expected Shortfall loss inside portfolio neural networks to directly optimize for Basel III compliance and minimize regulatory capital charges during extreme stress epochs.</p>
                         <div class="library-stats">
                             <div class="library-stats-item"><i class="fa-brands fa-github"></i> github: <strong>pytorch/pytorch</strong></div>
                             <div class="library-stats-item"><i class="fa-solid fa-star"></i> stars: <strong>~82k+</strong></div>

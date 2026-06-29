@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hypothesis Testing & A/B Testing Simulator</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- KaTeX CSS for beautiful math -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Lucide Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- KaTeX JS & Auto-render extension -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {
+        delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\\\(', right: '\\\\)', display: false},
+            {left: '\\\\[', right: '\\\\]', display: true}
+        ],
+        throwOnError: false
+    });"></script>
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-container">
+            <div class="logo">
+                <i data-lucide="sliders" class="logo-icon"></i>
+                <div class="logo-text">
+                    <h1>StatLab</h1>
+                    <span>A/B Testing & Hypothesis Testing Hub</span>
+                </div>
+            </div>
+            <nav class="main-nav">
+                <button class="nav-btn active" data-tab="simulator">
+                    <i data-lucide="activity"></i> Simulator
+                </button>
+                <button class="nav-btn" data-tab="calculator">
+                    <i data-lucide="calculator"></i> Test Calculator
+                </button>
+                <button class="nav-btn" data-tab="planner">
+                    <i data-lucide="calendar"></i> A/B Planner
+                </button>
+                <button class="nav-btn" data-tab="concepts">
+                    <i data-lucide="book-open"></i> Concept Guide
+                </button>
+            </nav>
+            <div class="header-actions">
+                <button id="shareBtn" class="btn btn-secondary tooltip" data-tooltip="Copy link with current configurations">
+                    <i data-lucide="share-2"></i> Share Config
+                </button>
+                <button id="themeToggle" class="btn btn-icon" aria-label="Toggle theme">
+                    <i data-lucide="moon" class="theme-icon-dark"></i>
+                    <i data-lucide="sun" class="theme-icon-light" style="display: none;"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <!-- STORY PRESETS BAR -->
+        <div class="card presets-card">
+            <div class="presets-container">
+                <div class="preset-title">
+                    <i data-lucide="book-open"></i>
+                    <span>Practical Case Studies:</span>
+                </div>
+                <div class="preset-buttons">
+                    <button class="btn btn-secondary preset-btn" id="presetVisitorBtn">
+                        <i data-lucide="globe"></i> Daily Visitors (Z-Test)
+                    </button>
+                    <button class="btn btn-secondary preset-btn" id="presetBpBtn">
+                        <i data-lucide="heart-pulse"></i> Blood Pressure Drug (T-Test)
+                    </button>
+                    <button class="btn btn-secondary preset-btn" id="presetAbBtn">
+                        <i data-lucide="split"></i> Algorithm A/B Trial
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SIMULATOR TAB -->
+        <section id="simulatorTab" class="tab-content active">
+            <div class="grid-layout">
+                <!-- Sidebar Controls -->
+                <div class="card control-panel">
+                    <div class="card-header">
+                        <i data-lucide="sliders-horizontal"></i>
+                        <h2>Simulation Parameters</h2>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Distribution Type</label>
+                        <div class="btn-group-toggle" id="distributionTypeToggle">
+                            <button class="toggle-btn active" data-value="normal">Normal (Z)</button>
+                            <button class="toggle-btn" data-value="t">Student's t</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="dfGroup" style="display: none;">
+                        <label for="degreesOfFreedom">Degrees of Freedom (<span id="dfValueDisplay">10</span>)</label>
+                        <input type="range" id="degreesOfFreedom" min="1" max="100" value="10" class="slider">
+                        <span class="help-text">Varies with sample size (df = n - 1)</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Alternative Hypothesis (\(H_a\))</label>
+                        <div class="btn-group-toggle" id="testTypeToggle">
+                            <button class="toggle-btn" data-value="left">Left-tailed (&lt;)</button>
+                            <button class="toggle-btn active" data-value="two">Two-tailed (&ne;)</button>
+                            <button class="toggle-btn" data-value="right">Right-tailed (&gt;)</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="alphaSlider">Significance Level (\(\alpha\)): <strong id="alphaValueDisplay">0.05</strong></label>
+                        <input type="range" id="alphaSlider" min="0.001" max="0.2" step="0.001" value="0.05" class="slider">
+                        <span class="help-text">Probability of committing a Type I error (false positive)</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="statisticSlider">Observed Test Statistic: <strong id="statisticValueDisplay">1.96</strong></label>
+                        <input type="range" id="statisticSlider" min="-4" max="4" step="0.01" value="1.96" class="slider">
+                        <div class="slider-inputs">
+                            <input type="number" id="statisticNumber" min="-10" max="10" step="0.01" value="1.96" class="number-input">
+                        </div>
+                    </div>
+                    
+                    <div class="control-actions">
+                        <button id="resetSimBtn" class="btn btn-outline-danger"><i data-lucide="rotate-ccw"></i> Reset Defaults</button>
+                    </div>
+                </div>
+
+                <!-- Main Visualization Area -->
+                <div class="visualization-area">
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <i data-lucide="line-chart"></i>
+                            <h2>Probability Density Curve</h2>
+                            <div class="badge-container" id="verdictBadge">
+                                <span class="badge badge-success">Reject H₀</span>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="distributionChart"></canvas>
+                        </div>
+                        <div class="chart-legend">
+                            <div class="legend-item"><span class="legend-color acceptance"></span> Acceptance Region</div>
+                            <div class="legend-item"><span class="legend-color rejection"></span> Rejection Region</div>
+                            <div class="legend-item"><span class="legend-color stat-line"></span> Observed Statistic</div>
+                        </div>
+                    </div>
+
+                    <!-- Statistics Output Summary Cards -->
+                    <div class="stats-summary-grid">
+                        <div class="card stat-card">
+                            <span class="stat-label">Critical Value(s)</span>
+                            <span class="stat-value" id="criticalValueText">&plusmn; 1.960</span>
+                            <span class="stat-subtext">Boundary of rejection region</span>
+                        </div>
+                        <div class="card stat-card">
+                            <span class="stat-label">Observed Test Statistic</span>
+                            <span class="stat-value" id="observedStatText">1.960</span>
+                            <span class="stat-subtext">Calculated from your data</span>
+                        </div>
+                        <div class="card stat-card">
+                            <span class="stat-label">p-value</span>
+                            <span class="stat-value highlight" id="pValueText">0.0500</span>
+                            <span class="stat-subtext" id="pValInterpretation">Equal to significance (\(\alpha\))</span>
+                        </div>
+                    </div>
+
+                    <div class="card narrative-card">
+                        <div class="card-header">
+                            <i data-lucide="message-square"></i>
+                            <h2>Statistical Narrative & Explanation</h2>
+                        </div>
+                        <div class="narrative-content">
+                            <p id="narrativeParagraph">
+                                At a significance level of \(\alpha = 0.05\), we compare our observed statistic \(z = 1.96\) to the critical boundaries. Because the test statistic falls right on the boundary of the rejection region, the p-value of \(0.0500\) is equal to our threshold. This means the probability of obtaining a test statistic as extreme as \(1.96\) by pure chance (assuming the null hypothesis is true) is exactly \(5\%\).
+                            </p>
+                            <div id="narrativeKaTexFormula" class="katex-formula-block"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CALCULATOR TAB -->
+        <section id="calculatorTab" class="tab-content">
+            <div class="grid-layout">
+                <!-- Calculator Settings -->
+                <div class="card control-panel">
+                    <div class="card-header">
+                        <i data-lucide="settings"></i>
+                        <h2>Test Setup</h2>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="calcTestSelect">Test Method</label>
+                        <select id="calcTestSelect" class="form-select">
+                            <option value="z_one_mean">One-Sample Z-Test (Known Variance)</option>
+                            <option value="t_one_mean">One-Sample T-Test (Unknown Variance)</option>
+                            <option value="t_two_ind">Two-Sample Independent T-Test (Two Means)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="calcAlternative">Alternative Hypothesis (\(H_a\))</label>
+                        <select id="calcAlternative" class="form-select">
+                            <option value="two">Two-sided (\(\mu \neq \mu_0\))</option>
+                            <option value="greater">Right-tailed (\(\mu > \mu_0\))</option>
+                            <option value="less">Left-tailed (\(\mu < \mu_0\))</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="calcAlpha">Significance Level (\(\alpha\))</label>
+                        <select id="calcAlpha" class="form-select">
+                            <option value="0.01">0.01 (99% Confidence)</option>
+                            <option value="0.05" selected>0.05 (95% Confidence)</option>
+                            <option value="0.10">0.10 (90% Confidence)</option>
+                        </select>
+                    </div>
+
+                    <hr class="separator">
+
+                    <!-- Inputs for One Sample Z-Test / T-Test -->
+                    <div id="calcOneSampleInputs">
+                        <h3>Sample Data</h3>
+                        <div class="form-group">
+                            <label for="calcNullMean">Hypothesized Mean (\(\mu_0\))</label>
+                            <input type="number" id="calcNullMean" value="100" step="any" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="calcSampleMean">Sample Mean (\(\bar{x}\))</label>
+                            <input type="number" id="calcSampleMean" value="105" step="any" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="calcStdDev" id="stdDevLabel">Population Std Dev (\(\sigma\))</label>
+                            <input type="number" id="calcStdDev" value="15" step="any" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="calcSampleSize">Sample Size (\(n\))</label>
+                            <input type="number" id="calcSampleSize" value="36" min="2" class="form-input">
+                        </div>
+                    </div>
+
+                    <!-- Inputs for Two Sample Independent T-Test -->
+                    <div id="calcTwoSampleInputs" style="display: none;">
+                        <h3>Group A (Control)</h3>
+                        <div class="form-group">
+                            <label for="calcMeanA">Mean (\(\bar{x}_A\))</label>
+                            <input type="number" id="calcMeanA" value="102" step="any" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="calcStdDevA">Std Dev (\(s_A\))</label>
+                            <input type="number" id="calcStdDevA" value="12" step="any" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="calcSizeA">Sample Size (\(n_A\))</label>
+                            <input type="number" id="calcSizeA" value="40" min="2" class="form-input">
+                        </div>
+
+                        <h3>Group B (Treatment)</h3>
+                        <div class="form-group">
+                            <label for="calcMeanB">Mean (\(\bar{x}_B\))</label>
+                            <input type="number" id="calcMeanB" value="108" step="any" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="calcStdDevB">Std Dev (\(s_B\))</label>
+                            <input type="number" id="calcStdDevB" value="14" step="any" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="calcSizeB">Sample Size (\(n_B\))</label>
+                            <input type="number" id="calcSizeB" value="45" min="2" class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Variance Assumption</label>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="calcEqualVar" checked>
+                                <label for="calcEqualVar">Assume equal variances (Pooled variance)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="calcComputeBtn" class="btn btn-primary w-full mt-4">
+                        <i data-lucide="play"></i> Compute Test
+                    </button>
+                </div>
+
+                <!-- Calculator Results -->
+                <div class="calculator-results">
+                    <div class="card result-card">
+                        <div class="card-header">
+                            <i data-lucide="check-square"></i>
+                            <h2>Test Conclusion</h2>
+                            <div class="badge-container" id="calcVerdictBadge">
+                                <span class="badge badge-success">Reject H₀</span>
+                            </div>
+                        </div>
+                        
+                        <div class="result-summary-box">
+                            <div id="calcSummaryVerdictText" class="result-verdict-title">
+                                Null hypothesis is rejected at the 5% significance level.
+                            </div>
+                            <p id="calcSummaryInterpretation" class="result-verdict-desc">
+                                There is sufficient evidence to conclude that the population mean is different from 100.
+                            </p>
+                        </div>
+
+                        <div class="steps-container">
+                            <h3><i data-lucide="list-ordered"></i> Step-by-Step Statistical Analysis</h3>
+                            
+                            <div class="step-card">
+                                <div class="step-num">1</div>
+                                <div class="step-content">
+                                    <h4>Formulate Hypotheses</h4>
+                                    <p>We establish our null hypothesis (status quo) and alternative hypothesis:</p>
+                                    <div class="math-render" id="mathStep1"></div>
+                                </div>
+                            </div>
+
+                            <div class="step-card">
+                                <div class="step-num">2</div>
+                                <div class="step-content">
+                                    <h4>Calculate standard error and test statistic</h4>
+                                    <p>Under the null hypothesis, the standard error (\(SE\)) and test statistic are calculated as follows:</p>
+                                    <div class="math-render" id="mathStep2"></div>
+                                </div>
+                            </div>
+
+                            <div class="step-card">
+                                <div class="step-num">3</div>
+                                <div class="step-content">
+                                    <h4>Evaluate Critical Value(s) and p-value</h4>
+                                    <p>Using the probability distribution, we determine the critical values and the probability of observing our test statistic (p-value):</p>
+                                    <div class="math-render" id="mathStep3"></div>
+                                </div>
+                            </div>
+
+                            <div class="step-card">
+                                <div class="step-num">4</div>
+                                <div class="step-content">
+                                    <h4>Final Decision Rule</h4>
+                                    <p>Since the test statistic comparison holds true, we write the decision rule:</p>
+                                    <div class="math-render" id="mathStep4"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Python code implementation section -->
+                        <div class="python-code-box mt-6" id="calcPythonCodeContainer">
+                            <div class="python-code-box-header">
+                                <div class="python-code-box-title">
+                                    <i data-lucide="code"></i>
+                                    <span>Python / SciPy Implementation</span>
+                                </div>
+                                <button id="copyPythonBtn" class="btn btn-secondary btn-icon tooltip" data-tooltip="Copy Python code" style="background: transparent; border: none; padding: 4px;">
+                                    <i data-lucide="copy" style="width: 1rem; height: 1rem; color: var(--text-secondary);"></i>
+                                </button>
+                            </div>
+                            <pre><code id="calcPythonCode" class="language-python"># Python code placeholder</code></pre>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PLANNER TAB -->
+        <section id="plannerTab" class="tab-content">
+            <div class="grid-layout">
+                <!-- Planner controls -->
+                <div class="card control-panel">
+                    <div class="card-header">
+                        <i data-lucide="calendar"></i>
+                        <h2>A/B Test Design</h2>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="planBaseline">Baseline Conversion Rate (\(p_1\)) (%)</label>
+                        <input type="number" id="planBaseline" value="10" min="0.1" max="99" step="0.1" class="form-input">
+                        <span class="help-text">Current conversion rate of the Control group.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="planMde">Minimum Detectable Effect (MDE)</label>
+                        <div class="flex-input-container">
+                            <input type="number" id="planMde" value="2" min="0.01" step="0.01" class="form-input">
+                            <select id="planMdeType" class="form-select mde-type-select">
+                                <option value="absolute" selected>Absolute %</option>
+                                <option value="relative">Relative %</option>
+                            </select>
+                        </div>
+                        <span class="help-text">The minimum difference you care to detect (e.g. 10% to 12% is a 2% absolute or 20% relative increase).</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="planAlpha">Significance Level (\(\alpha\)) (%)</label>
+                        <select id="planAlpha" class="form-select">
+                            <option value="0.01">1% (\(\alpha = 0.01\))</option>
+                            <option value="0.05" selected>5% (\(\alpha = 0.05\))</option>
+                            <option value="0.10">10% (\(\alpha = 0.10\))</option>
+                        </select>
+                        <span class="help-text">False positive rate threshold.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="planPower">Statistical Power (\(1-\beta\)) (%)</label>
+                        <select id="planPower" class="form-select">
+                            <option value="0.80" selected>80% (Standard)</option>
+                            <option value="0.90">90% (High sensitivity)</option>
+                            <option value="0.95">95% (Very high sensitivity)</option>
+                        </select>
+                        <span class="help-text">Probability of detecting an effect if it truly exists.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="planDailyTraffic">Expected Daily Traffic (Combined)</label>
+                        <input type="number" id="planDailyTraffic" value="1000" min="1" class="form-input">
+                        <span class="help-text">Total daily visitors to both Control + Treatment.</span>
+                    </div>
+
+                    <button id="planComputeBtn" class="btn btn-primary w-full mt-4">
+                        <i data-lucide="play"></i> Design Experiment
+                    </button>
+                </div>
+
+                <!-- Planner results -->
+                <div class="planner-results">
+                    <div class="card result-card">
+                        <div class="card-header">
+                            <i data-lucide="pie-chart"></i>
+                            <h2>Sample Size Requirements</h2>
+                        </div>
+                        
+                        <div class="stats-summary-grid">
+                            <div class="card stat-card accent-card">
+                                <span class="stat-label">Sample Size (Per Variant)</span>
+                                <span class="stat-value" id="planSampleSizeVal">3,925</span>
+                                <span class="stat-subtext">Control or Treatment count</span>
+                            </div>
+                            <div class="card stat-card">
+                                <span class="stat-label">Total Sample Size</span>
+                                <span class="stat-value" id="planTotalSizeVal">7,850</span>
+                                <span class="stat-subtext">Total visitors required</span>
+                            </div>
+                            <div class="card stat-card">
+                                <span class="stat-label">Estimated Runtime</span>
+                                <span class="stat-value highlight" id="planDurationVal">8 Days</span>
+                                <span class="stat-subtext">Based on your daily traffic</span>
+                            </div>
+                        </div>
+
+                        <div class="explanation-box mt-6">
+                            <h3><i data-lucide="info"></i> Planner Insights</h3>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <strong>Control group target rate:</strong>
+                                    <span id="planControlRateText">10.00%</span>
+                                </div>
+                                <div class="info-item">
+                                    <strong>Treatment group target rate:</strong>
+                                    <span id="planTreatmentRateText">12.00%</span>
+                                </div>
+                                <div class="info-item">
+                                    <strong>Absolute MDE:</strong>
+                                    <span id="planAbsMdeText">2.00%</span>
+                                </div>
+                                <div class="info-item">
+                                    <strong>Relative MDE:</strong>
+                                    <span id="planRelMdeText">20.00%</span>
+                                </div>
+                            </div>
+                            
+                            <p class="mt-4" id="planTextNarrative">
+                                To detect an absolute improvement of at least 2.00% from your baseline conversion of 10.00% with a 5.00% significance level (\(\alpha\)) and 80.00% power, you need to collect 3,925 samples per variant. Assuming an equal distribution of traffic (50% each) and 1,000 total daily visitors, your experiment should run for approximately 8 days.
+                            </p>
+                            <div id="planFormulaBlock" class="katex-formula-block"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONCEPT GUIDE TAB -->
+        <section id="conceptsTab" class="tab-content">
+            <div class="concept-layout">
+                <!-- Concept Sidebar Navigation -->
+                <div class="concept-sidebar">
+                    <button class="concept-nav-btn active" data-concept="intro">What is Hypothesis Testing?</button>
+                    <button class="concept-nav-btn" data-concept="hypotheses">Null & Alternative</button>
+                    <button class="concept-nav-btn" data-concept="errors">Type I & Type II Errors</button>
+                    <button class="concept-nav-btn" data-concept="pvalue">The p-value & Alpha</button>
+                    <button class="concept-nav-btn" data-concept="power">Statistical Power</button>
+                    <button class="concept-nav-btn" data-concept="abtesting">Connecting to A/B Testing</button>
+                </div>
+
+                <!-- Concept Content Box -->
+                <div class="card concept-card">
+                    <!-- Concept 1: Introduction -->
+                    <div id="concept-intro" class="concept-detail-content active">
+                        <h2>What is Hypothesis Testing?</h2>
+                        <p>Hypothesis testing is a formal statistical framework used to decide whether the data at hand support a particular claim or theory. It allows experimenters (like product managers, data scientists, and growth marketers) to make mathematical assertions about populations based on sample statistics.</p>
+                        
+                        <div class="quote-box">
+                            <p>"Hypothesis testing is the mathematical interface between intuition and evidence."</p>
+                        </div>
+
+                        <h3>Why use it?</h3>
+                        <p>In business and science, we are prone to confirmation bias. If we change a website button color from blue to green and see conversion increase by 0.5% the next day, we naturally want to celebrate. Hypothesis testing asks: <em>"Could this 0.5% increase simply be random daily fluctuation?"</em> It helps filter out noise from true product signal.</p>
+                        
+                        <h3>The General Steps:</h3>
+                        <ol class="spaced-list">
+                            <li><strong>State the Hypotheses:</strong> Define the Null Hypothesis (\(H_0\)) and Alternative Hypothesis (\(H_a\)).</li>
+                            <li><strong>Set Decision Criteria:</strong> Choose a significance level (\(\alpha\)), usually 5% (\(0.05\)).</li>
+                            <li><strong>Collect Data & Compute:</strong> Gather sample data and calculate the appropriate test statistic (Z or t) and corresponding p-value.</li>
+                            <li><strong>Make a Decision:</strong> Reject the Null Hypothesis if the p-value is less than \(\alpha\), or fail to reject it otherwise.</li>
+                        </ol>
+                    </div>
+
+                    <!-- Concept 2: Null and Alternative -->
+                    <div id="concept-hypotheses" class="concept-detail-content">
+                        <h2>Null vs. Alternative Hypotheses</h2>
+                        <p>Every hypothesis test requires setting up two mutually exclusive statements:</p>
+                        
+                        <div class="comparison-grid">
+                            <div class="comp-card null-card">
+                                <h3>Null Hypothesis (\(H_0\))</h3>
+                                <p class="comp-summary">The hypothesis of "no difference", "no effect", or "no change".</p>
+                                <p>It represents the status quo. If you test a new feature, \(H_0\) assumes the feature has no effect on user behavior.</p>
+                                <div class="comp-math">\(H_0: \mu_{new} = \mu_{old}\)</div>
+                            </div>
+                            <div class="comp-card alt-card">
+                                <h3>Alternative Hypothesis (\(H_a\) or \(H_1\))</h3>
+                                <p class="comp-summary">The hypothesis of "difference", "effect", or "change".</p>
+                                <p>It is what you want to prove. It asserts that the new feature does change user behavior.</p>
+                                <div class="comp-math">\(H_a: \mu_{new} \neq \mu_{old}\)</div>
+                            </div>
+                        </div>
+
+                        <h3>One-Tailed vs. Two-Tailed Tests</h3>
+                        <p>Depending on your alternative hypothesis, you choose the directionality of the test:</p>
+                        <ul>
+                            <li><strong>Two-Tailed (Non-directional):</strong> You test if the new version is simply *different* (better or worse). Formulated as: \(H_a: \mu \neq \mu_0\). Rejection region is split between both ends of the distribution curve.</li>
+                            <li><strong>One-Tailed (Directional):</strong> You test if the new version is *specifically better* (\(H_a: \mu > \mu_0\)) or *specifically worse* (\(H_a: \mu < \mu_0\)). Rejection region is concentrated entirely in one tail.</li>
+                        </ul>
+                        <blockquote>
+                            <strong>Note:</strong> In A/B testing, two-tailed tests are widely considered the industry standard because they protect against claiming a positive result when in fact the variation is worse.
+                        </blockquote>
+                    </div>
+
+                    <!-- Concept 3: Errors -->
+                    <div id="concept-errors" class="concept-detail-content">
+                        <h2>Type I and Type II Errors</h2>
+                        <p>Because we draw conclusions about a whole population using only a sample, we can never be 100% certain. There are two kinds of errors we can commit:</p>
+
+                        <table class="error-table">
+                            <thead>
+                                <tr>
+                                    <th>Decision Made</th>
+                                    <th>H₀ is actually TRUE (No real effect)</th>
+                                    <th>H₀ is actually FALSE (Real effect exists)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="row-header">Reject H₀<br><small>(Declare a winner)</small></td>
+                                    <td class="cell-error">
+                                        <div class="cell-badge type-1">Type I Error (False Positive)</div>
+                                        <p>You claim there is an effect when there isn't. You ship a useless feature.</p>
+                                        <p><strong>Probability = \(\alpha\)</strong></p>
+                                    </td>
+                                    <td class="cell-correct">
+                                        <div class="cell-badge correct">Correct Decision</div>
+                                        <p>You successfully identify a winning feature.</p>
+                                        <p><strong>Probability = \(1 - \beta\) (Power)</strong></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="row-header">Fail to Reject H₀<br><small>(Keep status quo)</small></td>
+                                    <td class="cell-correct">
+                                        <div class="cell-badge correct">Correct Decision</div>
+                                        <p>You correctly decide not to roll out a feature that does nothing.</p>
+                                        <p><strong>Probability = \(1 - \alpha\)</strong></p>
+                                    </td>
+                                    <td class="cell-error">
+                                        <div class="cell-badge type-2">Type II Error (False Negative)</div>
+                                        <p>You fail to detect a real improvement. You miss a great opportunity.</p>
+                                        <p><strong>Probability = \(\beta\)</strong></p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3 class="mt-6">Balancing the Trade-off</h3>
+                        <p>There is a natural trade-off between Type I and Type II errors. If you decrease your willingness to make a Type I error (decreasing \(\alpha\) from 5% to 1%), you increase the threshold required to declare a result significant. This makes it harder to reject the null hypothesis, which in turn increases your probability of committing a Type II error (\(\beta\)), thereby lowering your test power.</p>
+                    </div>
+
+                    <!-- Concept 4: p-value -->
+                    <div id="concept-pvalue" class="concept-detail-content">
+                        <h2>The p-value and Alpha (\(\alpha\))</h2>
+                        <p>The **p-value** is one of the most misunderstood concepts in statistics. Let's define it precisely:</p>
+                        
+                        <div class="definition-box">
+                            <p><strong>p-value definition:</strong> The probability of obtaining test results at least as extreme as the result actually observed, under the assumption that the null hypothesis is true.</p>
+                        </div>
+
+                        <h3>What the p-value is NOT:</h3>
+                        <ul>
+                            <li>It is **not** the probability that the null hypothesis is true.</li>
+                            <li>It is **not** the probability that the alternative hypothesis is false.</li>
+                            <li>It is **not** the probability that the observed result was caused by random chance.</li>
+                        </ul>
+
+                        <h3>Decision Rule</h3>
+                        <p>We compare the p-value to our pre-defined significance level \(\alpha\):</p>
+                        <div class="decision-rules-container">
+                            <div class="rule-box reject">
+                                <h4>If \(p < \alpha\): Reject \(H_0\)</h4>
+                                <p>The probability of observing this data by chance is very low. We conclude there is a statistically significant effect.</p>
+                            </div>
+                            <div class="rule-box accept">
+                                <h4>If \(p \ge \alpha\): Fail to Reject \(H_0\)</h4>
+                                <p>The data is reasonably likely to occur under the null hypothesis. We cannot conclude that an effect exists.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Concept 5: Power -->
+                    <div id="concept-power" class="concept-detail-content">
+                        <h2>Statistical Power (\(1 - \beta\))</h2>
+                        <p>Statistical power is the probability that a test will correctly reject a false null hypothesis. In plain English, **power is the probability of finding an effect, assuming an effect actually exists.**</p>
+
+                        <h3>Why Power Matters</h3>
+                        <p>An underpowered test is like looking for a needle in a haystack with a weak magnifying glass. You are likely to walk away concluding there is no needle (Type II error), when in fact it was there all along. In A/B testing, standard practice is to aim for **80% power** (\(\beta = 0.20\)).</p>
+
+                        <h3>Factors that Influence Power:</h3>
+                        <ol class="spaced-list">
+                            <li><strong>Sample Size (\(n\)):</strong> As sample size increases, random variance decreases. Standard error shrinks, which makes it much easier to detect small differences. <em>(Higher sample size = Higher power)</em></li>
+                            <li><strong>Effect Size:</strong> A massive improvement (e.g. 50% increase in clicks) is much easier to spot than a tiny improvement (e.g. 0.1% increase). <em>(Larger effect size = Higher power)</em></li>
+                            <li><strong>Significance Level (\(\alpha\)):</strong> If you make \(\alpha\) more lenient (e.g. 10% instead of 5%), you widen the rejection region, making it easier to reject the null. <em>(Higher alpha = Higher power, but more false positives!)</em></li>
+                        </ol>
+                    </div>
+
+                    <!-- Concept 6: A/B Testing -->
+                    <div id="concept-abtesting" class="concept-detail-content">
+                        <h2>Connecting Hypothesis Testing to A/B Testing</h2>
+                        <p>A/B testing is simply hypothesis testing applied to digital products. You split your traffic into two groups:</p>
+                        <ul>
+                            <li><strong>A (Control):</strong> The existing version of the page or feature.</li>
+                            <li><strong>B (Treatment):</strong> The new variant you want to test.</li>
+                        </ul>
+
+                        <h3>Common Practical Pitfalls in A/B Testing:</h3>
+                        <ol class="spaced-list">
+                            <li><strong>Peeking (The Multiple Comparisons Problem):</strong> Checking the results daily and stopping the test as soon as the p-value dips below 0.05. This dramatically inflates your actual Type I error rate. You must decide on your sample size beforehand and wait until it is complete.</li>
+                            <li><strong>Running too many tests:</strong> If you run 20 tests simultaneously with \(\alpha = 0.05\), by pure random chance, you expect at least one test to show a "statistically significant" result, even if all treatments are identical to control.</li>
+                            <li><strong>Confusing statistical significance with practical significance:</strong> With a sample size of 10 million users, a 0.01% change in conversion rate might be statistically significant (p &lt; 0.05), but the cost to build and maintain the feature might far outweigh the minor conversion increase. Always calculate the ROI.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <div class="footer-container">
+            <p>&copy; 2026 StatLab. Designed for interactive product and statistical education.</p>
+            <p>Built with <i data-lucide="heart" class="heart-icon"></i> using HTML, CSS, JavaScript, KaTeX, and Chart.js.</p>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i data-lucide="check" class="toast-icon"></i>
+        <span id="toastMessage">Configuration copied!</span>
+    </div>
+
+    <!-- Main JavaScript Logic -->
+    <script src="app.js"></script>
+</body>
+</html>

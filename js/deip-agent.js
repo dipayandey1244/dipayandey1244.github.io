@@ -22,7 +22,7 @@ You have deep knowledge about Dipayan Dey:
 3. Projects & Links (always suggest these links when asked):
    - AetherCrawl Web Crawler & Academy: A visual crawler simulator and Web Crawling Academy that maps link hierarchies dynamically, explains step-by-step crawler mechanics, shares amazing historical trivia (like Lego server cases, origin of robots.txt), and explains SOTA modern crawling techniques (located at '/web-crawler/'). Mention his local python package 'distributed-web-crawler'.
    - Institutional Risk Engine: Real-time Basel III & IFRS 9 stress dashboard (located at '/risk-analytics-dashboard/').
-   - Open Source Contributions: Core patches and interactive showcases for PyTorch (differentiable Expected Shortfall Loss), LangGraph (cycles), LightGBM, FastAPI, and Pydantic (located at '/contributions/'). Mention his custom package 'pytorch-risk-extensions' for differentiable tail-risk.
+   - Paper Implementation & Open Source: Core patches and interactive showcases for PyTorch (differentiable Expected Shortfall Loss quantile optimization paper, ArXiv:2006.01244), LangGraph (cycles), LightGBM, FastAPI, and Pydantic (located at '/contributions/'). Mention his custom package 'pytorch-risk-extensions' for differentiable tail-risk.
    - Systemic Business Cases: Audit reports detailing XGBoost surveillance, BNY LangGraph councils, and Morgan Stanley spoofing audits (located at '/cases/').
    - Interactive Resume: Comprehensive timeline and skills CV (located at '/resume/').
 4. Contact Info:
@@ -733,11 +733,12 @@ Dipayan developed **AetherCrawl**, an autonomous high-performance web crawler an
 *(Note: Currently running in offline fallback mode)*`;
     }
     
-    if (clean.includes("pytorch") || clean.includes("es") || clean.includes("shortfall") || clean.includes("risk-extensions")) {
+    if (clean.includes("pytorch") || clean.includes("es") || clean.includes("shortfall") || clean.includes("risk-extensions") || clean.includes("paper")) {
         return `*A warm glow shines from Deip's lanterns:*
-Dipayan created a custom PyTorch package called **pytorch-risk-extensions** which implements a differentiable **Expected Shortfall (ES) Loss** module!
-- It uses a temperature-scaled sigmoid mask to approximate the 99% Basel III Value at Risk (VaR) threshold, allowing deep learning networks to directly backpropagate tail-risk penalties.
-- You can explore the interactive Deep Learning simulator on the **[Open Source Contributions](/contributions/)** page!
+Dipayan created a custom PyTorch package called **pytorch-risk-extensions** implementing the differentiable **Expected Shortfall (ES) Loss** quantile optimization paper (**ArXiv:2006.01244**)!
+- **Use Case**: Allows deep learning networks to directly backpropagate 99% Basel III regulatory tail-risk penalties instead of baseline Mean Squared Error (MSE).
+- It uses a temperature-scaled sigmoid mask to approximate the VaR threshold, maintaining stable backpropagation gradients during stress epochs.
+- You can explore the interactive Deep Learning simulator on the **[Paper Implementation & Open Source](/contributions/)** page!
 
 *(Note: Currently running in offline fallback mode)*`;
     }
@@ -751,9 +752,9 @@ Dipayan created a custom PyTorch package called **pytorch-risk-extensions** whic
 *(Note: Currently running in offline fallback mode)*`;
     }
     
-    if (clean.includes("project") || clean.includes("dashboard") || clean.includes("portfolio") || clean.includes("contribution") || clean.includes("open source")) {
+    if (clean.includes("project") || clean.includes("dashboard") || clean.includes("portfolio") || clean.includes("contribution") || clean.includes("open source") || clean.includes("paper")) {
         return `*Deip lists Dipayan's development index:*
-1. **[Open Source Contributions](/contributions/)** - Patches for PyTorch (differentiable Expected Shortfall loss), LangGraph (cycles), LightGBM (covariance constraints), and FastAPI/Pydantic (Decimal validator).
+1. **[Paper Implementation & Open Source](/contributions/)** - Implemented Expected Shortfall Quantile Optimization paper (ArXiv:2006.01244) in PyTorch, plus patches for LangGraph (cycles), LightGBM (covariance constraints), and FastAPI/Pydantic.
 2. **[AetherCrawl & Crawler Academy](/web-crawler/)** - Autonomous web crawler with historical evolution timeline, modern techniques dashboard, and interactive mechanics stepper.
 3. **[Institutional Risk Engine](/risk-analytics-dashboard/)** - Dynamic credit, market, and liquidity stress dashboard.
 4. **[Systemic Business Cases](/cases/)** - In-depth reports on Goldman Sachs, BNY, and Morgan Stanley compliance validations.
