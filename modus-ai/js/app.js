@@ -31,22 +31,35 @@ const sampleQueries = [
 ];
 
 // Document Elements
-const tabItems = document.querySelectorAll('.nav-item');
-const activeTabTitle = document.getElementById('active-tab-title');
-const activeTabDesc = document.getElementById('active-tab-desc');
-const viewport = document.getElementById('viewport');
+let tabItems;
+let activeTabTitle;
+let activeTabDesc;
+let viewport;
 
-const topLatencyVal = document.getElementById('top-latency');
-const topScoreVal = document.getElementById('top-score');
+let topLatencyVal;
+let topScoreVal;
 
 // Inputs & Selectors
-const versionToggle = document.getElementById('versionToggle');
-const retrievalSelect = document.getElementById('retrievalSelect');
-const dimToggle = document.getElementById('dimToggle');
-const rerankToggle = document.getElementById('rerankToggle');
+let versionToggle;
+let retrievalSelect;
+let dimToggle;
+let rerankToggle;
 
 // Initialize App
 function init() {
+    tabItems = document.querySelectorAll('.nav-item');
+    activeTabTitle = document.getElementById('active-tab-title');
+    activeTabDesc = document.getElementById('active-tab-desc');
+    viewport = document.getElementById('viewport');
+
+    topLatencyVal = document.getElementById('top-latency');
+    topScoreVal = document.getElementById('top-score');
+
+    versionToggle = document.getElementById('versionToggle');
+    retrievalSelect = document.getElementById('retrievalSelect');
+    dimToggle = document.getElementById('dimToggle');
+    rerankToggle = document.getElementById('rerankToggle');
+
     setupEventListeners();
     renderActiveTab();
 }
@@ -896,4 +909,8 @@ mlflow.autolog(log_traces=True)</code></pre>
 }
 
 // Load App
-init();
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}
