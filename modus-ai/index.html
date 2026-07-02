@@ -192,7 +192,7 @@
       <div class="nav-section">
         <div class="nav-section-label">GenAI Engineering</div>
         <div class="nav-item" data-tab="ai-copilot"><i class="ti ti-cpu"></i> LangGraph Co-pilot</div>
-        <div class="nav-item" data-tab="benchmarks"><i class="ti ti-gauge"></i> Platform Benchmarks</div>
+        <div class="nav-item" data-tab="pipelines"><i class="ti ti-chart-line"></i> Medallion Ingestion</div>
         <div class="nav-item" data-tab="deliverables"><i class="ti ti-file-text"></i> PS Deliverables</div>
       </div>
     </nav>
@@ -202,7 +202,7 @@
         <div class="user-avatar">FDE</div>
         <div>
           <div class="user-name">Professional Services</div>
-          <div class="user-role">Databricks Principal FDE</div>
+          <div class="user-role">Principal Forward Deployed Engineer</div>
         </div>
       </div>
     </div>
@@ -226,7 +226,7 @@
     <!-- 1. OVERVIEW TAB -->
     <div class="content" id="tab-overview">
       <div id="api-key-banner" class="info-box info-box-warning" style="margin-bottom: 4px; display:none;">
-        <i class="ti ti-bulb"></i> <strong>Databricks Serverless Gateway</strong>: Add a <strong>Groq API Key</strong> in sidebar settings to enable live agent generation. Running in simulation mode.
+        <i class="ti ti-bulb"></i> <strong>Serverless Lakehouse Gateway</strong>: Add a <strong>Groq API Key</strong> in sidebar settings to enable live agent generation. Running in simulation mode.
       </div>
       
       <!-- KPIs -->
@@ -485,37 +485,58 @@
       </div>
     </div>
 
-    <!-- 7. BENCHMARKS TAB -->
-    <div class="content" id="tab-benchmarks" style="display:none;">
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title">Photon Compute vs Standard Spark Benchmarks</div>
+    <!-- 7. MEDALLION INGESTION PIPELINE TAB -->
+    <div class="content" id="tab-pipelines" style="display:none;">
+      <div class="grid-2" style="grid-template-columns: 1fr 1.3fr;">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Medallion Pipeline Workspace</div>
+          </div>
+          
+          <div class="form-group">
+            <label>Select Case Study Pipeline</label>
+            <select class="form-select" id="pipeline-case-select" onchange="loadPipelineCase()">
+              <option value="foxsports">Fox Sports: High-Concurrency Ingestion</option>
+              <option value="jpmc">JPMorgan Chase: 5PB Data Migration</option>
+              <option value="qualcomm">Qualcomm: Production Agentic Workflows</option>
+              <option value="spokane">City of Spokane: Automated ETL &amp; GIS</option>
+            </select>
+          </div>
+
+          <div class="info-box info-box-success" id="pipeline-case-desc" style="margin-bottom: 12px;">
+            Fox Sports co-built high-throughput search partitions, doubling search success rate during live event workloads exceeding 200,000 daily concurrent requests.
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; background:var(--surface-1); padding:12px; border-radius:6px; border:0.5px solid var(--border); margin-bottom:12px;">
+            <div style="text-align:center;">
+              <div class="trace-badge badge-pass" style="margin:0 auto 4px;">Bronze</div>
+              <span style="font-size:9.5px; color:var(--text-muted);">Auto Loader</span>
+            </div>
+            <i class="ti ti-arrow-right" style="color:var(--text-muted);"></i>
+            <div style="text-align:center;">
+              <div class="trace-badge badge-pass" style="margin:0 auto 4px;">Silver</div>
+              <span style="font-size:9.5px; color:var(--text-muted);">Deduplicated</span>
+            </div>
+            <i class="ti ti-arrow-right" style="color:var(--text-muted);"></i>
+            <div style="text-align:center;">
+              <div class="trace-badge badge-pass" style="margin:0 auto 4px;">Gold</div>
+              <span style="font-size:9.5px; color:var(--text-muted);">Aggregated</span>
+            </div>
+          </div>
+
+          <button class="run-btn" id="pipeline-run-btn" onclick="executeMedallionPipeline()" style="width:100%; justify-content:center; padding:10px;">
+            <i class="ti ti-player-play"></i> Execute Medallion Pipeline
+          </button>
         </div>
-        <table class="system-table" style="margin-top:10px;">
-          <thead>
-            <tr><th>Query Execution Scenario</th><th>Standard Apache Spark</th><th>Photon Engine</th><th>Delta Speedup</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Aggregations on 500M Transactions</td>
-              <td>142 seconds</td>
-              <td style="color:var(--text-success); font-weight:bold;">12 seconds</td>
-              <td style="color:var(--text-success);">11.8x</td>
-            </tr>
-            <tr>
-              <td>Join: Customer Master (10M) &amp; Transactions</td>
-              <td>380 seconds</td>
-              <td style="color:var(--text-success); font-weight:bold;">48 seconds</td>
-              <td style="color:var(--text-success);">7.9x</td>
-            </tr>
-            <tr>
-              <td>Auto Loader Schema Ingestion Burst</td>
-              <td>65 seconds</td>
-              <td style="color:var(--text-success); font-weight:bold;">15 seconds</td>
-              <td style="color:var(--text-success);">4.3x</td>
-            </tr>
-          </tbody>
-        </table>
+
+        <div class="panel" style="display:flex; flex-direction:column;">
+          <div class="panel-header">
+            <div class="panel-title">Pipeline Log Output &amp; Gold Preview</div>
+          </div>
+          <div class="code-view" id="pipeline-logs" style="flex: 1; min-height: 250px; line-height:1.5; color:#a9deb4;">
+            Select a case study and click "Execute Medallion Pipeline" to watch log streams.
+          </div>
+        </div>
       </div>
     </div>
 
@@ -709,8 +730,8 @@
 
   // --- CONSULTING DOCUMENTS ---
   const docs = {
-    migration: `Migration Strategy: Legacy Hadoop Hive to Databricks Lakehouse\n\n1. Objective: Transition 5 petabytes of financial transaction tables and 500+ analytical notebooks to Delta Lake in 4 months.\n2. Ingestion pipeline: Set up Delta Lake Auto Loader (cloudFiles) streaming parquet, avro, and CSV files directly from S3/ADLS landing zones.\n3. Compute Optimization: Bind Photon execution engine over Databricks SQL warehouses to run low-latency BI aggregations on Gold Layer tables.`,
-    dr: `Disaster Recovery (DR) Plan for Northstar Lakehouse\n\n1. Target RTO: 30 minutes. Target RPO: 5 minutes.\n2. Checkpoints & Metastore: Replicate Unity Catalog schemas and metastore configurations across secondary Databricks workspaces in failover regions.\n3. Delta Deep Clone: Schedule daily delta tables replication via 'CREATE TABLE secondary.transactions DEEP CLONE primary.transactions' to copy binary logs.`,
+    migration: `Migration Strategy: Legacy Hadoop Hive to Delta Lakehouse\n\n1. Objective: Transition 5 petabytes of financial transaction tables and 500+ analytical notebooks to Delta Lake in 4 months.\n2. Ingestion pipeline: Set up Delta Lake Auto Loader (cloudFiles) streaming parquet, avro, and CSV files directly from S3/ADLS landing zones.\n3. Compute Optimization: Bind Photon execution engine over Serverless SQL warehouses to run low-latency BI aggregations on Gold Layer tables.`,
+    dr: `Disaster Recovery (DR) Plan for Northstar Lakehouse\n\n1. Target RTO: 30 minutes. Target RPO: 5 minutes.\n2. Checkpoints & Metastore: Replicate Unity Catalog schemas and metastore configurations across secondary compute workspaces in failover regions.\n3. Delta Deep Clone: Schedule daily delta tables replication via 'CREATE TABLE secondary.transactions DEEP CLONE primary.transactions' to copy binary logs.`,
     rbac: `RBAC & Governance Access Controls (Unity Catalog)\n\n1. catalog hierarchy: Catalog (northstar_financial) -> Schema (bronze, silver, gold) -> Tables.\n2. Group Permissions:\n - data_engineers: USAGE on Catalog, CREATE on Schema.\n - business_analysts: SELECT on Gold schema tables only (PII columns masked via Unity Catalog dynamic masking functions).`,
     contracts: `Northstar Data Contracts Schema Specifications\n\n1. Schema Contract: transactions_500m\nFields:\n - transaction_id: BIGINT (NOT NULL, UNIQUE)\n - amount: DOUBLE (positive)\n - timestamp: TIMESTAMP\n2. Quality Expectation assertions: expect_column_values_to_be_between('amount', 0.1, 100000)`
   };
@@ -768,10 +789,10 @@
 
     // 2. Direct Groq API client call fallback
     if (apiKey) {
-      let sysPrompt = "You are a senior Databricks Forward Deployed Engineer.";
-      if (agent === 'code_generator') sysPrompt = "You are the Databricks PySpark Code Generator. Output only clean, optimized PySpark code using best practices like Auto Loader or Structured Streaming. Avoid explanations.";
-      if (agent === 'sql_optimizer') sysPrompt = "You are the Databricks SQL Optimizer. Output optimized SQL utilizing broadcast joins, caching, and Liquid Clustering with a brief execution plan description.";
-      if (agent === 'pipeline_debugger') sysPrompt = "You are the Databricks Pipeline Debugger. Help data engineers diagnose Spark failures, memory overflows, or checkpoint corruptions.";
+      let sysPrompt = "You are a senior Forward Deployed Engineer.";
+      if (agent === 'code_generator') sysPrompt = "You are the PySpark Code Generator. Output only clean, optimized PySpark code using best practices like Auto Loader or Structured Streaming. Avoid explanations.";
+      if (agent === 'sql_optimizer') sysPrompt = "You are the SQL Optimizer. Output optimized SQL utilizing broadcast joins, caching, and Liquid Clustering with a brief execution plan description.";
+      if (agent === 'pipeline_debugger') sysPrompt = "You are the Pipeline Debugger. Help data engineers diagnose Spark failures, memory overflows, or checkpoint corruptions.";
       if (agent === 'dq_assistant') sysPrompt = "You are the Data Quality Assistant. Generate Great Expectations rules or schema contract assertions.";
 
       const payload = {
@@ -1072,11 +1093,19 @@
     if (queryLower.includes("customer_master")) table = "customer_master";
     else if (queryLower.includes("transactions")) table = "transactions";
     else if (queryLower.includes("custom_dataset")) table = "custom_dataset";
-    else return { error: "Table not found. Supported tables: customer_master, transactions, custom_dataset" };
+    else if (queryLower.includes("fox_sports_search")) table = "fox_sports_search";
+    else if (queryLower.includes("jpmc_migration")) table = "jpmc_migration";
+    else if (queryLower.includes("qualcomm_agentic")) table = "qualcomm_agentic";
+    else if (queryLower.includes("spokane_etl")) table = "spokane_etl";
+    else return { error: "Table not found. Supported tables: customer_master, transactions, custom_dataset, fox_sports_search, jpmc_migration, qualcomm_agentic, spokane_etl" };
 
     let sourceData;
     if (table === "customer_master") sourceData = localCustomers;
     else if (table === "transactions") sourceData = localTransactions;
+    else if (table === "fox_sports_search") sourceData = caseSportsData;
+    else if (table === "jpmc_migration") sourceData = caseJpmcData;
+    else if (table === "qualcomm_agentic") sourceData = caseQualcommData;
+    else if (table === "spokane_etl") sourceData = caseSpokaneData;
     else {
       if (customDatasetRows.length === 0) return { error: "custom_dataset is empty. Please upload a CSV dataset file first!" };
       sourceData = customDatasetRows;
@@ -1177,6 +1206,165 @@
     });
     html += `</tbody></table>`;
     view.innerHTML = html;
+  }
+
+  // --- PIPELINE CASE STUDY DATA ---
+  const caseSportsData = [
+    { query_id: 1, search_query: "Live Game Stream", concurrent_requests: 120000, latency_ms: 12, success_rate_pct: 99.8 },
+    { query_id: 2, search_query: "Live Game Stream", concurrent_requests: 150000, latency_ms: 14, success_rate_pct: 99.7 },
+    { query_id: 3, search_query: "Player Stats", concurrent_requests: 45000, latency_ms: 8, success_rate_pct: 99.9 },
+    { query_id: 4, search_query: "Player Stats", concurrent_requests: 60000, latency_ms: 9, success_rate_pct: 99.9 },
+    { query_id: 5, search_query: "Highlights Video", concurrent_requests: 80000, latency_ms: 22, success_rate_pct: 99.2 },
+    { query_id: 6, search_query: "Highlights Video", concurrent_requests: 95000, latency_ms: 25, success_rate_pct: 99.1 }
+  ];
+
+  const caseJpmcData = [
+    { notebook_id: 101, migration_phase: "Phase 1 - Ingest", data_volume_tb: 120.5, is_delta_format: 1, duration_hrs: 12 },
+    { notebook_id: 102, migration_phase: "Phase 1 - Ingest", data_volume_tb: 450.0, is_delta_format: 1, duration_hrs: 24 },
+    { notebook_id: 103, migration_phase: "Phase 2 - Cleansing", data_volume_tb: 890.2, is_delta_format: 1, duration_hrs: 48 },
+    { notebook_id: 104, migration_phase: "Phase 2 - Cleansing", data_volume_tb: 1200.0, is_delta_format: 1, duration_hrs: 72 },
+    { notebook_id: 105, migration_phase: "Phase 3 - Analytics", data_volume_tb: 50.4, is_delta_format: 1, duration_hrs: 6 },
+    { notebook_id: 106, migration_phase: "Phase 3 - Analytics", data_volume_tb: 95.8, is_delta_format: 1, duration_hrs: 10 }
+  ];
+
+  const caseQualcommData = [
+    { task_id: 1, task_name: "Workflow Synthesis", manual_time_hours: 48.0, agent_time_minutes: 15.5, accuracy_pct: 98.4 },
+    { task_id: 2, task_name: "Workflow Synthesis", manual_time_hours: 72.0, agent_time_minutes: 22.0, accuracy_pct: 98.6 },
+    { task_id: 3, task_name: "Code Refactoring", manual_time_hours: 24.0, agent_time_minutes: 5.2, accuracy_pct: 99.1 },
+    { task_id: 4, task_name: "Code Refactoring", manual_time_hours: 36.0, agent_time_minutes: 8.0, accuracy_pct: 99.2 },
+    { task_id: 5, task_name: "Verification Logs", manual_time_hours: 12.0, agent_time_minutes: 2.1, accuracy_pct: 97.8 }
+  ];
+
+  const caseSpokaneData = [
+    { record_id: 1, department_source: "GIS Maps", is_duplicate: 1, infrastructure_cost_usd: 1200.00 },
+    { record_id: 2, department_source: "GIS Maps", is_duplicate: 0, infrastructure_cost_usd: 450.00 },
+    { record_id: 3, department_source: "Financials", is_duplicate: 1, infrastructure_cost_usd: 3500.00 },
+    { record_id: 4, department_source: "Financials", is_duplicate: 0, infrastructure_cost_usd: 800.00 },
+    { record_id: 5, department_source: "Permits Portal", is_duplicate: 1, infrastructure_cost_usd: 4500.00 },
+    { record_id: 6, department_source: "Permits Portal", is_duplicate: 0, infrastructure_cost_usd: 900.00 }
+  ];
+
+  const pipelineCaseStudies = {
+    foxsports: {
+      name: "Fox Sports Search Ingestion",
+      table: "fox_sports_search",
+      query: "SELECT search_query, AVG(latency_ms), MAX(concurrent_requests) FROM fox_sports_search GROUP BY search_query;",
+      logs: [
+        "[Bronze] Initializing Auto Loader file discovery on s3://foxsports-raw-ingest/...",
+        "[Bronze] Ingested 150,000 raw search JSON logs from streaming broker.",
+        "[Silver] Mapping JSON schema to structured Delta partition columns...",
+        "[Silver] Deduplication: removed 14,230 duplicate log items.",
+        "[Silver] Great Expectations assertion passed: query_latency_ms < 1000.",
+        "[Gold] Creating consolidated feature store aggregates...",
+        "[Gold] Delta Optimization: applying Z-Order clustering by (search_query).",
+        "[Success] Gold Table 'fox_sports_search' successfully updated in memory catalog!"
+      ]
+    },
+    jpmc: {
+      name: "JPMorgan Chase Data Migration",
+      table: "jpmc_migration",
+      query: "SELECT migration_phase, COUNT(*), SUM(data_volume_tb) FROM jpmc_migration GROUP BY migration_phase;",
+      logs: [
+        "[Bronze] Scanning s3://jpmc-lakehouse-migration-source/ for legacy Hadoop tables...",
+        "[Bronze] Discovered 5.2 petabytes of data assets and 512 statistical model notebooks.",
+        "[Silver] Migrating raw structures to transactional Silver Delta Lake tables...",
+        "[Silver] Data quality checks: verified Schema Evolution compatibility.",
+        "[Silver] Masking customer PII columns using dynamic cell-level privacy filters.",
+        "[Gold] Materializing historical analytical features for ML models...",
+        "[Gold] Compacted layout: optimized storage using Liquid Clustering.",
+        "[Success] Gold Table 'jpmc_migration' successfully registered in Unity Catalog!"
+      ]
+    },
+    qualcomm: {
+      name: "Qualcomm Agentic Workflows",
+      table: "qualcomm_agentic",
+      query: "SELECT task_name, manual_time_hours, agent_time_minutes FROM qualcomm_agentic;",
+      logs: [
+        "[Bronze] Reading raw verification logs from Qualcomm silicon testing boards...",
+        "[Bronze] Ingested 12,000 test executions via cloud parquet storage.",
+        "[Silver] Extracting error signatures and compiling agentic prompts...",
+        "[Silver] Validation check: checked test accuracy ratios > 95%.",
+        "[Gold] Constructing multi-agent reasoning graphs (LangGraph orchestra)...",
+        "[Gold] Aggregated execution durations and calculated total cost savings.",
+        "[Success] Gold Table 'qualcomm_agentic' successfully populated in analytics store!"
+      ]
+    },
+    spokane: {
+      name: "City of Spokane Automated ETL",
+      table: "spokane_etl",
+      query: "SELECT department_source, is_duplicate, COUNT(*) FROM spokane_etl GROUP BY department_source, is_duplicate;",
+      logs: [
+        "[Bronze] Ingesting files from disparate GIS, finance, and permits servers...",
+        "[Bronze] Discovered 85,000 unorganized cross-department database records.",
+        "[Silver] Running ETL cross-matching algorithms for deduplication...",
+        "[Silver] Cleansing complete: removed 68,000 duplicate permit and financial records (80% cut).",
+        "[Gold] Loading clean normalized records to centralized financial schemas...",
+        "[Gold] Calculated monthly infrastructure savings: 50% cluster reduction.",
+        "[Success] Gold Table 'spokane_etl' successfully compiled and loaded!"
+      ]
+    }
+  };
+
+  function loadPipelineCase() {
+    const selected = document.getElementById('pipeline-case-select').value;
+    const c = pipelineCaseStudies[selected];
+    const desc = document.getElementById('pipeline-case-desc');
+    const casesDescMap = {
+      foxsports: "Fox Sports co-built high-throughput search partitions, doubling search success rate during live event workloads exceeding 200,000 daily concurrent requests.",
+      jpmc: "JPMC migrated over 5 petabytes of compliance tables and 500+ statistical analysis notebooks to the Serverless Lakehouse Platform in just 4 months with full transactional checks.",
+      qualcomm: "Qualcomm transitioned isolated AI experiments into production-grade multi-agent reasoning models, successfully compressing multi-day validation workflows to minutes.",
+      spokane: "Spokane automated ETL pipelines across GIS, financials, and permits, reducing duplicate data records by 80% and slashing infrastructure cluster costs by 50%."
+    };
+    if (c && desc) {
+      desc.innerHTML = casesDescMap[selected];
+      document.getElementById('pipeline-logs').innerHTML = `Select a case study and click "Execute Medallion Pipeline" to watch log streams.`;
+    }
+  }
+
+  function executeMedallionPipeline() {
+    const selected = document.getElementById('pipeline-case-select').value;
+    const c = pipelineCaseStudies[selected];
+    const logBox = document.getElementById('pipeline-logs');
+    const runBtn = document.getElementById('pipeline-run-btn');
+
+    if (!c) return;
+
+    runBtn.disabled = true;
+    logBox.innerHTML = "";
+    
+    let index = 0;
+    
+    function appendLogLine() {
+      if (index < c.logs.length) {
+        logBox.innerHTML += `<div>${c.logs[index]}</div>`;
+        logBox.scrollTop = logBox.scrollHeight;
+        index++;
+        setTimeout(appendLogLine, 600);
+      } else {
+        logBox.innerHTML += `<div style="color:var(--text-success); font-weight:bold; margin-top:8px;"><i class="ti ti-circle-check"></i> Pipeline run complete! Loaded dataset into console.</div>`;
+        runBtn.disabled = false;
+        
+        // Auto load dataset query into SQL Editor
+        document.getElementById('sql-editor-input').value = c.query;
+        
+        // Render preview table inside logBox
+        let previewTableHtml = `<div style="margin-top:12px; font-weight:bold;">Gold Dataset Preview (Table: ${c.table}):</div>`;
+        const res = executeLocalSQL(c.query);
+        if (res && res.records) {
+          previewTableHtml += `<table class="system-table" style="width:100%; border-collapse:collapse; margin-top:6px; font-size:9.5px; background:var(--surface-0); border:0.5px solid var(--border);">`;
+          previewTableHtml += `<thead><tr>` + res.columns.map(col => `<th style="padding:4px 8px; border-bottom:1px solid var(--border-strong); text-align:left;">${col}</th>`).join('') + `</tr></thead>`;
+          previewTableHtml += `<tbody>`;
+          res.records.slice(0, 4).forEach(row => {
+            previewTableHtml += `<tr>` + res.columns.map(col => `<td style="padding:4px 8px; border-bottom:0.5px solid var(--border);">${row[col]}</td>`).join('') + `</tr>`;
+          });
+          previewTableHtml += `</tbody></table>`;
+          previewTableHtml += `<div style="margin-top:8px;"><button class="run-btn" onclick="switchTab('sql-console'); runSQLQuery();" style="padding:4px 8px; font-size:10px;"><i class="ti ti-terminal"></i> Query live in SQL Console →</button></div>`;
+          logBox.innerHTML += previewTableHtml;
+        }
+      }
+    }
+    
+    appendLogLine();
   }
 
   // Startup Init
