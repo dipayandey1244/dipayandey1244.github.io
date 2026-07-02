@@ -372,28 +372,19 @@
         </div>
     </header>
 
-    <!-- Projects Grid Section -->
+    <!-- Section 1: Financial & Quantitative Engineering -->
     <section class="projects-section">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 24px; background: linear-gradient(135deg, #ffffff 40%, #10b981 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-wallet" style="color: var(--color-success);"></i> Financial &amp; Quantitative Engineering
+        </h2>
         <div class="projects-grid">
-            <!-- Ghibli Generator -->
-            <a href="https://github.com/dipayandey1244" target="_blank" class="card card-ghibli">
-                <div class="card-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
-                <div class="card-content">
-                    <h3>Ghibli Generator</h3>
-                    <p>A computer vision art pipeline that transforms static scenery photos into beautiful Ghibli-style digital paintings.</p>
-                </div>
-                <div class="card-footer">
-                    <span>View Repository</span> <i class="fa-solid fa-arrow-right-long"></i>
-                </div>
-            </a>
-
             <!-- Risk Engine (Featured Dashboard) -->
             <a href="./risk-analytics-dashboard/" target="_blank" class="card card-risk">
                 <span class="featured-badge">Featured System</span>
                 <div class="card-icon"><i class="fa-solid fa-shield-halved"></i></div>
                 <div class="card-content">
                     <h3>Institutional Risk Engine</h3>
-                    <p>Basel III & IFRS 9 compliant risk dashboard. Includes Value at Risk, Expected Shortfall modeling, and dynamic stress scenario simulators.</p>
+                    <p>Basel III &amp; IFRS 9 compliant risk dashboard. Includes Value at Risk, Expected Shortfall modeling, and dynamic stress scenario simulators.</p>
                 </div>
                 <div class="card-footer">
                     <span>Launch Engine</span> <i class="fa-solid fa-arrow-right-long"></i>
@@ -412,16 +403,38 @@
                     <span>Launch Workspace</span> <i class="fa-solid fa-arrow-right-long"></i>
                 </div>
             </a>
+        </div>
+    </section>
 
-            <!-- Systemic Business Cases -->
-            <a href="./cases/" target="_blank" class="card card-finance">
-                <div class="card-icon"><i class="fa-solid fa-briefcase"></i></div>
+    <!-- Section 2: Backend Development & AI Systems -->
+    <section class="projects-section" style="padding-top: 0; margin-top: -10px;">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 24px; background: linear-gradient(135deg, #ffffff 40%, #6366f1 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-server" style="color: var(--color-accent);"></i> Backend &amp; AI Systems Development
+        </h2>
+        <div class="projects-grid">
+            <!-- Paper Implementation (FrugalGPT Router) -->
+            <a href="./frugalgpt-router/" target="_blank" class="card card-finance">
+                <span class="featured-badge" style="background-color: rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.3); color: #c7d2fe;">Paper Implementation</span>
+                <div class="card-icon"><i class="fa-solid fa-graduation-cap"></i></div>
                 <div class="card-content">
-                    <h3>Systemic Case Studies</h3>
-                    <p>Quantitative audit reports detailing XGBoost alert staging filters, RAG validations, and LightGBM model debugging.</p>
+                    <h3>FrugalGPT LLM Router</h3>
+                    <p>Production-grade implementation of the FrugalGPT cascade routing &amp; semantic cache gateway (ArXiv:2305.05176). Classifies prompt complexity to route queries across multi-tier models, saving up to 70% in API costs.</p>
                 </div>
                 <div class="card-footer">
-                    <span>Read Case Studies</span> <i class="fa-solid fa-arrow-right-long"></i>
+                    <span>Launch Gateway</span> <i class="fa-solid fa-arrow-right-long"></i>
+                </div>
+            </a>
+
+            <!-- AetherCrawl -->
+            <a href="./web-crawler/" class="card card-crawler">
+                <span class="featured-badge" style="background-color: rgba(217, 70, 239, 0.15); border-color: rgba(217, 70, 239, 0.3); color: #f472b6;">Autonomous System</span>
+                <div class="card-icon"><i class="fa-solid fa-spider"></i></div>
+                <div class="card-content">
+                    <h3>AetherCrawl Engine</h3>
+                    <p>An autonomous, high-performance web crawler and metadata analyzer. Visualizes link-state graph trees, schedules thread tasks dynamically, and indexes crawl history to SQLite databases.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Launch Analyzer</span> <i class="fa-solid fa-arrow-right-long"></i>
                 </div>
             </a>
 
@@ -436,17 +449,36 @@
                     <span>View Contributions</span> <i class="fa-solid fa-arrow-right-long"></i>
                 </div>
             </a>
+        </div>
+    </section>
 
-            <!-- Paper Implementation (FrugalGPT Router) -->
-            <a href="./frugalgpt-router/" target="_blank" class="card card-finance">
-                <span class="featured-badge" style="background-color: rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.3); color: #c7d2fe;">Paper Implementation</span>
-                <div class="card-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+    <!-- Section 3: Machine Learning & Research Cases -->
+    <section class="projects-section" style="padding-top: 0; margin-top: -10px;">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 24px; background: linear-gradient(135deg, #ffffff 40%, #38bdf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-microscope" style="color: var(--color-info);"></i> Machine Learning &amp; Research Cases
+        </h2>
+        <div class="projects-grid">
+            <!-- Ghibli Generator -->
+            <a href="https://github.com/dipayandey1244" target="_blank" class="card card-ghibli">
+                <div class="card-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
                 <div class="card-content">
-                    <h3>FrugalGPT LLM Router</h3>
-                    <p>Production-grade implementation of the FrugalGPT cascade routing &amp; semantic cache gateway (ArXiv:2305.05176). Classifies prompt complexity to route queries across multi-tier models, saving up to 70% in API costs.</p>
+                    <h3>Ghibli Generator</h3>
+                    <p>A computer vision art pipeline that transforms static scenery photos into beautiful Ghibli-style digital paintings.</p>
                 </div>
                 <div class="card-footer">
-                    <span>Launch Gateway</span> <i class="fa-solid fa-arrow-right-long"></i>
+                    <span>View Repository</span> <i class="fa-solid fa-arrow-right-long"></i>
+                </div>
+            </a>
+
+            <!-- Systemic Business Cases -->
+            <a href="./cases/" target="_blank" class="card card-finance">
+                <div class="card-icon"><i class="fa-solid fa-briefcase"></i></div>
+                <div class="card-content">
+                    <h3>Systemic Case Studies</h3>
+                    <p>Quantitative audit reports detailing XGBoost alert staging filters, RAG validations, and LightGBM model debugging.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Read Case Studies</span> <i class="fa-solid fa-arrow-right-long"></i>
                 </div>
             </a>
 
@@ -459,27 +491,6 @@
                 </div>
                 <div class="card-footer">
                     <span>Read More</span> <i class="fa-solid fa-arrow-right-long"></i>
-                </div>
-            </a>
-        </div>
-    </section>
-
-    <!-- Ambitious Projects Section -->
-    <section class="projects-section" style="padding-top: 0; margin-top: -20px;">
-        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 24px; background: linear-gradient(135deg, #ffffff 40%, #d946ef 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;">
-            <i class="fa-solid fa-rocket" style="color: var(--color-crawler);"></i> Ambitious Projects
-        </h2>
-        <div class="projects-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
-            <!-- AetherCrawl -->
-            <a href="./web-crawler/" class="card card-crawler">
-                <span class="featured-badge" style="background-color: rgba(217, 70, 239, 0.15); border-color: rgba(217, 70, 239, 0.3); color: #f472b6;">Autonomous System</span>
-                <div class="card-icon"><i class="fa-solid fa-spider"></i></div>
-                <div class="card-content">
-                    <h3>AetherCrawl Engine</h3>
-                    <p>An autonomous, high-performance web crawler and metadata analyzer. Visualizes link-state graph trees, schedules thread tasks dynamically, and indexes crawl history to SQLite databases.</p>
-                </div>
-                <div class="card-footer">
-                    <span>Launch Analyzer</span> <i class="fa-solid fa-arrow-right-long"></i>
                 </div>
             </a>
         </div>
