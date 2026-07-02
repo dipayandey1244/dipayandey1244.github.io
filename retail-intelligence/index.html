@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modus AI — Agentic Retail Intelligence</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f5f3;
+    --surface-0: #efefed;
+    --surface-1: #f5f5f3;
+    --surface-2: #ffffff;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --border: rgba(11,11,11,0.10);
+    --border-strong: rgba(11,11,11,0.18);
+    --bg-success: #eaf3de;
+    --text-success: #3b6d11;
+    --bg-warning: #faeeda;
+    --text-warning: #854f0b;
+    --bg-danger: #fcebeb;
+    --text-danger: #a32d2d;
+    --text-accent: #185fa5;
+    --radius: 8px;
+    --orange: #e4532a;
+    --indigo: #4b5563;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111110;
+      --surface-0: #161615;
+      --surface-1: #1a1a19;
+      --surface-2: #232322;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #898781;
+      --border: rgba(255,255,255,0.10);
+      --border-strong: rgba(255,255,255,0.18);
+      --bg-success: #173404;
+      --text-success: #c0dd97;
+      --bg-warning: #412402;
+      --text-warning: #fac775;
+      --bg-danger: #501313;
+      --text-danger: #f7c1c1;
+      --text-accent: #85b7eb;
+    }
+  }
+
+  html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif; background: var(--bg); color: var(--text-primary); }
+
+  .app { display: flex; height: 100vh; overflow: hidden; position: relative; }
+
+  /* SIDEBAR */
+  .sidebar { width: 210px; min-width: 210px; background: var(--surface-0); border-right: 0.5px solid var(--border); display: flex; flex-direction: column; padding: 0; z-index: 10; }
+  .sidebar-logo { display: flex; align-items: center; justify-content: space-between; padding: 18px 16px; border-bottom: 0.5px solid var(--border); }
+  .logo-mark { width: 26px; height: 26px; background: var(--indigo); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .logo-mark svg { width: 15px; height: 15px; fill: white; }
+  .logo-text { font-size: 14px; font-weight: 600; color: var(--text-primary); letter-spacing: -0.3px; }
+  .logo-sub { font-size: 10px; color: var(--text-muted); margin-top: 1px; }
+
+  .sidebar-nav { padding: 12px 8px; flex: 1; overflow-y: auto; }
+  .nav-section { margin-bottom: 16px; }
+  .nav-section-label { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.07em; padding: 0 8px 6px; }
+  .nav-item { display: flex; align-items: center; gap: 9px; padding: 7px 8px; border-radius: 6px; font-size: 12.5px; color: var(--text-secondary); cursor: pointer; transition: background 0.1s, color 0.1s; user-select: none; }
+  .nav-item:hover { background: var(--surface-1); color: var(--text-primary); }
+  .nav-item.active { background: rgba(99,102,241,0.1); color: var(--text-accent); font-weight: 500; }
+  .nav-item i { font-size: 15px; }
+
+  .sidebar-footer { padding: 12px 8px; border-top: 0.5px solid var(--border); }
+  .user-pill { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 6px; cursor: pointer; }
+  .user-pill:hover { background: var(--surface-1); }
+  .user-avatar { width: 26px; height: 26px; border-radius: 50%; background: rgba(99,102,241,0.15); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: var(--text-accent); }
+  .user-name { font-size: 12px; font-weight: 500; color: var(--text-primary); }
+  .user-role { font-size: 10px; color: var(--text-muted); }
+
+  /* MAIN */
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  .topbar { height: 48px; min-height: 48px; background: var(--surface-1); border-bottom: 0.5px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; }
+  .topbar-left { display: flex; align-items: center; gap: 14px; }
+  .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); }
+  .breadcrumb span { color: var(--text-primary); font-weight: 500; }
+  .breadcrumb i { font-size: 12px; }
+  .live-pill { display: flex; align-items: center; gap: 5px; background: var(--bg-success); border: 0.5px solid rgba(63,166,84,0.3); border-radius: 20px; padding: 3px 10px; font-size: 11px; color: var(--text-success); font-weight: 500; }
+  .live-dot { width: 6px; height: 6px; border-radius: 50%; background: #3fa654; animation: blink 2s infinite; }
+
+  .topbar-right { display: flex; align-items: center; gap: 8px; }
+  .time-btn { font-size: 11.5px; color: var(--text-secondary); background: var(--surface-2); border: 0.5px solid var(--border-strong); border-radius: 6px; padding: 5px 10px; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+  .time-btn i { font-size: 13px; }
+  .run-btn { font-size: 12px; font-weight: 500; background: var(--indigo); color: white; border: none; border-radius: 6px; padding: 6px 14px; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: opacity 0.15s; }
+  .run-btn:hover { opacity: 0.88; }
+  .run-btn i { font-size: 13px; }
+
+  /* CONTENT PANELS */
+  .content { flex: 1; overflow-y: auto; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; }
+  
+  /* KPI ROW */
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .kpi-card { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .kpi-label { font-size: 10.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+  .kpi-value { font-size: 26px; font-weight: 500; color: var(--text-primary); line-height: 1; letter-spacing: -0.5px; }
+  .kpi-delta { font-size: 11px; margin-top: 5px; display: flex; align-items: center; gap: 3px; }
+  .delta-up { color: var(--text-success); }
+  .delta-down { color: var(--text-danger); }
+
+  /* CHARTS ROW */
+  .charts-row { display: grid; grid-template-columns: 1.7fr 1fr; gap: 12px; }
+  .panel { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 10px; padding: 16px; display: flex; flex-direction: column; }
+  .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .panel-title { font-size: 12.5px; font-weight: 500; color: var(--text-primary); }
+  .panel-legend { display: flex; gap: 14px; align-items: center; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 10.5px; color: var(--text-muted); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+  .panel-action { font-size: 11px; color: var(--text-accent); cursor: pointer; font-weight: 500; }
+  .panel-action:hover { text-decoration: underline; }
+  .chart-wrap { position: relative; height: 160px; width: 100%; }
+
+  /* FAILURE LEGEND */
+  .failure-legend { display: flex; flex-direction: column; gap: 5px; margin-top: 10px; }
+  .failure-row { display: flex; justify-content: space-between; align-items: center; font-size: 11px; }
+  .failure-label { display: flex; align-items: center; gap: 6px; color: var(--text-muted); }
+  .failure-swatch { width: 8px; height: 8px; border-radius: 2px; }
+  .failure-pct { font-weight: 500; color: var(--text-primary); }
+
+  /* BOTTOM ROW */
+  .bottom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* TRACES */
+  .trace-list { display: flex; flex-direction: column; gap: 7px; }
+  .trace-item { display: flex; align-items: flex-start; gap: 10px; padding: 9px 11px; border-radius: 8px; border: 0.5px solid var(--border); background: var(--surface-1); cursor: pointer; transition: border-color 0.12s; }
+  .trace-item:hover { border-color: var(--border-strong); }
+  .trace-badge { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; margin-top: 1px; letter-spacing: 0.02em; }
+  .badge-pass { background: var(--bg-success); color: var(--text-success); }
+  .badge-warn { background: var(--bg-warning); color: var(--text-warning); }
+  .badge-fail { background: var(--bg-danger); color: var(--text-danger); }
+  .trace-body { flex: 1; min-width: 0; }
+  .trace-q { font-size: 11.5px; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .trace-meta { font-size: 10px; color: var(--text-muted); margin-top: 3px; display: flex; gap: 10px; }
+  .trace-score { margin-left: auto; font-size: 13px; font-weight: 500; color: var(--text-primary); flex-shrink: 0; padding-top: 1px; }
+
+  /* SLIDE OVER DRAWER FOR TRACE DETAILS */
+  .drawer {
+    position: fixed;
+    top: 0;
+    right: -460px;
+    width: 440px;
+    height: 100%;
+    background: var(--surface-2);
+    border-left: 0.5px solid var(--border);
+    box-shadow: -8px 0 24px rgba(0,0,0,0.15);
+    transition: right 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+  .drawer.open { right: 0; }
+  .drawer-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 0.5px solid var(--border); padding-bottom: 12px; }
+  .drawer-title { font-size: 13.5px; font-weight: 600; }
+  .drawer-close { font-size: 18px; cursor: pointer; color: var(--text-muted); border: none; background: none; }
+  .drawer-close:hover { color: var(--text-primary); }
+  .drawer-body { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; font-family: monospace; font-size: 11px; }
+
+  .trace-node { border: 0.5px solid var(--border); border-radius: 6px; background: var(--surface-1); overflow: hidden; margin-bottom: 6px; }
+  .trace-node-header { padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; background: rgba(0,0,0,0.02); }
+  .trace-node-title { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+  .trace-node-body { padding: 10px 12px; border-top: 0.5px solid var(--border); display: flex; flex-direction: column; gap: 6px; color: var(--text-secondary); }
+  
+  /* FORM CONTROLS FOR PLAYGROUND */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+  .form-group label { font-size: 11px; font-weight: 500; color: var(--text-secondary); }
+  .form-select, .form-input { padding: 8px 10px; border: 0.5px solid var(--border-strong); background: var(--surface-1); color: var(--text-primary); border-radius: 6px; font-size: 12px; outline: none; }
+  .form-select:focus, .form-input:focus { border-color: var(--text-accent); }
+  
+  .code-view { background: #0c0c0b; color: #a9deb4; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 10.5px; overflow-x: auto; border: 0.5px solid var(--border); }
+  
+  /* LATENCY DISPLAY */
+  .latency-bar-row { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; }
+  .latency-bar-meta { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--text-secondary); }
+  .latency-bar-bg { height: 6px; background: var(--surface-0); border-radius: 3px; overflow: hidden; }
+  .latency-bar-fill { height: 100%; border-radius: 3px; }
+  
+  /* DIALOGS / STATUS INFO BOX */
+  .info-box { padding: 12px; border-radius: 6px; border: 0.5px solid var(--border); font-size: 11.5px; line-height: 1.5; }
+  .info-box-success { background: var(--bg-success); color: var(--text-success); border-color: rgba(63,166,84,0.2); }
+  .info-box-warning { background: var(--bg-warning); color: var(--text-warning); border-color: rgba(250,238,218,0.2); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div class="logo-mark">
+          <svg viewBox="0 0 20 20"><path d="M10 2L2 7l8 5 8-5-8-5zM2 13l8 5 8-5M2 10l8 5 8-5" stroke="white" stroke-width="1.5" fill="none" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <div class="logo-text">Modus AI</div>
+          <div class="logo-sub">Retail Intelligence</div>
+        </div>
+      </div>
+      <button onclick="openSettingsModal()" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:15px; display:flex;" title="API Configuration"><i class="ti ti-settings"></i></button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-label">Inventory Teams</div>
+        <div class="nav-item active" data-tab="overview"><i class="ti ti-layout-dashboard"></i> Dashboard</div>
+        <div class="nav-item" data-tab="traces"><i class="ti ti-route"></i> Trace Telemetry</div>
+        <div class="nav-item" data-tab="playground"><i class="ti ti-keyboard"></i> Agent Playground</div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Pipelines</div>
+        <div class="nav-item" data-tab="forecast"><i class="ti ti-chart-line"></i> Demand Forecast</div>
+        <div class="nav-item" data-tab="schema"><i class="ti ti-database"></i> Delta Schema</div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Config</div>
+        <div class="nav-item" data-tab="config"><i class="ti ti-settings"></i> Setup Manual</div>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-pill" onclick="openSettingsModal()">
+        <div class="user-avatar">DD</div>
+        <div>
+          <div class="user-name">Dipayan Dey</div>
+          <div class="user-role">AI Engineer</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="breadcrumb">
+          prod-catalog <i class="ti ti-chevron-right"></i> <span id="breadcrumb-tab">dashboard</span>
+        </div>
+        <div class="live-pill"><div class="live-dot"></div> Live</div>
+      </div>
+      <div class="topbar-right">
+        <div class="time-btn"><i class="ti ti-calendar"></i> Last 24h <i class="ti ti-chevron-down"></i></div>
+        <button class="run-btn" id="topbar-run-btn"><i class="ti ti-player-play"></i> Run audit</button>
+      </div>
+    </div>
+
+    <!-- 1. DASHBOARD TAB -->
+    <div class="content" id="tab-overview">
+      <div id="api-key-banner" class="info-box info-box-warning" style="margin-bottom: 4px; display:none;">
+        <i class="ti ti-bulb"></i> <strong>Real-time API Mode</strong>: Click the settings gear in the sidebar to add a <strong>Groq API Key</strong> for live LLM-based explanations. Currently running in simulation fallback mode.
+      </div>
+      
+      <!-- KPIs -->
+      <div class="kpi-row">
+        <div class="kpi-card">
+          <div class="kpi-label">Stockout Probability</div>
+          <div class="kpi-value" id="kpi-stockout">42.5%</div>
+          <div class="kpi-delta delta-down"><i class="ti ti-trending-down" style="font-size:12px"></i> -4.2% vs last week</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Active Forecast Horizon</div>
+          <div class="kpi-value" id="kpi-horizon">7 days</div>
+          <div class="kpi-delta delta-up"><i class="ti ti-check" style="font-size:12px"></i> XGBoost Trained</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Expected Demand</div>
+          <div class="kpi-value" id="kpi-demand">380 units</div>
+          <div class="kpi-delta delta-up"><i class="ti ti-trending-up" style="font-size:12px"></i> +12% vs last month</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Inventory Decision</div>
+          <div class="kpi-value" id="kpi-decision">REORDER</div>
+          <div class="kpi-delta delta-up"><i class="ti ti-trending-up" style="font-size:12px"></i> Costing: $125.0</div>
+        </div>
+      </div>
+
+      <!-- CHARTS -->
+      <div class="charts-row">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Expected Demand vs Actual Sales (7-day forecast)</div>
+            <div class="panel-legend">
+              <div class="legend-item"><div class="legend-dot" style="background:#2a78d6"></div>Actual Sales</div>
+              <div class="legend-item"><div class="legend-dot" style="background:#e4532a"></div>XGBoost Predict</div>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="lineChart" role="img"></canvas>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Risk Alerts Distribution</div>
+            <div class="panel-action" onclick="switchTab('traces')">Diagnose →</div>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="doughnutChart" role="img"></canvas>
+          </div>
+          <div class="failure-legend">
+            <div class="failure-row"><span class="failure-label"><span class="failure-swatch" style="background:#e4532a"></span>Critical Stockout</span><span class="failure-pct">35%</span></div>
+            <div class="failure-row"><span class="failure-label"><span class="failure-swatch" style="background:#eda100"></span>Reorder Warning</span><span class="failure-pct">45%</span></div>
+            <div class="failure-row"><span class="failure-label"><span class="failure-swatch" style="background:#2a78d6"></span>Safe / Sufficient</span><span class="failure-pct">20%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTTOM -->
+      <div class="bottom-row">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Recent Inventory Audits</div>
+            <div class="panel-action" onclick="switchTab('traces')">Filter Alerts →</div>
+          </div>
+          <div class="trace-list" id="overview-trace-list">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Agent Execution Spans</div>
+          </div>
+          <div class="trace-list" id="overview-span-list">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. TRACES TAB -->
+    <div class="content" id="tab-traces" style="display:none;">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Multi-Agent Telemetry Logs</div>
+          <div class="panel-action" id="traces-filter-btn" onclick="toggleTraceFilter()">Show All Audits</div>
+        </div>
+        <div class="trace-list" id="traces-tab-list">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. PLAYGROUND TAB -->
+    <div class="content" id="tab-playground" style="display:none;">
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Audit parameters</div>
+          </div>
+          
+          <div class="form-group">
+            <label>Select Retail Case Study Product</label>
+            <select class="form-select" id="playground-product-select" onchange="applyPlaygroundProduct()">
+              <option value="101" selected>Milk (ID 101) - High Volume</option>
+              <option value="102">Whole Wheat Bread (ID 102) - Normal</option>
+              <option value="103">Red Apples (ID 103) - Low Stock</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Query Intent</label>
+            <input type="text" class="form-input" id="playground-query" value="What is the demand forecast and reorder action for Milk (ID 101)?">
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Forecast Horizon</label>
+              <select class="form-select" id="playground-horizon">
+                <option value="7" selected>7 Days (Standard)</option>
+                <option value="14">14 Days (Extended)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Forecast Engine</label>
+              <select class="form-select">
+                <option value="xgboost" selected>XGBoost Regressor</option>
+                <option value="prophet">Prophet Model</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="run-btn" id="playground-run-btn" onclick="runPlaygroundQuery()" style="width:100%; justify-content:center; padding:10px;">
+            <i class="ti ti-player-play"></i> Trigger Agentic Audit
+          </button>
+        </div>
+
+        <div class="panel" style="display:flex; flex-direction:column; gap:12px;">
+          <div class="panel-header">
+            <div class="panel-title">Store Manager Actionable Output</div>
+          </div>
+          <div class="info-box info-box-success" id="playground-explanation" style="font-size:12px; font-weight:500; min-height:80px;">
+            Waiting for query execution audit to generate summary...
+          </div>
+          <div class="panel-title" style="margin-top:10px; font-size:11px;">Agent Execution Trace Spans</div>
+          <div class="code-view" style="flex:1; min-height:160px; font-size:10px;" id="playground-terminal">
+            No active audit execution trace loaded.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. FORECAST PIPELINE TAB -->
+    <div class="content" id="tab-forecast" style="display:none;">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Classical ML Feature Engineering</div>
+        </div>
+        <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">
+          The ML pipeline applies lag shifting and rolling averages to historical sales data before fitting the XGBoost Regressor.
+        </p>
+        <div class="code-view">
+          <pre># Feature engineering lag variables
+df['sales_lag_7'] = df.groupby('product_id')['sales'].shift(7)
+df['sales_lag_14'] = df.groupby('product_id')['sales'].shift(14)
+df['sales_roll_mean_7'] = df.groupby('product_id')['sales'].shift(1).rolling(window=7).mean()
+df['day_of_week'] = df['date'].dt.weekday</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. SCHEMA TAB -->
+    <div class="content" id="tab-schema" style="display:none;">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Delta Table Blueprints</div>
+        </div>
+        <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">
+          Delta Lake table storing quantitative metrics write-backs from agent decisions.
+        </p>
+        <div class="code-view">
+          <pre>CREATE TABLE hive_metastore.observability.retail_evals (
+    audit_id STRING,
+    timestamp TIMESTAMP,
+    product_id INT,
+    xgboost_forecast_sum DOUBLE,
+    stockout_probability DOUBLE,
+    decision STRING,
+    reorder_quantity INT
+) USING DELTA;</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. SETUP MANUAL TAB -->
+    <div class="content" id="tab-config" style="display:none;">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Docker Orchestration Setup</div>
+        </div>
+        <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">
+          Compose setup to bind FastAPI backend and Streamlit dashboard.
+        </p>
+        <div class="code-view">
+          <pre>version: '3.8'
+services:
+  retail-intelligence:
+    build: .
+    ports:
+      - "8000:8000"
+      - "8501:8501"
+    environment:
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - GROQ_MODEL=llama-3.1-70b-versatile</pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SLIDE OVER DRAWER -->
+<div class="drawer" id="trace-drawer">
+  <div class="drawer-header">
+    <div class="drawer-title" id="drawer-trace-title">Audit Trace Details</div>
+    <button class="drawer-close" onclick="closeDrawer()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="drawer-body" id="drawer-trace-body">
+    <!-- Rendered tree -->
+  </div>
+</div>
+
+<!-- CONFIG MODAL -->
+<div class="drawer" id="settings-modal">
+  <div class="drawer-header">
+    <div class="drawer-title">API Configuration</div>
+    <button class="drawer-close" onclick="closeSettingsModal()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="drawer-body">
+    <div class="form-group">
+      <label for="groq-api-key">Groq API Key</label>
+      <input type="password" class="form-input" id="groq-api-key" placeholder="gsk_...">
+    </div>
+    <div class="form-group">
+      <label for="groq-model-select">Completion Model</label>
+      <select class="form-select" id="groq-model-select">
+        <option value="llama-3.1-70b-versatile">llama-3.1-70b-versatile</option>
+        <option value="llama-3.1-8b-instant">llama-3.1-8b-instant</option>
+        <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
+        <option value="gemma2-9b-it">gemma2-9b-it</option>
+      </select>
+    </div>
+    <button class="run-btn" onclick="saveSettings()" style="width: 100%; justify-content: center; padding: 10px;">Save Configuration</button>
+    <div class="info-box info-box-success" style="margin-top: 10px; font-size: 10.5px;">
+      <i class="ti ti-shield-check"></i> Keys are stored exclusively in your local browser storage (localStorage) and are never sent to any server other than Groq's official API.
+    </div>
+  </div>
+</div>
+
+<script>
+  // Simulation Datasets
+  let tracesData = [
+    {
+      id: "aud_01",
+      query: "What is the demand forecast and reorder action for Milk (ID 101)?",
+      product: "Fresh Milk 1L",
+      model: "PlannerAgent",
+      chunks: 3,
+      latency: 1.2,
+      score: 0.94,
+      status: "WARN",
+      eval: { faithfulness: 0.94, relevance: 0.96, recall: 0.92, groundedness: 0.95, coherence: 0.97 },
+      current_stock: 180,
+      forecast_total: 215.2,
+      stockout_probability: 0.425,
+      decision: "REORDER",
+      reorder_qty: 250,
+      cost: 625.0,
+      explanation: "XGBoost demand forecast predicts total demand of 215.2 units over 7 days. Expected lead-time demand is 90 units, leaving current stock in a WARNING state with a 42.5% stockout probability. Reordering 250 units is recommended to secure safety buffer levels.",
+      spans: [
+        { name: "PlannerAgent", latency: 60, info: "Identified target product Milk (ID 101) and set 7-day forecast boundary." },
+        { name: "ForecastAgent", latency: 110, info: "Executed XGBoost: predicted 7-day sales values: [28,30,29,32,35,31,30.2]" },
+        { name: "StockoutRiskAgent", latency: 85, info: "Calculated stockout probability at 42.5% based on lead time of 2 days." },
+        { name: "InventoryDecisionAgent", latency: 90, info: "Decision: REORDER 250 units (unit cost $2.5, total cost $625.0)." }
+      ]
+    },
+    {
+      id: "aud_02",
+      query: "Calculate stockout probability and inventory decisions for Whole Wheat Bread (ID 102)",
+      product: "Whole Wheat Bread",
+      model: "PlannerAgent",
+      chunks: 5,
+      latency: 2.1,
+      score: 0.71,
+      status: "PASS",
+      eval: { faithfulness: 0.89, relevance: 0.91, recall: 0.87, groundedness: 0.90, coherence: 0.93 },
+      current_stock: 140,
+      forecast_total: 115.0,
+      stockout_probability: 0.12,
+      decision: "HOLD",
+      reorder_qty: 0,
+      cost: 0.0,
+      explanation: "Current stock of 140 units is sufficient to cover the expected 7-day demand of 115 units. Stockout risk probability is safe at 12.0% within the 3-day lead time. A HOLD strategy is active.",
+      spans: [
+        { name: "PlannerAgent", latency: 55, info: "Identified target product Bread (ID 102) and set 7-day forecast boundary." },
+        { name: "ForecastAgent", latency: 95, info: "Executed XGBoost: predicted 7-day sales values: [15,16,18,17,16,18,15]" },
+        { name: "StockoutRiskAgent", latency: 80, info: "Calculated stockout probability at 12.0% based on lead time of 3 days." },
+        { name: "InventoryDecisionAgent", latency: 90, info: "Decision: HOLD (stock levels within parameters)." }
+      ]
+    },
+    {
+      id: "aud_03",
+      query: "Audit Apple inventory (ID 103) and recommended reorder quantity",
+      product: "Red Apples (Bag)",
+      model: "PlannerAgent",
+      chunks: 2,
+      latency: 1.8,
+      score: 0.51,
+      status: "FAIL",
+      eval: { faithfulness: 0.51, relevance: 0.62, recall: 0.44, groundedness: 0.52, coherence: 0.79 },
+      current_stock: 35,
+      forecast_total: 98.4,
+      stockout_probability: 0.885,
+      decision: "REORDER",
+      reorder_qty: 120,
+      cost: 360.0,
+      explanation: "Red Apples inventory is in a CRITICAL state. Lead time expected demand is 70 units against a current stock of 35, yielding a critical 88.5% stockout probability. Reorder of 120 units ($360.0 cost) is requested immediately.",
+      spans: [
+        { name: "PlannerAgent", latency: 75, info: "Identified target product Apples (ID 103) and set 7-day forecast boundary." },
+        { name: "ForecastAgent", latency: 120, info: "Executed XGBoost: predicted 7-day sales: [12,14,13,15,14,16,14.4]" },
+        { name: "StockoutRiskAgent", latency: 95, info: "Calculated stockout probability at 88.5% based on lead time of 5 days." },
+        { name: "InventoryDecisionAgent", latency: 100, info: "Decision: REORDER 120 units (unit cost $3.0, total cost $360.0)." }
+      ]
+    }
+  ];
+
+  // Config variables
+  let weightClaude = 0.4;
+  let weightGPT = 0.3;
+  let weightGemini = 0.3;
+  let showOnlyFailing = false;
+
+  // Charts
+  let lineChartInst = null;
+  let doughnutChartInst = null;
+
+  // Tab navigation
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const tabName = item.getAttribute('data-tab');
+      if (tabName) switchTab(tabName);
+    });
+  });
+
+  function switchTab(tabName) {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    const activeNav = document.querySelector(`.nav-item[data-tab="${tabName}"]`);
+    if (activeNav) activeNav.classList.add('active');
+
+    document.getElementById('breadcrumb-tab').innerText = tabName.replace('-', ' ');
+
+    document.querySelectorAll('.content').forEach(c => c.style.display = 'none');
+    const targetContent = document.getElementById('content-' + tabName) || document.getElementById('tab-' + tabName);
+    if (targetContent) {
+      targetContent.style.display = 'flex';
+    }
+
+    if (tabName === 'overview') {
+      setTimeout(() => {
+        initOverviewCharts();
+        checkKeyStatus();
+      }, 50);
+    }
+  }
+
+  // Render lists and components
+  function renderTables() {
+    // Overview Recent Audits
+    const overList = document.getElementById('overview-trace-list');
+    if (overList) {
+      overList.innerHTML = tracesData.map(t => `
+        <div class="trace-item" onclick="openTrace('${t.id}')">
+          <div class="trace-badge badge-${t.status === 'PASS' ? 'pass' : t.status === 'WARN' ? 'warn' : 'fail'}">${t.status}</div>
+          <div class="trace-body">
+            <div class="trace-q">${t.product}: ${t.decision} (${t.reorder_qty} units)</div>
+            <div class="trace-meta"><span>Risk: ${(t.stockout_probability * 100).toFixed(1)}%</span><span>Forecast: ${t.forecast_total} units</span></div>
+          </div>
+          <div class="trace-score">${t.id}</div>
+        </div>
+      `).join('');
+    }
+
+    // Overview Spans list
+    const spanList = document.getElementById('overview-span-list');
+    if (spanList) {
+      // Map spans of trace 1 by default
+      const defaultTrace = tracesData[0];
+      spanList.innerHTML = defaultTrace.spans.map(s => `
+        <div class="trace-item" style="cursor:default;">
+          <div class="trace-badge badge-pass" style="background:var(--surface-0); color:var(--text-secondary);"><i class="ti ti-activity"></i></div>
+          <div class="trace-body">
+            <div class="trace-q" style="font-weight:600; font-size:11px;">${s.name}</div>
+            <div class="trace-meta" style="font-size:10px;">${s.info}</div>
+          </div>
+          <div class="trace-score" style="font-size:11px;">${s.latency} ms</div>
+        </div>
+      `).join('');
+    }
+
+    // Traces tab list
+    const tracesTabList = document.getElementById('traces-tab-list');
+    if (tracesTabList) {
+      let filtered = tracesData;
+      if (showOnlyFailing) {
+        filtered = tracesData.filter(t => t.status === 'FAIL' || t.status === 'WARN');
+      }
+      tracesTabList.innerHTML = filtered.map(t => `
+        <div class="trace-item" onclick="openTrace('${t.id}')">
+          <div class="trace-badge badge-${t.status === 'PASS' ? 'pass' : t.status === 'WARN' ? 'warn' : 'fail'}">${t.status}</div>
+          <div class="trace-body">
+            <div class="trace-q">${t.query}</div>
+            <div class="trace-meta"><span>${t.product}</span><span>Stock: ${t.current_stock} units</span></div>
+          </div>
+          <div class="trace-score">${t.id}</div>
+        </div>
+      `).join('');
+    }
+  }
+
+  function toggleTraceFilter() {
+    showOnlyFailing = !showOnlyFailing;
+    document.getElementById('traces-filter-btn').innerText = showOnlyFailing ? "Show All Audits" : "Filter Alerts";
+    renderTables();
+  }
+
+  // Drawers
+  function openTrace(id) {
+    const trace = tracesData.find(t => t.id === id);
+    if (!trace) return;
+
+    document.getElementById('drawer-trace-title').innerText = `Audit: ${trace.id}`;
+    
+    let spansHTML = trace.spans.map(s => `
+      <div class="trace-node">
+        <div class="trace-node-header">
+          <span class="trace-node-title"><i class="ti ti-circle-filled" style="font-size:8px; color:var(--text-accent);"></i> ${s.name}</span>
+          <span>${s.latency} ms</span>
+        </div>
+        <div class="trace-node-body">
+          <p>${s.info}</p>
+        </div>
+      </div>
+    `).join('');
+
+    document.getElementById('drawer-trace-body').innerHTML = `
+      <div style="border-bottom: 0.5px solid var(--border); padding-bottom: 12px; margin-bottom: 8px;">
+        <span class="trace-badge badge-${trace.status === 'PASS' ? 'pass' : trace.status === 'WARN' ? 'warn' : 'fail'}">${trace.status}</span>
+        <h4 style="font-size:12px; font-weight:600; margin-top:8px;">${trace.query}</h4>
+        <div style="margin-top:6px; color:var(--text-muted); font-size:10px;">
+          <span>Stockout Prob: ${(trace.stockout_probability * 100).toFixed(1)}%</span> | <span>Decision: ${trace.decision}</span>
+        </div>
+      </div>
+      <div style="font-weight:600; font-size:11px; margin-bottom:8px; color:var(--text-primary);">Orchestrator Exec Spans:</div>
+      ${spansHTML}
+    `;
+
+    document.getElementById('trace-drawer').classList.add('open');
+  }
+
+  function closeDrawer() {
+    document.getElementById('trace-drawer').classList.remove('open');
+  }
+
+  // Settings Configuration
+  function openSettingsModal() {
+    document.getElementById('settings-modal').classList.add('open');
+  }
+
+  function closeSettingsModal() {
+    document.getElementById('settings-modal').classList.remove('open');
+  }
+
+  function saveSettings() {
+    const key = document.getElementById('groq-api-key').value.trim();
+    const model = document.getElementById('groq-model-select').value;
+    
+    if (key) {
+      localStorage.setItem('groq_api_key', key);
+    } else {
+      localStorage.removeItem('groq_api_key');
+    }
+    localStorage.setItem('groq_model', model);
+    
+    closeSettingsModal();
+    checkKeyStatus();
+    alert('Configuration saved successfully!');
+  }
+
+  function loadSettings() {
+    const key = localStorage.getItem('groq_api_key') || '';
+    const model = localStorage.getItem('groq_model') || 'llama-3.1-70b-versatile';
+    
+    document.getElementById('groq-api-key').value = key;
+    document.getElementById('groq-model-select').value = model;
+    checkKeyStatus();
+  }
+
+  function checkKeyStatus() {
+    const key = localStorage.getItem('groq_api_key');
+    const banner = document.getElementById('api-key-banner');
+    if (banner) {
+      if (key) {
+        banner.className = "info-box info-box-success";
+        banner.innerHTML = `<i class="ti ti-shield-check"></i> <strong>Real-time API Mode Active</strong>: Successfully loaded Groq completions gateway key. Running live agent audits.`;
+        banner.style.display = "block";
+      } else {
+        banner.className = "info-box info-box-warning";
+        banner.innerHTML = `<i class="ti ti-bulb"></i> <strong>Real-time API Mode</strong>: Click the settings gear in the sidebar to add a <strong>Groq API Key</strong> for live LLM explanations. Currently running in simulation fallback mode.`;
+        banner.style.display = "block";
+      }
+    }
+  }
+
+  // RAG / Agent Playground
+  const productConfigs = {
+    "101": {
+      name: "Fresh Milk 1L",
+      query: "What is the demand forecast and reorder action for Milk (ID 101)?",
+      stock: 180,
+      lead_time: 2,
+      cost: 2.5
+    },
+    "102": {
+      name: "Whole Wheat Bread",
+      query: "Calculate stockout probability and inventory decisions for Whole Wheat Bread (ID 102).",
+      stock: 140,
+      lead_time: 3,
+      cost: 1.8
+    },
+    "103": {
+      name: "Red Apples (Bag)",
+      query: "Audit Apple inventory (ID 103) and recommended reorder quantity.",
+      stock: 35,
+      lead_time: 5,
+      cost: 3.0
+    }
+  };
+
+  function applyPlaygroundProduct() {
+    const pid = document.getElementById('playground-product-select').value;
+    const config = productConfigs[pid];
+    if (config) {
+      document.getElementById('playground-query').value = config.query;
+    }
+  }
+
+  function runPlaygroundQuery() {
+    const pid = document.getElementById('playground-product-select').value;
+    const query = document.getElementById('playground-query').value;
+    const horizon = parseInt(document.getElementById('playground-horizon').value);
+    
+    const config = productConfigs[pid];
+    const runBtn = document.getElementById('playground-run-btn');
+    const term = document.getElementById('playground-terminal');
+    const explBox = document.getElementById('playground-explanation');
+    
+    runBtn.disabled = true;
+    term.innerHTML = `<i class="ti ti-loader fa-spin"></i> Triggering PlannerAgent workflow...`;
+    explBox.innerHTML = `Orchestrating agent audit...`;
+
+    const apiKey = localStorage.getItem('groq_api_key');
+    const apiModel = localStorage.getItem('groq_model') || 'llama-3.1-70b-versatile';
+
+    // Simulated XGBoost Forecast numbers
+    let baseForecast = pid === '101' ? 215.2 : pid === '102' ? 115.0 : 98.4;
+    if (horizon === 14) baseForecast = Math.round(baseForecast * 1.9 * 10) / 10;
+
+    const expectedLeadDemand = Math.round((baseForecast / horizon) * config.lead_time);
+    const buffer = config.stock - expectedLeadDemand;
+    
+    let prob = 0.0;
+    if (buffer < 0) prob = 1.0;
+    else if (buffer === 0) prob = 0.5;
+    else prob = Math.round(Math.exp(-buffer / (expectedLeadDemand * 0.4 + 1)) * 1000) / 1000;
+
+    let decision = "HOLD";
+    let qty = 0;
+    let cost = 0.0;
+    if (prob > 0.5 || buffer < expected_demand_calculation(baseForecast, horizon, config.lead_time) * 0.2) {
+      decision = "REORDER";
+      qty = Math.max(50, Math.round(expectedLeadDemand * 2 - config.stock));
+      cost = qty * config.cost;
+    } else if (prob > 0.2) {
+      decision = "TRANSFER";
+      qty = 25;
+      cost = qty * config.cost * 0.1;
+    }
+
+    const spans = [
+      { name: "PlannerAgent", latency: 60, info: `Audited product: ${config.name} (ID: ${pid}) over ${horizon} days.` },
+      { name: "ForecastAgent", latency: 120, info: `XGBoost trained. Expected demand: ${baseForecast} units.` },
+      { name: "StockoutRiskAgent", latency: 90, info: `Lead time: ${config.lead_time} days. Stockout probability: ${(prob*100).toFixed(1)}%.` },
+      { name: "InventoryDecisionAgent", latency: 95, info: `Decision resolved: ${decision} (${qty} units, cost $${cost.toFixed(2)}).` }
+    ];
+
+    if (apiKey) {
+      term.innerHTML = `<i class="ti ti-loader fa-spin"></i> Calling ExplanationAgent via Groq (${apiModel})...`;
+      
+      const payload = {
+        model: apiModel,
+        messages: [
+          {
+            role: "system",
+            content: "You are the ExplanationAgent for a retail inventory system. Formulate a 3-sentence summary for a store manager. You MUST ground your summary strictly in these values, do NOT make up any numbers:\n" +
+                     `- Product Name: ${config.name}\n` +
+                     `- Forecast Horizon: ${horizon} days\n` +
+                     `- Total Predicted Demand: ${baseForecast} units\n` +
+                     `- Current Stock: ${config.stock} units\n` +
+                     `- Lead Time: ${config.lead_time} days\n` +
+                     `- Stockout Probability: ${(prob*100).toFixed(1)}%\n` +
+                     `- Decision Recommended: ${decision}\n` +
+                     `- Quantity: ${qty} units\n` +
+                     `- Total Cost: $${cost.toFixed(2)}`
+          },
+          {
+            role: "user",
+            content: `Explain the inventory status of ${config.name} based on the agent outputs.`
+          }
+        ],
+        temperature: 0.1
+      };
+
+      fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP Error ${res.status}`);
+        return res.json();
+      })
+      .then(data => {
+        const text = data.choices[0].message.content.trim();
+        explBox.innerHTML = `<strong>🤖 ExplanationAgent summary</strong>:<br>${text}`;
+        
+        // Push trace
+        pushNewTrace(query, config.name, baseForecast, prob, decision, qty, cost, text, spans);
+        runBtn.disabled = false;
+      })
+      .catch(err => {
+        explBox.innerHTML = `Groq API Error: ${err.message}`;
+        runBtn.disabled = false;
+      });
+
+    } else {
+      setTimeout(() => {
+        const text = `The XGBoost forecast projects a demand of ${baseForecast} units over the next ${horizon} days for ${config.name}. With a current stock of ${config.stock} units and a ${config.lead_time}-day lead time, the calculated stockout risk is ${(prob*100).toFixed(1)}%. It is recommended to proceed with action: ${decision} (${qty} units at an estimated cost of $${cost.toFixed(2)}).`;
+        
+        explBox.innerHTML = `<strong>🤖 ExplanationAgent summary (Simulated)</strong>:<br>${text}`;
+        pushNewTrace(query, config.name, baseForecast, prob, decision, qty, cost, text, spans);
+        runBtn.disabled = false;
+      }, 1000);
+    }
+  }
+
+  function expected_decay(forecast, days, lead) {
+    return (forecast / days) * lead;
+  }
+  function expected_demand_calculation(forecast, days, lead) {
+    return expected_decay(forecast, days, lead);
+  }
+
+  function pushNewTrace(query, productName, forecastTotal, prob, decision, qty, cost, explanation, spans) {
+    const id = "aud_" + (tracesData.length + 1).toString().padStart(2, '0');
+    const status = prob > 0.8 ? "FAIL" : prob > 0.3 ? "WARN" : "PASS";
+    
+    const newTrace = {
+      id,
+      query,
+      product: productName,
+      model: "PlannerAgent",
+      chunks: 3,
+      latency: 1.5,
+      score: 0.9,
+      status,
+      current_stock: 100,
+      forecast_total: forecastTotal,
+      stockout_probability: prob,
+      decision,
+      reorder_qty: qty,
+      cost,
+      explanation,
+      spans
+    };
+
+    tracesData.unshift(newTrace);
+    renderTables();
+
+    // Renders JSON
+    document.getElementById('playground-terminal').innerHTML = JSON.stringify({
+      trace_id: id,
+      spans: spans.map((s, idx) => ({ step: idx+1, agent: s.name, log: s.info, duration_ms: s.latency }))
+    }, null, 2);
+
+    // Update main KPIs
+    document.getElementById('kpi-stockout').innerText = `${(prob*100).toFixed(1)}%`;
+    document.getElementById('kpi-demand').innerText = `${forecastTotal} units`;
+    document.getElementById('kpi-decision').innerText = decision;
+    document.getElementById('kpi-decision').parentNode.querySelector('.kpi-delta').innerHTML = `<i class="ti ti-trending-up" style="font-size:12px"></i> Cost: $${cost.toFixed(2)}`;
+  }
+
+  // Topbar Run Audit trigger
+  document.getElementById('topbar-run-btn').addEventListener('click', () => {
+    switchTab('playground');
+  });
+
+  // Charts
+  const isDark = matchMedia('(prefers-color-scheme: dark)').matches;
+  const gridColor = isDark ? '#2c2c2a' : '#e1e0d9';
+  const textMuted = '#898781';
+
+  function initOverviewCharts() {
+    if (lineChartInst) lineChartInst.destroy();
+    if (doughnutChartInst) doughnutChartInst.destroy();
+
+    const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    
+    const lineCtx = document.getElementById('lineChart');
+    if (lineCtx) {
+      lineChartInst = new Chart(lineCtx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            { label: 'Actual Sales', data: [42, 38, 45, 52, 60, 68, 65], borderColor: '#2a78d6', backgroundColor: 'transparent', borderWidth: 2, tension: 0.3 },
+            { label: 'XGBoost Prediction', data: [40, 41, 44, 49, 58, 65, 62], borderColor: '#e4532a', borderDash: [4, 4], backgroundColor: 'transparent', borderWidth: 2, tension: 0.3 }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { color: gridColor }, ticks: { color: textMuted, font: { size: 10 } } },
+            y: { grid: { color: gridColor }, ticks: { color: textMuted, font: { size: 10 } } }
+          }
+        }
+      });
+    }
+
+    const doughnutCtx = document.getElementById('doughnutChart');
+    if (doughnutCtx) {
+      doughnutChartInst = new Chart(doughnutCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Critical Stockout', 'Reorder Warning', 'Safe / Sufficient'],
+          datasets: [{ data: [35, 45, 20], backgroundColor: ['#e4532a','#eda100','#2a78d6'], borderWidth: 2, borderColor: isDark ? '#232322' : '#ffffff' }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false, cutout: '68%',
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+  }
+
+  // Startup Init
+  loadSettings();
+  renderTables();
+  initOverviewCharts();
+</script>
+</body>
+</html>

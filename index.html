@@ -3,34 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Dipayan Dey | FinTech Developer & Portfolio</title>
+    <title>Dipayan Dey | FinTech Developer & AI Systems Portfolio</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         /* ==========================================================================
-           DESIGN SYSTEM & VARIABLES
+           DESIGN SYSTEM & VARIABLES (Databricks + Anthropic Blended Theme)
            ========================================================================== */
         :root {
-            --bg-primary: #070a13;
-            --bg-card: rgba(18, 25, 47, 0.55);
-            --bg-card-hover: rgba(25, 35, 65, 0.75);
-            --border-color: rgba(255, 255, 255, 0.08);
+            --bg-primary: #06070a;
+            --bg-card: rgba(13, 17, 27, 0.65);
+            --bg-card-hover: rgba(20, 26, 40, 0.85);
+            --border-color: rgba(255, 255, 255, 0.06);
             
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --text-muted: #8e9cb2;
+            --text-primary: #f4f0ea;
+            --text-secondary: #b0a89f;
+            --text-muted: #7c756c;
             
-            --color-info: #38bdf8;
-            --color-info-glow: rgba(56, 189, 248, 0.15);
-            --color-accent: #6366f1;
-            --color-accent-glow: rgba(99, 102, 241, 0.2);
+            --color-info: #85b7eb;
+            --color-info-glow: rgba(133, 183, 235, 0.15);
+            --color-accent: #ff5630; /* Databricks Coral */
+            --color-accent-glow: rgba(255, 86, 48, 0.18);
             --color-success: #10b981;
             --color-success-glow: rgba(16, 185, 129, 0.15);
             --color-warning: #f59e0b;
@@ -39,8 +39,9 @@
             --color-crawler-glow: rgba(217, 70, 239, 0.15);
             
             --font-sans: 'Outfit', -apple-system, sans-serif;
+            --font-serif: 'Lora', Georgia, serif;
             --font-mono: 'JetBrains Mono', monospace;
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         /* ==========================================================================
@@ -70,11 +71,11 @@
         body::before {
             content: '';
             position: fixed;
-            top: -25%;
+            top: -20%;
             left: -15%;
             width: 700px;
             height: 700px;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.14) 0%, rgba(99, 102, 241, 0) 70%);
+            background: radial-gradient(circle, rgba(255, 86, 48, 0.08) 0%, rgba(255, 86, 48, 0) 70%);
             z-index: -1;
             pointer-events: none;
             filter: blur(100px);
@@ -87,7 +88,7 @@
             right: -15%;
             width: 600px;
             height: 600px;
-            background: radial-gradient(circle, rgba(56, 189, 248, 0.1) 0%, rgba(56, 189, 248, 0) 70%);
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.07) 0%, rgba(99, 102, 241, 0) 70%);
             z-index: -1;
             pointer-events: none;
             filter: blur(100px);
@@ -96,10 +97,17 @@
         /* ==========================================================================
            HERO HEADER SECTION
            ========================================================================== */
-
+        header {
+            text-align: center;
+            padding: 100px 20px 40px;
+            max-width: 800px;
+            z-index: 10;
+        }
 
         .profile-photo-container {
             margin-bottom: 24px;
+            position: relative;
+            display: inline-block;
         }
 
         .profile-photo {
@@ -108,21 +116,30 @@
             border-radius: 50%;
             border: 3px solid var(--border-color);
             object-fit: cover;
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.25);
+            box-shadow: 0 0 30px rgba(255, 86, 48, 0.15);
             transition: var(--transition);
         }
 
-        .profile-photo:hover {
-            transform: scale(1.05);
-            border-color: var(--color-accent);
-            box-shadow: 0 0 25px rgba(99, 102, 241, 0.5);
+        .profile-photo-container::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 50%;
+            border: 1px dashed rgba(255, 86, 48, 0.25);
+            animation: rotate 60s linear infinite;
         }
 
-        header {
-            text-align: center;
-            padding: 100px 20px 40px;
-            max-width: 800px;
-            z-index: 10;
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        .profile-photo:hover {
+            transform: scale(1.04);
+            border-color: var(--color-accent);
+            box-shadow: 0 0 35px rgba(255, 86, 48, 0.35);
         }
 
         .profile-badge {
@@ -130,35 +147,36 @@
             align-items: center;
             gap: 6px;
             background-color: var(--color-accent-glow);
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            color: #a5b4fc;
+            border: 1px solid rgba(255, 86, 48, 0.3);
+            color: #ffaa95;
             padding: 6px 14px;
             border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 11px;
+            font-weight: 700;
             margin-bottom: 24px;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
             text-transform: uppercase;
         }
 
         h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            letter-spacing: -1.5px;
+            font-family: var(--font-serif);
+            font-size: 3.8rem;
+            font-weight: 700;
+            letter-spacing: -1px;
             line-height: 1.1;
-            background: linear-gradient(135deg, #ffffff 30%, #a5b4fc 100%);
+            background: linear-gradient(135deg, #ffffff 40%, #ffd0c5 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 16px;
+            margin-bottom: 18px;
         }
 
         .subtitle {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             color: var(--text-secondary);
             font-weight: 400;
-            max-width: 600px;
+            max-width: 620px;
             margin: 0 auto 30px auto;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         /* Social links bar */
@@ -176,7 +194,7 @@
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.03);
+            background-color: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--border-color);
             color: var(--text-secondary);
             font-size: 18px;
@@ -189,7 +207,7 @@
             background-color: rgba(255, 255, 255, 0.08);
             border-color: rgba(255, 255, 255, 0.2);
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
         }
 
         /* ==========================================================================
@@ -202,9 +220,13 @@
             z-index: 10;
         }
 
+        .projects-section h2 {
+            font-family: var(--font-serif);
+        }
+
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 24px;
         }
 
@@ -221,21 +243,21 @@
             flex-direction: column;
             justify-content: space-between;
             transition: var(--transition);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
             position: relative;
             overflow: hidden;
-            min-height: 220px;
+            min-height: 230px;
         }
 
         /* Category accent hovers */
         .card:hover {
             transform: translateY(-6px);
-            border-color: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 86, 48, 0.25);
             background: var(--bg-card-hover);
         }
 
-        .card-ghibli:hover { box-shadow: 0 12px 35px rgba(56, 189, 248, 0.12); }
-        .card-risk:hover { box-shadow: 0 12px 35px rgba(16, 185, 129, 0.14); }
+        .card-ghibli:hover { box-shadow: 0 12px 35px rgba(133, 183, 235, 0.12); }
+        .card-risk:hover { box-shadow: 0 12px 35px rgba(255, 86, 48, 0.15); }
         .card-finance:hover { box-shadow: 0 12px 35px rgba(99, 102, 241, 0.12); }
         .card-markdown:hover { box-shadow: 0 12px 35px rgba(245, 158, 11, 0.12); }
         .card-crawler:hover { box-shadow: 0 12px 35px rgba(217, 70, 239, 0.16); }
@@ -248,14 +270,15 @@
         }
 
         .card-ghibli .card-icon { color: var(--color-info); }
-        .card-risk .card-icon { color: var(--color-success); }
-        .card-finance .card-icon { color: var(--color-accent); }
+        .card-risk .card-icon { color: var(--color-accent); }
+        .card-finance .card-icon { color: var(--color-success); }
         .card-markdown .card-icon { color: var(--color-warning); }
         .card-crawler .card-icon { color: var(--color-crawler); }
 
         .card-content h3 {
-            font-size: 18px;
-            font-weight: 700;
+            font-family: var(--font-serif);
+            font-size: 19px;
+            font-weight: 600;
             color: var(--text-primary);
             margin-bottom: 8px;
             display: flex;
@@ -267,18 +290,20 @@
         .card-content p {
             font-size: 13.5px;
             color: var(--text-secondary);
-            line-height: 1.5;
+            line-height: 1.55;
             margin-bottom: 24px;
         }
 
         .card-footer {
-            font-size: 12px;
+            font-size: 11.5px;
             font-weight: 600;
             color: var(--text-primary);
             display: flex;
             align-items: center;
             gap: 6px;
             transition: gap 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .card:hover .card-footer {
@@ -286,8 +311,8 @@
         }
 
         .card-ghibli .card-footer { color: var(--color-info); }
-        .card-risk .card-footer { color: var(--color-success); }
-        .card-finance .card-footer { color: var(--color-accent); }
+        .card-risk .card-footer { color: var(--color-accent); }
+        .card-finance .card-footer { color: var(--color-success); }
         .card-markdown .card-footer { color: var(--color-warning); }
         .card-crawler .card-footer { color: var(--color-crawler); }
 
@@ -296,14 +321,14 @@
             position: absolute;
             top: 16px;
             right: 16px;
-            background-color: var(--color-success-glow);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            color: #6ee7b7;
+            background-color: var(--color-accent-glow);
+            border: 1px solid rgba(255, 86, 48, 0.3);
+            color: #ffd0c5;
             padding: 3px 10px;
             border-radius: 12px;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 700;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
             text-transform: uppercase;
         }
 
@@ -317,7 +342,7 @@
             color: var(--text-muted);
             width: 100%;
             border-top: 1px solid rgba(255, 255, 255, 0.03);
-            background-color: rgba(0, 0, 0, 0.1);
+            background-color: rgba(0, 0, 0, 0.2);
             z-index: 10;
         }
 
@@ -334,7 +359,7 @@
                 padding: 60px 20px 20px;
             }
             h1 {
-                font-size: 2.5rem;
+                font-size: 2.8rem;
             }
             .subtitle {
                 font-size: 1.1rem;
@@ -347,11 +372,15 @@
 </head>
 <body>
 
+    <!-- ANIMATED MESH BACKDROP -->
+    <canvas id="canvas-particles" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:-2; pointer-events:none; opacity: 0.55;"></canvas>
+
     <!-- Header section -->
     <header>
         <div class="profile-photo-container">
             <img src="dipayan_avatar.png" alt="Dipayan Dey Avatar" class="profile-photo">
         </div>
+        <br>
         <span class="profile-badge">
             <i class="fa-solid fa-code-branch"></i> Systems Engineer & FinTech
         </span>
@@ -372,13 +401,13 @@
         </div>
     </header>
 
-    <!-- Section 1: Financial & Quantitative Engineering -->
+    <!-- Section 1: Quantitative Engineering & AI Platforms (Featured Showcase) -->
     <section class="projects-section">
-        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 24px; background: linear-gradient(135deg, #ffffff 40%, #10b981 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;">
-            <i class="fa-solid fa-wallet" style="color: var(--color-success);"></i> Financial &amp; Quantitative Engineering
+        <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 24px; background: linear-gradient(135deg, #ffffff 40%, #ff5630 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-wallet" style="color: var(--color-accent);"></i> Quantitative Systems &amp; AI Platforms
         </h2>
         <div class="projects-grid">
-            <!-- Risk Engine (Featured Dashboard) -->
+            <!-- Risk Engine -->
             <a href="./risk-analytics-dashboard/" target="_blank" class="card card-risk">
                 <span class="featured-badge">Featured System</span>
                 <div class="card-icon"><i class="fa-solid fa-shield-halved"></i></div>
@@ -391,7 +420,41 @@
                 </div>
             </a>
 
-            <!-- Google Finance DnA Console (Featured Workspace) -->
+            <!-- Modus AI Observability Console -->
+            <a href="./modus-ai/" target="_blank" class="card card-risk">
+                <span class="featured-badge" style="background-color: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3); color: #6ee7b7;">Observability</span>
+                <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
+                <div class="card-content">
+                    <h3>Modus AI Observability</h3>
+                    <p>GenAI observability dashboard for RAG pipelines. Features multi-model LLM-as-a-Judge consensus evaluations, dense/sparse retrieval tracing, and live Groq API completions.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Launch Observatory</span> <i class="fa-solid fa-arrow-right-long"></i>
+                </div>
+            </a>
+
+            <!-- Agentic Retail Intelligence System -->
+            <a href="./retail-intelligence/" target="_blank" class="card card-risk">
+                <span class="featured-badge" style="background-color: rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.3); color: #c7d2fe;">Agentic Team</span>
+                <div class="card-icon"><i class="fa-solid fa-cubes"></i></div>
+                <div class="card-content">
+                    <h3>Agentic Retail Intelligence</h3>
+                    <p>Multi-agent team managing demand forecasting and stockout risks. Integrates classical ML (XGBoost) predictors and Groq LLM uncertainty explanations.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Launch System</span> <i class="fa-solid fa-arrow-right-long"></i>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Section 2: Deep Engineering & Research Projects -->
+    <section class="projects-section" style="padding-top: 0; margin-top: -10px;">
+        <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 24px; background: linear-gradient(135deg, #ffffff 40%, #10b981 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-server" style="color: var(--color-success);"></i> Systems Engineering &amp; Research
+        </h2>
+        <div class="projects-grid">
+            <!-- Google Finance DnA Console -->
             <a href="./fde-simulator/?tab=finance" target="_blank" class="card card-finance">
                 <span class="featured-badge" style="background-color: rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.3); color: #c7d2fe;">Agent Workspace</span>
                 <div class="card-icon"><i class="fa-solid fa-brain"></i></div>
@@ -404,34 +467,13 @@
                 </div>
             </a>
 
-            <!-- Modus AI Observability Console (Featured Observatory) -->
-            <a href="./modus-ai/" target="_blank" class="card card-risk">
-                <span class="featured-badge" style="background-color: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3); color: #6ee7b7;">RAG Observability</span>
-                <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
-                <div class="card-content">
-                    <h3>Modus AI Observability</h3>
-                    <p>Production-grade GenAI observability platform for RAG pipeline monitoring. Features multi-model LLM-as-a-Judge council evaluations, dense/sparse hybrid search tracing, and FastAPI integration.</p>
-                </div>
-                <div class="card-footer">
-                    <span>Launch Observatory</span> <i class="fa-solid fa-arrow-right-long"></i>
-                </div>
-            </a>
-        </div>
-    </section>
-
-    <!-- Section 2: Backend Development & AI Systems -->
-    <section class="projects-section" style="padding-top: 0; margin-top: -10px;">
-        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 24px; background: linear-gradient(135deg, #ffffff 40%, #6366f1 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;">
-            <i class="fa-solid fa-server" style="color: var(--color-accent);"></i> Backend &amp; AI Systems Development
-        </h2>
-        <div class="projects-grid">
             <!-- Paper Implementation (FrugalGPT Router) -->
             <a href="./frugalgpt-router/" target="_blank" class="card card-finance">
                 <span class="featured-badge" style="background-color: rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.3); color: #c7d2fe;">Paper Implementation</span>
                 <div class="card-icon"><i class="fa-solid fa-graduation-cap"></i></div>
                 <div class="card-content">
                     <h3>FrugalGPT LLM Router</h3>
-                    <p>Production-grade implementation of the FrugalGPT cascade routing &amp; semantic cache gateway (ArXiv:2305.05176). Classifies prompt complexity to route queries across multi-tier models, saving up to 70% in API costs.</p>
+                    <p>Production-grade implementation of the FrugalGPT cascade routing &amp; semantic cache gateway (ArXiv:2305.05176). Classifies prompt complexity to route queries, saving up to 70% in API costs.</p>
                 </div>
                 <div class="card-footer">
                     <span>Launch Gateway</span> <i class="fa-solid fa-arrow-right-long"></i>
@@ -465,10 +507,10 @@
         </div>
     </section>
 
-    <!-- Section 3: Machine Learning & Research Cases -->
+    <!-- Section 3: Machine Learning & Minimal Tools -->
     <section class="projects-section" style="padding-top: 0; margin-top: -10px;">
-        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 24px; background: linear-gradient(135deg, #ffffff 40%, #38bdf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;">
-            <i class="fa-solid fa-microscope" style="color: var(--color-info);"></i> Machine Learning &amp; Research Cases
+        <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 24px; background: linear-gradient(135deg, #ffffff 40%, #85b7eb 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-microscope" style="color: var(--color-info);"></i> Research Cases &amp; Libraries
         </h2>
         <div class="projects-grid">
             <!-- Ghibli Generator -->
@@ -517,5 +559,87 @@
     <!-- PERSISTENT DEIP AI AGENT -->
     <script src="./js/deip-agent.js"></script>
 
+    <!-- INTERACTIVE BACKGROUND PARTICLE ENGINE -->
+    <script>
+        const canvas = document.getElementById('canvas-particles');
+        const ctx = canvas.getContext('2d');
+
+        let particles = [];
+        const particleCount = 75;
+        const connectionDistance = 100;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+                this.radius = Math.random() * 2 + 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
+                if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 86, 48, 0.4)';
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Update & Draw
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            // Draw Lines
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < connectionDistance) {
+                        const alpha = (1 - dist / connectionDistance) * 0.15;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(255, 86, 48, ${alpha})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        initParticles();
+        animate();
+    </script>
 </body>
 </html>
