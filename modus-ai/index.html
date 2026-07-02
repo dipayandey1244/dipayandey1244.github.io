@@ -1014,7 +1014,7 @@
   }
 
   function executeLocalSQL(sql) {
-    let cleanSql = sql.replace(/\\s+/g, ' ').trim();
+    let cleanSql = sql.replace(/\s+/g, ' ').trim();
     let queryLower = cleanSql.toLowerCase();
 
     let table = "";
@@ -1059,8 +1059,8 @@
       let aggCol = "", aggFunc = "";
       selectFields.forEach(f => {
         let fl = f.toLowerCase();
-        if (fl.includes("sum(")) { aggFunc = "sum"; aggCol = f.match(/\\(([^)]+)\\)/)[1].trim(); }
-        if (fl.includes("avg(")) { aggFunc = "avg"; aggCol = f.match(/\\(([^)]+)\\)/)[1].trim(); }
+        if (fl.includes("sum(")) { aggFunc = "sum"; aggCol = f.match(/\(([^)]+)\)/)[1].trim(); }
+        if (fl.includes("avg(")) { aggFunc = "avg"; aggCol = f.match(/\(([^)]+)\)/)[1].trim(); }
         if (fl.includes("count(")) { aggFunc = "count"; }
       });
 
@@ -1079,10 +1079,10 @@
         
         if (aggFunc === "sum") {
           let sum = vals.reduce((s, x) => s + (parseFloat(x[aggCol]) || 0), 0);
-          row[`SUM(\${aggCol})`] = parseFloat(sum.toFixed(2));
+          row[`SUM(${aggCol})`] = parseFloat(sum.toFixed(2));
         } else if (aggFunc === "avg") {
           let sum = vals.reduce((s, x) => s + (parseFloat(x[aggCol]) || 0), 0);
-          row[`AVG(\${aggCol})`] = parseFloat((sum / vals.length).toFixed(2));
+          row[`AVG(${aggCol})`] = parseFloat((sum / vals.length).toFixed(2));
         } else if (aggFunc === "count") {
           row["COUNT(*)"] = vals.length;
         } else {
@@ -1112,10 +1112,10 @@
     }
 
     let html = `<table class="system-table" style="width: 100%; border-collapse: collapse;">`;
-    html += `<thead><tr>` + columns.map(c => `<th style="border-bottom: 2px solid var(--border-strong); padding: 6px 12px; text-align: left;">\${c}</th>`).join('') + `</tr></thead>`;
+    html += `<thead><tr>` + columns.map(c => `<th style="border-bottom: 2px solid var(--border-strong); padding: 6px 12px; text-align: left;">${c}</th>`).join('') + `</tr></thead>`;
     html += `<tbody>`;
     records.forEach(r => {
-      html += `<tr>` + columns.map(c => `<td style="padding: 6px 12px; border-bottom: 0.5px solid var(--border);">\${r[c] !== undefined ? r[c] : ''}</td>`).join('') + `</tr>`;
+      html += `<tr>` + columns.map(c => `<td style="padding: 6px 12px; border-bottom: 0.5px solid var(--border);">${r[c] !== undefined ? r[c] : ''}</td>`).join('') + `</tr>`;
     });
     html += `</tbody></table>`;
     view.innerHTML = html;
@@ -1125,6 +1125,7 @@
   loadSettings();
   renderTables();
   initOverviewCharts();
+  runSQLQuery();
 </script>
 </body>
 </html>
