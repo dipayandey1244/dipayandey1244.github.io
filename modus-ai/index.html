@@ -312,6 +312,11 @@
           <div class="panel-header">
             <div class="panel-title">Query Editor</div>
           </div>
+          <div class="form-group" style="border-bottom: 0.5px solid var(--border); padding-bottom: 12px; margin-bottom: 12px;">
+            <label><i class="ti ti-upload"></i> Ingest Custom CSV Dataset</label>
+            <input type="file" id="sql-csv-upload" accept=".csv" onchange="handleSQLCSVUpload()" style="font-size: 11.5px; margin-top: 4px; color: var(--text-secondary);">
+            <div id="sql-upload-status" style="font-size: 10px; color: var(--text-muted); margin-top: 4px;">Upload any RFC 4180 CSV table to query on table "custom_dataset".</div>
+          </div>
           <div class="form-group">
             <label>Query Templates</label>
             <select class="form-select" id="sql-template-select" onchange="applySQLTemplate()">
@@ -319,6 +324,7 @@
               <option value="tx_cat">Analyze transaction sums by category</option>
               <option value="wealth_retail">Get Wealth segment customers</option>
               <option value="high_val_join">Join high-value transactions and customer segments</option>
+              <option value="custom_query" id="sql-template-custom-opt" style="display:none;">Query custom_dataset: SELECT * FROM custom_dataset LIMIT 10;</option>
             </select>
           </div>
           <div class="form-group">
@@ -946,8 +952,52 @@
     cust_country: "SELECT Country, AVG(Balance) FROM customer_master GROUP BY Country;",
     tx_cat: "SELECT Category, SUM(Amount) FROM transactions GROUP BY Category;",
     wealth_retail: "SELECT Name, Segment, Country, Balance FROM customer_master WHERE Segment = 'Wealth' LIMIT 5;",
-    high_val_join: "SELECT c.Name, t.Category, t.Amount FROM transactions t JOIN customer_master c ON t.Customer_ID = c.Customer_ID LIMIT 10;"
+    high_val_join: "SELECT c.Name, t.Category, t.Amount FROM transactions t JOIN customer_master c ON t.Customer_ID = c.Customer_ID LIMIT 10;",
+    custom_query: "SELECT * FROM custom_dataset LIMIT 10;"
   };
+
+  let customDatasetRows = [];
+
+  function handleSQLCSVUpload() {
+    const fileInput = document.getElementById('sql-csv-upload');
+    const statusText = document.getElementById('sql-upload-status');
+    const customOpt = document.getElementById('sql-template-custom-opt');
+    const file = fileInput.files[0];
+    
+    if (!file) return;
+    
+    statusText.innerHTML = `<i class="ti ti-loader fa-spin"></i> Parsing CSV file...`;
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const text = e.target.result;
+        const rows = parseCSV(text);
+        if (rows.length < 2) throw new Error("Dataset contains insufficient rows or columns.");
+        
+        const headers = rows[0];
+        customDatasetRows = [];
+        for (let i = 1; i < rows.length; i++) {
+          let row = {};
+          headers.forEach((h, idx) => {
+            row[h.trim()] = rows[i][idx] ? rows[i][idx].trim() : "";
+          });
+          customDatasetRows.push(row);
+        }
+        
+        statusText.style.color = "var(--text-success)";
+        statusText.innerHTML = `<i class="ti ti-circle-check"></i> Loaded <strong>custom_dataset</strong> (${customDatasetRows.length} rows) successfully!`;
+        customOpt.style.display = "block";
+        
+        document.getElementById('sql-template-select').value = "custom_query";
+        applySQLTemplate();
+      } catch (err) {
+        statusText.style.color = "var(--text-danger)";
+        statusText.innerHTML = `<i class="ti ti-alert-triangle"></i> Upload Error: ${err.message}`;
+      }
+    };
+    reader.readAsText(file);
+  }
 
   function applySQLTemplate() {
     const template = document.getElementById('sql-template-select').value;
@@ -971,8 +1021,9 @@
     view.innerHTML = `<i class="ti ti-loader fa-spin"></i> Executing SQL on Northstar cluster compute...`;
 
     const backendUrl = localStorage.getItem('modus_backend_url') || '';
+    const queryLower = sql.toLowerCase();
 
-    if (backendUrl) {
+    if (backendUrl && !queryLower.includes("custom_dataset")) {
       fetch(`${backendUrl}/api/v1/query-data`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1020,9 +1071,16 @@
     let table = "";
     if (queryLower.includes("customer_master")) table = "customer_master";
     else if (queryLower.includes("transactions")) table = "transactions";
-    else return { error: "Table not found. Supported tables: customer_master, transactions" };
+    else if (queryLower.includes("custom_dataset")) table = "custom_dataset";
+    else return { error: "Table not found. Supported tables: customer_master, transactions, custom_dataset" };
 
-    let sourceData = table === "customer_master" ? localCustomers : localTransactions;
+    let sourceData;
+    if (table === "customer_master") sourceData = localCustomers;
+    else if (table === "transactions") sourceData = localTransactions;
+    else {
+      if (customDatasetRows.length === 0) return { error: "custom_dataset is empty. Please upload a CSV dataset file first!" };
+      sourceData = customDatasetRows;
+    }
     let data = JSON.parse(JSON.stringify(sourceData));
 
     if (queryLower.includes("where")) {
