@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FrugalGPT Router Gateway | Paper Implementation</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-primary: #050811;
+            --bg-surface: rgba(13, 20, 38, 0.45);
+            --bg-surface-elevated: rgba(22, 32, 59, 0.65);
+            --bg-terminal: #02040a;
+            
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-focus: rgba(99, 102, 241, 0.5);
+            
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            
+            --color-tier1: #3b82f6;      /* Blue for Llama 8B */
+            --color-tier2: #10b981;      /* Green for Gemini Flash */
+            --color-tier3: #ec4899;      /* Pink for Claude Sonnet */
+            --color-cache: #eab308;      /* Yellow for Cache */
+            
+            --font-sans: 'Outfit', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            --transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Ambient background glow */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -20%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, rgba(99, 102, 241, 0) 70%);
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(80px);
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -20%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.05) 0%, rgba(236, 72, 153, 0) 70%);
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(80px);
+        }
+
+        /* Navigation Header */
+        header {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 24px 15px 24px;
+            display: flex;
+            justify-content: justify-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-logo {
+            font-size: 24px;
+            color: #6366f1;
+            background: rgba(99, 102, 241, 0.15);
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            border: 1px solid rgba(99, 102, 241, 0.25);
+        }
+
+        .nav-title h1 {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-title span {
+            font-size: 11px;
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+            display: block;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .back-btn:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Layout Grid */
+        main {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 24px;
+            flex-grow: 1;
+        }
+
+        @media (max-width: 1024px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Common Panel Styling */
+        .panel {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: border-color 0.2s ease;
+        }
+
+        .panel:hover {
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: justify-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .panel-title {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Prompt Sandbox Section */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 90px;
+            background: var(--bg-terminal);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            font-size: 14px;
+            padding: 12px;
+            border-radius: 8px;
+            resize: vertical;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        textarea:focus {
+            border-color: var(--border-focus);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);
+        }
+
+        .sandbox-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            background: #6366f1;
+            color: white;
+            border: 1px solid rgba(99, 102, 241, 0.4);
+            border-radius: 8px;
+            padding: 10px 18px;
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            background: #4f46e5;
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: none;
+        }
+
+        /* Preset Prompts List */
+        .preset-prompts {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .preset-card {
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .preset-card:hover {
+            background: rgba(255, 255, 255, 0.035);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .preset-text {
+            color: var(--text-secondary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .preset-badge {
+            font-size: 9px;
+            font-family: var(--font-mono);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        /* Live Gateway Pipeline Trace */
+        .trace-pipeline {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .trace-step {
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: rgba(0,0,0,0.1);
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            opacity: 0.5;
+            transition: var(--transition);
+        }
+
+        .trace-step.active {
+            opacity: 1;
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, 0.04);
+        }
+
+        .trace-step.success {
+            opacity: 1;
+            border-color: var(--color-tier2);
+            background: rgba(16, 185, 129, 0.03);
+        }
+
+        .trace-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .trace-spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Terminal Screen */
+        .terminal-panel {
+            background: var(--bg-terminal);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: var(--font-mono);
+            font-size: 11.5px;
+            padding: 12px;
+            min-height: 140px;
+            max-height: 200px;
+            overflow-y: auto;
+            color: #cbd5e1;
+            line-height: 1.4;
+        }
+
+        .terminal-line {
+            margin-bottom: 4px;
+        }
+
+        /* COLUMN 2: Metrics and Observability */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .metric-header {
+            font-size: 11px;
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+        }
+
+        .metric-value {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin: 6px 0;
+            letter-spacing: -1px;
+        }
+
+        .metric-footer {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        /* SVG Line Charts and Pareto Frontier */
+        .chart-container {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.15);
+            padding: 16px;
+            position: relative;
+        }
+
+        /* Retrainer Section */
+        .tuning-sliders {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            font-family: var(--font-mono);
+            color: var(--text-secondary);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: #6366f1;
+            cursor: pointer;
+        }
+
+        /* Response Output */
+        .response-container {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 13.5px;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+
+        .response-title {
+            font-size: 11px;
+            font-family: var(--font-mono);
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Utility classes */
+        .color-t1 { color: var(--color-tier1); }
+        .color-t2 { color: var(--color-tier2); }
+        .color-t3 { color: var(--color-tier3); }
+        .color-c { color: var(--color-cache); }
+        
+        .badge-t1 { background: rgba(59, 130, 246, 0.15); color: var(--color-tier1); border: 1px solid rgba(59, 130, 246, 0.25); }
+        .badge-t2 { background: rgba(16, 185, 129, 0.15); color: var(--color-tier2); border: 1px solid rgba(16, 185, 129, 0.25); }
+        .badge-t3 { background: rgba(236, 72, 153, 0.15); color: var(--color-tier3); border: 1px solid rgba(236, 72, 153, 0.25); }
+        .badge-c { background: rgba(234, 179, 8, 0.15); color: var(--color-cache); border: 1px solid rgba(234, 179, 8, 0.25); }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            font-size: 12.5px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            margin-top: 40px;
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        footer strong {
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header navigation -->
+    <header>
+        <div class="nav-brand">
+            <div class="nav-logo">
+                <i class="fa-solid fa-server"></i>
+            </div>
+            <div class="nav-title">
+                <h1>FrugalGPT Router &amp; Semantic Cache</h1>
+                <span>ArXiv:2305.05176 // LLMOps Cost Gateway</span>
+            </div>
+        </div>
+        <a href="../" class="back-btn">
+            <i class="fa-solid fa-arrow-left-long"></i> Back to Portfolio
+        </a>
+    </header>
+
+    <!-- Main Grid -->
+    <main>
+        
+        <!-- COLUMN 1: Sandbox and Router trace -->
+        <div class="flex-col" style="display: flex; flex-direction: column; gap: 24px;">
+            
+            <!-- Sandbox Panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title"><i class="fa-solid fa-flask"></i> Interactive Prompt Sandbox</span>
+                    <span class="font-mono text-muted" style="font-size: 10px;">Router API V1</span>
+                </div>
+                <div class="panel-body">
+                    <div class="input-group">
+                        <label for="prompt-input" style="font-size: 11px; text-transform: uppercase; color: var(--text-secondary); font-family: var(--font-mono);">Enter Custom Query</label>
+                        <textarea id="prompt-input" placeholder="Type a technical question, simple greeting, or math problem here to test the routing path..."></textarea>
+                    </div>
+                    
+                    <div class="sandbox-actions">
+                        <button class="btn" id="run-btn">
+                            <i class="fa-solid fa-play"></i> Run Through Gateway
+                        </button>
+                        <button class="btn btn-outline" id="clear-btn">Clear</button>
+                    </div>
+
+                    <!-- Preset Prompts -->
+                    <div class="preset-prompts">
+                        <span style="font-size: 11px; text-transform: uppercase; color: var(--text-secondary); font-family: var(--font-mono);">Preloaded Test Queries</span>
+                        
+                        <div class="preset-card" onclick="selectPreset(0)">
+                            <span class="preset-text">What is the capital of Spain?</span>
+                            <span class="preset-badge badge-t1">Factual / Low</span>
+                        </div>
+                        <div class="preset-card" onclick="selectPreset(1)">
+                            <span class="preset-text">Write a high-performance Rust actor system using Actix and explain thread-safety guarantees.</span>
+                            <span class="preset-badge badge-t3">Coding / High</span>
+                        </div>
+                        <div class="preset-card" onclick="selectPreset(2)">
+                            <span class="preset-text">Translate this corporate policy into German: 'Google Finance requires invoice verification for credit values exceeding $50,000.'</span>
+                            <span class="preset-badge badge-t2">Translation / Mid</span>
+                        </div>
+                        <div class="preset-card" onclick="selectPreset(3)">
+                            <span class="preset-text">What is the capital of Spain?</span>
+                            <span class="preset-badge badge-c">Cache Repeat</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pipeline Trace and Terminal Log -->
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title"><i class="fa-solid fa-network-wired"></i> Router Execution Flow</span>
+                    <span class="font-mono text-muted" id="status-badge" style="font-size: 10px;">IDLE</span>
+                </div>
+                <div class="panel-body" style="gap: 12px;">
+                    <div class="trace-pipeline">
+                        <!-- Step 1: Semantic Cache -->
+                        <div class="trace-step" id="step-cache">
+                            <span class="trace-label"><i class="fa-solid fa-database"></i> 1. Semantic Cache Database Check</span>
+                            <span class="trace-status" id="step-cache-status">-</span>
+                        </div>
+                        
+                        <!-- Step 2: Feature Classifier -->
+                        <div class="trace-step" id="step-classify">
+                            <span class="trace-label"><i class="fa-solid fa-brain"></i> 2. Complexity Feature Classifier</span>
+                            <span class="trace-status" id="step-classify-status">-</span>
+                        </div>
+
+                        <!-- Step 3: Model Routing -->
+                        <div class="trace-step" id="step-route">
+                            <span class="trace-label"><i class="fa-solid fa-route"></i> 3. Dynamic Model Cascader</span>
+                            <span class="trace-status" id="step-route-status">-</span>
+                        </div>
+
+                        <!-- Step 4: Endpoint Execution -->
+                        <div class="trace-step" id="step-exec">
+                            <span class="trace-label"><i class="fa-solid fa-bolt"></i> 4. HA API Endpoint Response</span>
+                            <span class="trace-status" id="step-exec-status">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Pipeline Trace Terminal Output -->
+                    <div class="terminal-panel" id="terminal">
+                        <div style="color: var(--text-muted);">Gateway logs idle. Enter a prompt above to watch the pipeline execute...</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- COLUMN 2: Metrics and Model Tuning -->
+        <div class="flex-col" style="display: flex; flex-direction: column; gap: 24px;">
+            
+            <!-- Live Observability Panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title"><i class="fa-solid fa-chart-line"></i> observibility dashboard</span>
+                    <span class="font-mono text-muted" style="font-size: 10px;">Live Metrics</span>
+                </div>
+                <div class="panel-body" style="gap: 16px;">
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <span class="metric-header">Cost Saved (vs T3)</span>
+                            <span class="metric-value text-green" id="metric-savings" style="color: var(--color-tier2);">68.5%</span>
+                            <span class="metric-footer" id="metric-savings-footer">Saved $4.18 over 25 trials</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-header">Avg Latency</span>
+                            <span class="metric-value text-primary" id="metric-latency" style="color: var(--color-tier1);">245ms</span>
+                            <span class="metric-footer">Saves ~1,550ms vs Tier 3</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-header">Cache Hit Rate</span>
+                            <span class="metric-value color-c" id="metric-cache">12.0%</span>
+                            <span class="metric-footer">Vector distance threshold: 0.92</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-header">Routed Accuracy</span>
+                            <span class="metric-value color-t2" id="metric-accuracy">96.8%</span>
+                            <span class="metric-footer">Target precision tolerance: 95%</span>
+                        </div>
+                    </div>
+
+                    <!-- Model Distribution Visual -->
+                    <div class="flex-col gap-4 font-mono" style="font-size: 10px; border-top: 1px solid var(--border-color); paddingTop: 12px; margin-top: 4px;">
+                        <span class="text-secondary" style="margin-bottom: 6px; display: block;">GATEWAY MODEL ROUTING SPLIT:</span>
+                        <div class="flex-col gap-6">
+                            <div class="flex-col">
+                                <div class="flex-row justify-between" style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                                    <span>Tier 1: Llama 3.1 8B (Low Cost)</span>
+                                    <span id="dist-t1-val">44%</span>
+                                </div>
+                                <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.04); border-radius: 3px; overflow: hidden;">
+                                    <div id="dist-t1-bar" style="width: 44%; height: 100%; background: var(--color-tier1); transition: width 0.3s;"></div>
+                                </div>
+                            </div>
+                            <div class="flex-col" style="margin-top: 6px;">
+                                <div class="flex-row justify-between" style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                                    <span>Tier 2: Gemini 1.5 Flash (Medium)</span>
+                                    <span id="dist-t2-val">36%</span>
+                                </div>
+                                <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.04); border-radius: 3px; overflow: hidden;">
+                                    <div id="dist-t2-bar" style="width: 36%; height: 100%; background: var(--color-tier2); transition: width 0.3s;"></div>
+                                </div>
+                            </div>
+                            <div class="flex-col" style="margin-top: 6px;">
+                                <div class="flex-row justify-between" style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                                    <span>Tier 3: Claude 3.5 Sonnet (High Quality)</span>
+                                    <span id="dist-t3-val">20%</span>
+                                </div>
+                                <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.04); border-radius: 3px; overflow: hidden;">
+                                    <div id="dist-t3-bar" style="width: 20%; height: 100%; background: var(--color-tier3); transition: width 0.3s;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pareto Frontier & Hyperparameter Tuning -->
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title"><i class="fa-solid fa-sliders"></i> Router Parameter Tuning &amp; SVM training</span>
+                    <span class="font-mono text-muted" style="font-size: 10px;">Classifier Playground</span>
+                </div>
+                <div class="panel-body">
+                    
+                    <div class="tuning-sliders">
+                        
+                        <!-- 1. Strategy Slider -->
+                        <div class="slider-group">
+                            <div class="slider-header">
+                                <span>Router Decision Strategy</span>
+                                <span id="strategy-val" style="color: #6366f1; font-weight: bold;">Balanced</span>
+                            </div>
+                            <input type="range" id="slider-strategy" min="0" max="2" value="1" step="1">
+                            <span class="text-muted" style="font-size: 9px; color: var(--text-muted);">Cost-Optimized (max Llama), Balanced, or Quality-First (max Claude).</span>
+                        </div>
+
+                        <!-- 2. Cost Tolerance -->
+                        <div class="slider-group">
+                            <div class="slider-header">
+                                <span>Escalation Sensitivity Threshold</span>
+                                <span id="escalate-val" style="color: #6366f1; font-weight: bold;">0.65</span>
+                            </div>
+                            <input type="range" id="slider-escalate" min="0.30" max="0.90" value="0.65" step="0.05">
+                            <span class="text-muted" style="font-size: 9px; color: var(--text-muted);">Complexity score threshold above which queries trigger higher tier models.</span>
+                        </div>
+
+                    </div>
+
+                    <!-- Pareto Frontier Chart Area -->
+                    <div class="chart-container flex-col align-center">
+                        <span style="font-size: 9px; font-family: var(--font-mono); color: var(--text-secondary); display: block; margin-bottom: 6px; text-transform: uppercase;">Optimal Pareto Frontier (Cost vs. Accuracy)</span>
+                        
+                        <!-- Dynamic SVG Chart -->
+                        <svg width="280" height="150" style="overflow: visible;" id="pareto-chart">
+                            <!-- Chart Gridlines -->
+                            <line x1="30" y1="20" x2="30" y2="130" stroke="rgba(255,255,255,0.06)" />
+                            <line x1="30" y1="130" x2="260" y2="130" stroke="rgba(255,255,255,0.06)" />
+                            
+                            <!-- Labels -->
+                            <text x="20" y="75" fill="var(--text-muted)" font-size="8" font-family="var(--font-mono)" text-anchor="middle" transform="rotate(-90 20 75)">Accuracy</text>
+                            <text x="145" y="145" fill="var(--text-muted)" font-size="8" font-family="var(--font-mono)" text-anchor="middle">API Cost / 1k queries</text>
+
+                            <!-- Pareto curves (dynamic path drawn in JS) -->
+                            <path id="pareto-curve" d="M 30,120 Q 145,90 260,30" fill="none" stroke="rgba(99, 102, 241, 0.25)" stroke-width="1.5" />
+                            <path id="pareto-curve-active" d="M 30,120 Q 145,90 260,30" fill="none" stroke="#6366f1" stroke-width="2" />
+                            
+                            <!-- Dot indicators -->
+                            <circle id="chart-dot" cx="145" cy="90" r="5" fill="#f43f5e" stroke="#070a13" stroke-width="1.5" />
+                        </svg>
+                        
+                        <!-- Retrain trigger -->
+                        <div style="display: flex; justify-content: space-between; width: 100%; margin-top: 10px; align-items: center;">
+                            <span style="font-size: 9px; color: var(--text-muted);" id="training-status">SVM classifier model converged.</span>
+                            <button class="btn" id="train-btn" style="padding: 6px 12px; font-size: 11px;">
+                                <i class="fa-solid fa-rotate"></i> Retrain SVM Classifier
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Simulated Response Output Viewer -->
+            <div class="response-container flex-col" id="output-viewer" style="display: none;">
+                <div class="response-title">
+                    <span>GATEWAY COMPLETED EXECUTION</span>
+                    <span id="output-tier-badge" class="badge-t1">Llama-3-8B</span>
+                </div>
+                <div id="output-text" style="font-size: 13.5px; color: var(--text-primary);">
+                    ...
+                </div>
+                <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--border-color); padding-top: 10px; margin-top: 12px; font-family: var(--font-mono); font-size: 10px; color: var(--text-muted);">
+                    <span id="output-latency">Latency: 115ms</span>
+                    <span id="output-tokens">Tokens: 142</span>
+                    <span id="output-cost" style="color: var(--color-tier2);">Cost: $0.000014</span>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer>
+        <p>Paper Implementation by <strong>Dipayan Dey</strong> • Based on ArXiv:2305.05176</p>
+    </footer>
+
+    <!-- FrugalGPT Javascript Simulation Engine -->
+    <script>
+        // State variables
+        let totalRequests = 18;
+        let totalCostSavedDollars = 3.42;
+        let cacheHits = 2;
+        let routerAccuracy = 0.965;
+        
+        let modelDistribution = { t1: 8, t2: 6, t3: 4 }; // counts
+        let selectedStrategy = 1; // 0: Cost-Optimized, 1: Balanced, 2: Quality-First
+        let escalationThreshold = 0.65;
+        let isTraining = false;
+        
+        // Semantic Cache DB (mock)
+        const semanticCache = [
+            { query: "what is the capital of spain?", answer: "The capital of Spain is Madrid. It is the largest city in the country and serves as the political, economic, and cultural center.", tier: "cache", latency: 3, cost: 0.0000, tokens: 28 },
+            { query: "explain speculative decoding", answer: "Speculative decoding is an optimization technique where a smaller 'draft' model generates tokens quickly, which are then verified in parallel by a larger 'target' model in a single forward pass. This reduces generation latency while maintaining the larger model's output quality.", tier: "cache", latency: 5, cost: 0.0000, tokens: 45 }
+        ];
+
+        // Sample preset details
+        const presetQueries = [
+            "What is the capital of Spain?",
+            "Write a high-performance Rust actor system using Actix and explain thread-safety guarantees.",
+            "Translate this corporate policy into German: 'Google Finance requires invoice verification for credit values exceeding $50,000.'",
+            "What is the capital of Spain?"
+        ];
+
+        // Elements
+        const promptInput = document.getElementById('prompt-input');
+        const runBtn = document.getElementById('run-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const terminal = document.getElementById('terminal');
+        const statusBadge = document.getElementById('status-badge');
+        
+        // Pipeline steps
+        const stepCache = document.getElementById('step-cache');
+        const stepClassify = document.getElementById('step-classify');
+        const stepRoute = document.getElementById('step-route');
+        const stepExec = document.getElementById('step-exec');
+
+        const stepCacheStatus = document.getElementById('step-cache-status');
+        const stepClassifyStatus = document.getElementById('step-classify-status');
+        const stepRouteStatus = document.getElementById('step-route-status');
+        const stepExecStatus = document.getElementById('step-exec-status');
+
+        // Output viewer
+        const outputViewer = document.getElementById('output-viewer');
+        const outputText = document.getElementById('output-text');
+        const outputTierBadge = document.getElementById('output-tier-badge');
+        const outputLatency = document.getElementById('output-latency');
+        const outputTokens = document.getElementById('output-tokens');
+        const outputCost = document.getElementById('output-cost');
+
+        // Stats elements
+        const metricSavings = document.getElementById('metric-savings');
+        const metricSavingsFooter = document.getElementById('metric-savings-footer');
+        const metricLatency = document.getElementById('metric-latency');
+        const metricCache = document.getElementById('metric-cache');
+        const metricAccuracy = document.getElementById('metric-accuracy');
+        const distT1Val = document.getElementById('dist-t1-val');
+        const distT2Val = document.getElementById('dist-t2-val');
+        const distT3Val = document.getElementById('dist-t3-val');
+        const distT1Bar = document.getElementById('dist-t1-bar');
+        const distT2Bar = document.getElementById('dist-t2-bar');
+        const distT3Bar = document.getElementById('dist-t3-bar');
+
+        // Sliders & Retrainer
+        const sliderStrategy = document.getElementById('slider-strategy');
+        const sliderEscalate = document.getElementById('slider-escalate');
+        const strategyVal = document.getElementById('strategy-val');
+        const escalateVal = document.getElementById('escalate-val');
+        const trainBtn = document.getElementById('train-btn');
+        const trainingStatus = document.getElementById('training-status');
+        const paretoChart = document.getElementById('pareto-chart');
+        const chartDot = document.getElementById('chart-dot');
+        const paretoCurveActive = document.getElementById('pareto-curve-active');
+
+        // Log helper
+        function addLog(message, type = 'info') {
+            const time = new Date().toLocaleTimeString();
+            let color = '#cbd5e1';
+            if (type === 'success') color = '#10b981';
+            if (type === 'warn') color = '#eab308';
+            if (type === 'danger') color = '#ef4444';
+            if (type === 'special') color = '#ec4899';
+            if (type === 'sql') color = '#38bdf8';
+
+            const line = document.createElement('div');
+            line.className = 'terminal-line';
+            line.style.color = color;
+            line.innerHTML = `<span style="color: var(--text-muted); margin-right: 6px;">[${time}]</span> ${message}`;
+            terminal.appendChild(line);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        // Initialize display values
+        function updateStatsUI() {
+            // Cost metrics calculation
+            const totalClaudeCost = totalRequests * 0.003 * 350 / 1000;
+            const actualCost = (modelDistribution.t1 * 0.0001 * 150 / 1000) + 
+                               (modelDistribution.t2 * 0.00075 * 250 / 1000) + 
+                               (modelDistribution.t3 * 0.003 * 400 / 1000);
+            
+            const savingsPercent = Math.max(10, Math.min(95, ((totalClaudeCost - actualCost) / totalClaudeCost) * 100));
+            metricSavings.innerText = `${savingsPercent.toFixed(1)}%`;
+            metricSavingsFooter.innerText = `Saved $${(totalClaudeCost - actualCost).toFixed(4)} vs. Tier 3`;
+
+            // Latency calculations
+            const avgLatency = ((modelDistribution.t1 * 110) + (modelDistribution.t2 * 260) + (modelDistribution.t3 * 850) + (cacheHits * 4)) / (totalRequests + cacheHits);
+            metricLatency.innerText = `${Math.round(avgLatency)}ms`;
+
+            // Cache rate
+            const cacheRate = (cacheHits / (totalRequests + cacheHits)) * 100;
+            metricCache.innerText = `${cacheRate.toFixed(1)}%`;
+
+            // Accuracy
+            metricAccuracy.innerText = `${(routerAccuracy * 100).toFixed(1)}%`;
+
+            // Distribution bars
+            const sum = modelDistribution.t1 + modelDistribution.t2 + modelDistribution.t3;
+            const p1 = Math.round((modelDistribution.t1 / sum) * 100) || 0;
+            const p2 = Math.round((modelDistribution.t2 / sum) * 100) || 0;
+            const p3 = 100 - p1 - p2;
+
+            distT1Val.innerText = `${p1}%`;
+            distT2Val.innerText = `${p2}%`;
+            distT3Val.innerText = `${p3}%`;
+
+            distT1Bar.style.width = `${p1}%`;
+            distT2Bar.style.width = `${p2}%`;
+            distT3Bar.style.width = `${p3}%`;
+
+            // Update pareto chart dot location
+            const dotX = 30 + (1 - savingsPercent/100) * 230; // cost
+            const dotY = 130 - (routerAccuracy - 0.70) / 0.30 * 100; // accuracy
+            chartDot.setAttribute('cx', Math.max(40, Math.min(250, dotX)));
+            chartDot.setAttribute('cy', Math.max(30, Math.min(120, dotY)));
+        }
+
+        // Preset Selector
+        function selectPreset(idx) {
+            promptInput.value = presetQueries[idx];
+            addLog(`Loaded preset test query #${idx + 1}`);
+        }
+
+        // Clear Sandbox
+        clearBtn.addEventListener('click', () => {
+            promptInput.value = '';
+            outputViewer.style.display = 'none';
+            // reset steps
+            document.querySelectorAll('.trace-step').forEach(el => el.className = 'trace-step');
+            document.querySelectorAll('.trace-status').forEach(el => el.innerText = '-');
+            statusBadge.innerText = 'IDLE';
+            addLog('Sandbox cleared.');
+        });
+
+        // Sliders change event
+        sliderStrategy.addEventListener('input', (e) => {
+            selectedStrategy = parseInt(e.target.value);
+            const names = ['Cost-Optimized', 'Balanced', 'Quality-First'];
+            strategyVal.innerText = names[selectedStrategy];
+            
+            // Adjust distribution counts immediately to simulate parameter shifting
+            if (selectedStrategy === 0) {
+                modelDistribution = { t1: 14, t2: 3, t3: 1 };
+                routerAccuracy = 0.912;
+            } else if (selectedStrategy === 1) {
+                modelDistribution = { t1: 8, t2: 6, t3: 4 };
+                routerAccuracy = 0.965;
+            } else {
+                modelDistribution = { t1: 2, t2: 4, t3: 12 };
+                routerAccuracy = 0.988;
+            }
+            updateStatsUI();
+            addLog(`Routing policy updated to [${names[selectedStrategy]}]. Pareto frontier adjusted.`);
+        });
+
+        sliderEscalate.addEventListener('input', (e) => {
+            escalationThreshold = parseFloat(e.target.value);
+            escalateVal.innerText = escalationThreshold.toFixed(2);
+        });
+
+        // Retrainer Simulation
+        trainBtn.addEventListener('click', () => {
+            if (isTraining) return;
+            isTraining = true;
+            trainBtn.disabled = true;
+            statusBadge.innerText = 'TRAINING';
+            addLog('Initializing SVM classifier model retraining loop...', 'warn');
+            
+            let epoch = 1;
+            const interval = setInterval(() => {
+                const loss = (1 / epoch) * 0.45 + (Math.random() * 0.05);
+                const trainAcc = 80 + (epoch * 3.6) + (Math.random() * 0.5);
+                addLog(`SVM Epoch ${epoch}/5 - Loss: ${loss.toFixed(4)} | Train Acc: ${trainAcc.toFixed(1)}% | Val Acc: ${(trainAcc - 1.5).toFixed(1)}%`, 'sql');
+                
+                // Animate Pareto curve coordinates slightly
+                const progress = epoch / 5;
+                const pathY = 90 - (progress * 15);
+                paretoCurveActive.setAttribute('d', `M 30,120 Q 145,${pathY} 260,30`);
+
+                epoch++;
+                if (epoch > 5) {
+                    clearInterval(interval);
+                    isTraining = false;
+                    trainBtn.disabled = false;
+                    statusBadge.innerText = 'IDLE';
+                    trainingStatus.innerText = 'SVM Classifier retrained and converged.';
+                    addLog('Router Model Retraining Completed. New optimal weights applied to Gateway endpoints.', 'success');
+                    
+                    // Boost metrics slightly as a reward
+                    routerAccuracy = Math.min(0.992, routerAccuracy + 0.008);
+                    updateStatsUI();
+                }
+            }, 550);
+        });
+
+        // Run prompt pipeline
+        runBtn.addEventListener('click', () => {
+            const query = promptInput.value.trim();
+            if (!query) {
+                addLog('Please enter a query or select a preset to run.', 'danger');
+                return;
+            }
+
+            runPipeline(query);
+        });
+
+        // Main Simulation Runner
+        function runPipeline(query) {
+            outputViewer.style.display = 'none';
+            statusBadge.innerText = 'ROUTING';
+            terminal.innerHTML = ''; // Clear terminal for active trace
+
+            // Reset trace highlights
+            document.querySelectorAll('.trace-step').forEach(el => el.className = 'trace-step');
+            document.querySelectorAll('.trace-status').forEach(el => el.innerText = '-');
+
+            addLog('--- GATEWAY QUERY RECEIVED ---', 'info');
+            addLog(`Query String: "${query}"`);
+
+            // STEP 1: Cache Check
+            stepCache.className = 'trace-step active';
+            stepCacheStatus.innerHTML = '<i class="fa-solid fa-circle-notch trace-spinner"></i>';
+            addLog('Step 1: Commencing MD5 hashing on input query...');
+
+            setTimeout(() => {
+                // Check if query is in cache database
+                const cacheMatch = semanticCache.find(c => c.query.toLowerCase() === query.toLowerCase());
+
+                if (cacheMatch) {
+                    stepCache.className = 'trace-step success';
+                    stepCacheStatus.innerHTML = '<span style="color: var(--color-cache); font-weight:bold;">HIT (0.98)</span>';
+                    addLog(`Semantic Cache HIT! Cosine similarity matches signature. Returning pre-cached response in 3ms.`, 'success');
+                    
+                    // Update stats
+                    cacheHits++;
+                    
+                    // Show Output
+                    showOutputResponse(cacheMatch);
+                    return;
+                } else {
+                    stepCache.className = 'trace-step';
+                    stepCacheStatus.innerHTML = '<span style="color: var(--text-muted);">MISS</span>';
+                    addLog('Semantic Cache MISS. Cosine similarity threshold < 0.92.');
+                    
+                    // STEP 2: Complexity Feature Classifier
+                    setTimeout(() => {
+                        stepClassify.className = 'trace-step active';
+                        stepClassifyStatus.innerHTML = '<i class="fa-solid fa-circle-notch trace-spinner"></i>';
+                        addLog('Step 2: Commencing query text feature extraction...');
+                        
+                        // Score complexity based on prompt contents
+                        let score = 0.22; // baseline
+                        const containsMath = /[\+\-\*\/=\^]/.test(query) || query.includes("derivative") || query.includes("integral") || query.includes("f(x)");
+                        const containsCode = /function|class|def|import|let|const|rust|python|actix/.test(query.toLowerCase());
+                        const textLength = query.length;
+
+                        if (containsCode) score += 0.55;
+                        if (containsMath) score += 0.35;
+                        if (textLength > 200) score += 0.20;
+                        score = Math.min(0.98, score);
+
+                        addLog(`-> Feature Map: Length=${textLength} chars | CodeSyntax=${containsCode} | MathSyntax=${containsMath}`);
+                        addLog(`Complexity Classifier Output Score: ${score.toFixed(2)}`);
+
+                        setTimeout(() => {
+                            stepClassify.className = 'trace-step success';
+                            stepClassifyStatus.innerHTML = `<span style="color: var(--color-tier2); font-weight:bold;">${score.toFixed(2)}</span>`;
+
+                            // STEP 3: Router Cascader Selection
+                            setTimeout(() => {
+                                stepRoute.className = 'trace-step active';
+                                stepRouteStatus.innerHTML = '<i class="fa-solid fa-circle-notch trace-spinner"></i>';
+                                addLog('Step 3: Evaluating model routing threshold gates...');
+
+                                // Decision tier based on strategy and complexity score
+                                let tier = "tier1";
+                                if (selectedStrategy === 0) {
+                                    // Cost Optimized: routes to Llama except very complex
+                                    tier = score > 0.80 ? "tier2" : "tier1";
+                                } else if (selectedStrategy === 1) {
+                                    // Balanced
+                                    if (score > escalationThreshold) {
+                                        tier = score > 0.80 ? "tier3" : "tier2";
+                                    } else {
+                                        tier = "tier1";
+                                    }
+                                } else {
+                                    // Quality First
+                                    tier = score > 0.40 ? "tier3" : "tier2";
+                                }
+
+                                const tierNames = {
+                                    tier1: { name: "Llama 3.1 8B (Tier 1)", color: "var(--color-tier1)", badge: "badge-t1" },
+                                    tier2: { name: "Gemini 1.5 Flash (Tier 2)", color: "var(--color-tier2)", badge: "badge-t2" },
+                                    tier3: { name: "Claude 3.5 Sonnet (Tier 3)", color: "var(--color-tier3)", badge: "badge-t3" }
+                                };
+
+                                addLog(`Cascader Selection: Routing to [${tierNames[tier].name}] based on policy constraints.`, 'special');
+
+                                setTimeout(() => {
+                                    stepRoute.className = 'trace-step success';
+                                    stepRouteStatus.innerHTML = `<span class="preset-badge ${tierNames[tier].badge}">${tier.toUpperCase()}</span>`;
+
+                                    // STEP 4: Execution Endpoint
+                                    setTimeout(() => {
+                                        stepExec.className = 'trace-step active';
+                                        stepExecStatus.innerHTML = '<i class="fa-solid fa-circle-notch trace-spinner"></i>';
+                                        addLog(`Step 4: Dispatching payload to HA API endpoint...`);
+
+                                        // Mock Response Generator
+                                        let mockData = {};
+                                        if (tier === "tier1") {
+                                            mockData = {
+                                                answer: "To get the capital of Spain, we query global geography parameters. Madrid is the capital and largest municipality of Spain. The population of the city is approximately 3.3 million.",
+                                                tier: "tier1",
+                                                latency: 112 + Math.round(Math.random() * 20),
+                                                cost: 0.000015,
+                                                tokens: 38
+                                            };
+                                            modelDistribution.t1++;
+                                        } else if (tier === "tier2") {
+                                            mockData = {
+                                                answer: "Here is the German translation of the corporate policy:\n\n'Google Finance erfordert eine Rechnungsprüfung für Kreditwerte, die 50.000 US-Dollar überschreiten.'\n\nNotes: German financial terminology translates 'credit values' to 'Kreditwerte' and 'invoice verification' to 'Rechnungsprüfung'.",
+                                                tier: "tier2",
+                                                latency: 245 + Math.round(Math.random() * 40),
+                                                cost: 0.000185,
+                                                tokens: 65
+                                            };
+                                            modelDistribution.t2++;
+                                        } else {
+                                            mockData = {
+                                                answer: "```rust\nuse actix::prelude::*;\n\n// 1. Define Message\n#[derive(Message)]\n#[rtype(result = \"Result<bool, MailboxError>\")]\nstruct WriteLedger { amount: f64 }\n\n// 2. Define Actor\nstruct AuditActor { db_pool: SqliteConnection }\nimpl Actor for AuditActor {\n    type Context = Context<Self>;\n}\n```\n**Thread Safety guarantees in Actix:** Actix Actors are single-threaded execution loops. The system guarantees that the internal state of `AuditActor` is never mutated concurrently, bypassing Rust raw mutexes.",
+                                                tier: "tier3",
+                                                latency: 840 + Math.round(Math.random() * 80),
+                                                cost: 0.001250,
+                                                tokens: 145
+                                            };
+                                            modelDistribution.t3++;
+                                        }
+
+                                        totalRequests++;
+                                        
+                                        setTimeout(() => {
+                                            stepExec.className = 'trace-step success';
+                                            stepExecStatus.innerHTML = '<span style="color: var(--color-tier2); font-weight:bold;">200 OK</span>';
+                                            addLog('Response payload received. Connection closed.', 'success');
+                                            statusBadge.innerText = 'IDLE';
+
+                                            showOutputResponse(mockData);
+                                        }, 800);
+
+                                    }, 400);
+
+                                }, 400);
+
+                            }, 400);
+
+                        }, 400);
+
+                    }, 400);
+                }
+            }, 600);
+        }
+
+        // Show completed response
+        function showOutputResponse(data) {
+            outputViewer.style.display = 'flex';
+            outputText.innerText = data.answer;
+            
+            const badges = {
+                cache: { text: "SEMANTIC CACHE", class: "badge-c" },
+                tier1: { text: "TIER 1: LLAMA 8B", class: "badge-t1" },
+                tier2: { text: "TIER 2: GEMINI FLASH", class: "badge-t2" },
+                tier3: { text: "TIER 3: CLAUDE SONNET", class: "badge-t3" }
+            };
+
+            outputTierBadge.innerText = badges[data.tier].text;
+            outputTierBadge.className = `preset-badge ${badges[data.tier].class}`;
+
+            outputLatency.innerText = `Latency: ${data.latency}ms`;
+            outputTokens.innerText = `Tokens: ${data.tokens}`;
+            outputCost.innerText = `Cost: $${data.cost.toFixed(6)}`;
+
+            // Refresh dashboards
+            updateStatsUI();
+        }
+
+        // Initial setup
+        updateStatsUI();
+    </script>
+</body>
+</html>
