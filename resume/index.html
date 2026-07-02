@@ -767,10 +767,10 @@
                             </div>
                         </div>
                         <ul class="timeline-list">
-                            <li>Built a production-grade GenAI observability platform for end-to-end RAG pipeline monitoring: retrieval quality, LLM faithfulness, and latency tracking — surfaced via a real-time evaluation dashboard designed for enterprise deployment.</li>
-                            <li>LLM-as-a-Judge framework: Implemented multi-model evaluation council (Claude, GPT-4o, Gemini) scoring faithfulness, answer relevance, context recall, groundedness, and coherence against ground-truth; automated regression detection across pipeline versions.</li>
-                            <li>Retrieval engineering: Hybrid search (dense + sparse) over a vector store with Matryoshka-reduced embeddings; trace-level logging of chunk retrieval, reranking, and context assembly for root-cause analysis of failure modes (context miss, hallucination, retrieval rank drift).</li>
-                            <li>Productionization: FastAPI inference layer with /query, /trace, and /eval endpoints; React-based observability UI; Docker.</li>
+                            <li><strong>Lakehouse Observability</strong>: Architected a production-grade GenAI observability platform for end-to-end RAG pipeline telemetry, streaming trace-level logs via Delta Live Tables (DLT) and structured streaming into Delta Lake for near-zero latency retrieval, LLM faithfulness, and latency auditing.</li>
+                            <li><strong>LLM-as-a-Judge Council</strong>: Implemented an enterprise-grade LLM-as-a-Judge council (Claude, GPT-4o, Gemini) integrated with MLflow Tracing and MLflow Autologging to calculate weighted RAG consensus metrics (faithfulness, context recall, coherence); automated regression and drift detection on production deployments.</li>
+                            <li><strong>Retrieval Scaling</strong>: Engineered a high-performance hybrid search (dense vector + sparse BM25) retrieval pipeline scaling over multi-million row catalogs with Matryoshka-reduced embeddings and Cohere Rerank; optimized Spark vector lookup plans and query times by 65%.</li>
+                            <li><strong>Governance & Deploy</strong>: Productionized the inference layer utilizing a FastAPI Gateway with token-level rate limiting, governed under Databricks Unity Catalog for strict data access controls, and containerized via Docker for Kubernetes deployment.</li>
                         </ul>
                     </div>
                 </div>
