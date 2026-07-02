@@ -767,10 +767,10 @@
                             </div>
                         </div>
                         <ul class="timeline-list">
-                            <li>Built a production-grade GenAI observability platform for end-to-end RAG pipeline monitoring (retrieval quality, LLM faithfulness, and latency tracking) surfaced via a real-time evaluation dashboard designed for enterprise deployment.</li>
-                            <li>Implemented an LLM-as-a-Judge framework utilizing a multi-model evaluation council (Claude, GPT-4o, Gemini) scoring faithfulness, answer relevance, context recall, groundedness, and coherence against ground-truth; automated regression detection across pipeline versions.</li>
-                            <li>Designed a hybrid search (dense + sparse) retrieval pipeline over a vector store with Matryoshka-reduced embeddings; integrated trace-level logging of chunk retrieval, reranking, and context assembly for root-cause analysis of failure modes.</li>
-                            <li>Productionized the system with a FastAPI inference layer with /query, /trace, and /eval endpoints, a React-based observability UI, and Docker containerization.</li>
+                            <li>Built a production-grade GenAI observability platform for end-to-end RAG pipeline monitoring: retrieval quality, LLM faithfulness, and latency tracking — surfaced via a real-time evaluation dashboard designed for enterprise deployment.</li>
+                            <li>LLM-as-a-Judge framework: Implemented multi-model evaluation council (Claude, GPT-4o, Gemini) scoring faithfulness, answer relevance, context recall, groundedness, and coherence against ground-truth; automated regression detection across pipeline versions.</li>
+                            <li>Retrieval engineering: Hybrid search (dense + sparse) over a vector store with Matryoshka-reduced embeddings; trace-level logging of chunk retrieval, reranking, and context assembly for root-cause analysis of failure modes (context miss, hallucination, retrieval rank drift).</li>
+                            <li>Productionization: FastAPI inference layer with /query, /trace, and /eval endpoints; React-based observability UI; Docker.</li>
                         </ul>
                     </div>
                 </div>
