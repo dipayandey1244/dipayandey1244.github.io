@@ -1,28 +1,33 @@
 /* Design Tokens & Theme Variables */
 :root {
-    --bg-primary: #070a13;
-    --bg-card: rgba(18, 25, 47, 0.6);
-    --bg-card-hover: rgba(25, 35, 65, 0.8);
-    --bg-terminal: #02050c;
+    --bg-primary: #0b0a09;
+    --bg-card: rgba(22, 20, 18, 0.7);
+    --bg-card-hover: rgba(30, 27, 24, 0.85);
+    --bg-terminal: #050504;
     
-    --border-color: rgba(255, 255, 255, 0.08);
-    --border-glow: rgba(99, 102, 241, 0.2);
-    --border-focus: #3b82f6;
+    --border-color: rgba(230, 220, 200, 0.08);
+    --border-glow: rgba(255, 86, 48, 0.35);
+    --border-focus: #ff5630;
     
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --text-muted: #64748b;
+    --text-primary: #f4f0ea;
+    --text-secondary: #b0a89f;
+    --text-muted: #7c756c;
     
-    --color-primary: #3b82f6;
+    --color-primary: #ff5630;
     --color-success: #10b981;
     --color-warning: #f59e0b;
     --color-danger: #ef4444;
-    --color-purple: #a78bfa;
-    --color-orange: #f97316;
+    --color-purple: #c084fc;
+    --color-orange: #ff5630;
     
     --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-serif: 'Lora', Georgia, serif;
     --font-mono: 'JetBrains Mono', monospace;
     --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+h1, h2, h3, .logo-text h2, .page-title-area h1, .card-header h2, .panel-title, .nav-item span {
+    font-family: var(--font-serif);
 }
 
 /* Base Styles */

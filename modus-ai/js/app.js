@@ -11,7 +11,33 @@ let weightGemini = 0.3;
 
 let isSimulating = false;
 let activeTab = 'playground';
-let runResult = null;
+
+const defaultRunResult = {
+    query: 'Retrieve safaricom M-Pesa transaction limit',
+    latency: {
+        embeddings: 45,
+        retrieval: 85,
+        reranking: 90,
+        generation: 280,
+        total: 540
+    },
+    scores: {
+        faithfulness: 0.95,
+        relevance: 0.92,
+        recall: 0.90,
+        groundedness: 0.94,
+        coherence: 0.96
+    },
+    council: {
+        claude: { faithfulness: 0.95, relevance: 0.92, recall: 0.90, groundedness: 0.94, coherence: 0.96 },
+        gpt: { faithfulness: 0.93, relevance: 0.94, recall: 0.88, groundedness: 0.92, coherence: 0.95 },
+        gemini: { faithfulness: 0.96, relevance: 0.90, recall: 0.92, groundedness: 0.95, coherence: 0.94 }
+    },
+    failureMode: null,
+    output: 'The premium transaction limit for Safaricom M-Pesa is 150,000 KES per transaction, with a maximum daily limit of 300,000 KES.'
+};
+
+let runResult = defaultRunResult;
 let consensusChart = null;
 
 // Trace Nodes Expansion State
@@ -59,6 +85,10 @@ function init() {
     retrievalSelect = document.getElementById('retrievalSelect');
     dimToggle = document.getElementById('dimToggle');
     rerankToggle = document.getElementById('rerankToggle');
+
+    // Populate top bar with default loaded data
+    topLatencyVal.innerHTML = `<i class="fa-regular fa-clock"></i> 540 ms`;
+    topScoreVal.innerHTML = `<i class="fa-solid fa-circle-check"></i> 95 %`;
 
     setupEventListeners();
     renderActiveTab();
@@ -122,7 +152,7 @@ function renderActiveTab() {
         activeTabDesc.innerText = "Intercept standard API response payloads for downstream enterprise integrations.";
         renderPayload();
     } else if (activeTab === 'databricks') {
-        activeTabTitle.innerText = "Databricks & Spark";
+        activeTabTitle.innerText = "Lakehouse & Spark Integration";
         activeTabDesc.innerText = "Blueprint detailing MLflow Auto-log, Delta lake streaming, and Lakehouse Monitor alerts.";
         renderDatabricks();
     }
@@ -864,7 +894,7 @@ function renderPayload() {
 }
 
 // ----------------------------------------------------
-// DATABRICKS BLUEPRINT VIEW
+// INTEGRATION BLUEPRINT VIEW
 // ----------------------------------------------------
 function renderDatabricks() {
     viewport.innerHTML = `
@@ -872,11 +902,11 @@ function renderDatabricks() {
             <div class="databricks-card mlflow">
                 <h4><i class="fa-solid fa-chart-line"></i> 1. MLflow Trace Logging</h4>
                 <p>
-                    Modus AI intercepts API gateway calls and pushes nested spans to your Databricks MLflow tracking server. This logs similarity matches, embedding times, and LLM evaluations inside unified client runs.
+                    Modus AI intercepts API gateway calls and pushes nested spans to your MLflow tracking server. This logs similarity matches, embedding times, and LLM evaluations inside unified client runs.
                 </p>
                 <div class="code-snippet">
                     <pre><code>import mlflow
-mlflow.set_tracking_uri("databricks")
+mlflow.set_tracking_uri("http://localhost:5000")
 mlflow.autolog(log_traces=True)</code></pre>
                 </div>
             </div>
@@ -901,7 +931,7 @@ mlflow.autolog(log_traces=True)</code></pre>
             <div class="databricks-card monitoring">
                 <h4><i class="fa-solid fa-triangle-exclamation"></i> 3. Lakehouse Monitor Alerts</h4>
                 <p>
-                    Databricks Lakehouse Monitoring tracks population stability index (PSI) values and alert limits, automatically dispatching alert emails to the FDE solutions desk if drift rises above thresholds.
+                    Lakehouse Monitoring tracks population stability index (PSI) values and alert limits, automatically dispatching alert emails to the solutions desk if drift rises above thresholds.
                 </p>
             </div>
         </div>
