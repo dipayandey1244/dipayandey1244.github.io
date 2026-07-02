@@ -748,6 +748,33 @@
 
                 </div>
             </div>
+
+            <!-- Key Projects Section -->
+            <div class="resume-section">
+                <h2 class="section-title"><i class="fa-solid fa-code"></i> Key Projects</h2>
+                <div class="timeline">
+                    <!-- Modus AI -->
+                    <div class="timeline-item">
+                        <div class="timeline-node"></div>
+                        <div class="timeline-header">
+                            <div class="company-role">
+                                <h3>Modus AI</h3>
+                                <div class="company">GenAI Observability Platform</div>
+                            </div>
+                            <div class="location-date">
+                                <div>India</div>
+                                <div class="date">GitHub Project</div>
+                            </div>
+                        </div>
+                        <ul class="timeline-list">
+                            <li>Built a production-grade GenAI observability platform for end-to-end RAG pipeline monitoring (retrieval quality, LLM faithfulness, and latency tracking) surfaced via a real-time evaluation dashboard designed for enterprise deployment.</li>
+                            <li>Implemented an LLM-as-a-Judge framework utilizing a multi-model evaluation council (Claude, GPT-4o, Gemini) scoring faithfulness, answer relevance, context recall, groundedness, and coherence against ground-truth; automated regression detection across pipeline versions.</li>
+                            <li>Designed a hybrid search (dense + sparse) retrieval pipeline over a vector store with Matryoshka-reduced embeddings; integrated trace-level logging of chunk retrieval, reranking, and context assembly for root-cause analysis of failure modes.</li>
+                            <li>Productionized the system with a FastAPI inference layer with /query, /trace, and /eval endpoints, a React-based observability UI, and Docker containerization.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
             
             <!-- Skills Section -->
             <div class="resume-section">
