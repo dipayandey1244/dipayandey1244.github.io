@@ -181,7 +181,7 @@
       <div class="nav-section">
         <div class="nav-section-label">Lakehouse Monitors</div>
         <div class="nav-item active" data-tab="overview"><i class="ti ti-layout-dashboard"></i> Telemetry Overview</div>
-        <div class="nav-item" data-tab="pipelines"><i class="ti ti-chart-line"></i> Medallion Ingestion</div>
+        <div class="nav-item" data-tab="sql-console"><i class="ti ti-terminal"></i> Lakehouse SQL Console</div>
         <div class="nav-item" data-tab="catalog"><i class="ti ti-database"></i> Unity Catalog Lineage</div>
       </div>
       <div class="nav-section">
@@ -305,33 +305,38 @@
       </div>
     </div>
 
-    <!-- 2. MEDALLION PIPELINES TAB -->
-    <div class="content" id="tab-pipelines" style="display:none;">
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title">Medallion Layer Specifications & Auto Loader Telemetry</div>
+    <!-- 2. LAKEHOUSE SQL CONSOLE TAB -->
+    <div class="content" id="tab-sql-console" style="display:none;">
+      <div class="grid-2" style="grid-template-columns: 1.15fr 1.5fr;">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Query Editor</div>
+          </div>
+          <div class="form-group">
+            <label>Query Templates</label>
+            <select class="form-select" id="sql-template-select" onchange="applySQLTemplate()">
+              <option value="cust_country">List average balance by country</option>
+              <option value="tx_cat">Analyze transaction sums by category</option>
+              <option value="wealth_retail">Get Wealth segment customers</option>
+              <option value="high_val_join">Join high-value transactions and customer segments</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>SQL Editor</label>
+            <textarea class="form-textarea" id="sql-editor-input" rows="8" style="font-family: monospace; font-size: 11px;">SELECT Country, AVG(Balance) FROM customer_master GROUP BY Country;</textarea>
+          </div>
+          <button class="run-btn" id="sql-run-btn" onclick="runSQLQuery()" style="width:100%; justify-content:center; padding:10px;">
+            <i class="ti ti-terminal"></i> Execute SQL on Lakehouse
+          </button>
         </div>
-        <div class="trace-list">
-          <div class="trace-item" style="cursor:default;">
-            <div class="trace-badge badge-pass">Bronze</div>
-            <div class="trace-body">
-              <div class="trace-q">Ingestion: Kafka Streams + Auto Loader (cloudFiles)</div>
-              <div class="trace-meta"><span>Schema: Inference Enabled</span><span>Target format: Delta Lake</span></div>
-            </div>
+
+        <div class="panel" style="display:flex; flex-direction:column;">
+          <div class="panel-header">
+            <div class="panel-title">Execution Results</div>
+            <div id="sql-meta-stats" style="font-size: 10px; color: var(--text-muted);">0 rows · 0ms</div>
           </div>
-          <div class="trace-item" style="cursor:default;">
-            <div class="trace-badge badge-pass">Silver</div>
-            <div class="trace-body">
-              <div class="trace-q">Cleaning: Deduplication via `dropDuplicates` + PII Encryption</div>
-              <div class="trace-meta"><span>Data quality: Great Expectations assertions</span><span>Format: Liquid Clustering</span></div>
-            </div>
-          </div>
-          <div class="trace-item" style="cursor:default;">
-            <div class="trace-badge badge-pass">Gold</div>
-            <div class="trace-body">
-              <div class="trace-q">Aggregates: Z-Ordered feature store tables + ML-ready schemas</div>
-              <div class="trace-meta"><span>Target compute: Photon Serverless SQL</span><span>Latency: P95 < 200ms</span></div>
-            </div>
+          <div id="sql-results-view" style="overflow-x: auto; flex: 1; min-height: 250px; background: #07080b; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 10.5px; border: 0.5px solid var(--border);">
+            Execute a query to view live records from the datasets.
           </div>
         </div>
       </div>
@@ -908,6 +913,212 @@
         }
       });
     }
+  }
+
+  // --- SQL QUERY CONSOLE ENGINE ---
+  const localCustomers = [
+    { Customer_ID: 10001, Name: "Customer_10001", Segment: "Retail", Country: "USA", Join_Date: "2024-01-15", Balance: 45000.50 },
+    { Customer_ID: 10002, Name: "Customer_10002", Segment: "Wealth", Country: "USA", Join_Date: "2023-11-22", Balance: 154000.00 },
+    { Customer_ID: 10003, Name: "Customer_10003", Segment: "Corporate", Country: "India", Join_Date: "2024-03-01", Balance: 890000.20 },
+    { Customer_ID: 10004, Name: "Customer_10004", Segment: "Retail", Country: "India", Join_Date: "2025-05-12", Balance: 12000.00 },
+    { Customer_ID: 10005, Name: "Customer_10005", Segment: "SME", Country: "UK", Join_Date: "2023-08-19", Balance: 62000.10 },
+    { Customer_ID: 10006, Name: "Customer_10006", Segment: "Wealth", Country: "UK", Join_Date: "2024-02-10", Balance: 320000.00 },
+    { Customer_ID: 10007, Name: "Customer_10007", Segment: "Retail", Country: "Germany", Join_Date: "2025-01-05", Balance: 8400.00 },
+    { Customer_ID: 10008, Name: "Customer_10008", Segment: "SME", Country: "Germany", Join_Date: "2024-07-21", Balance: 145000.80 },
+    { Customer_ID: 10009, Name: "Customer_10009", Segment: "Retail", Country: "Singapore", Join_Date: "2023-10-30", Balance: 23000.40 },
+    { Customer_ID: 10010, Name: "Customer_10010", Segment: "Wealth", Country: "Singapore", Join_Date: "2024-06-14", Balance: 480000.00 }
+  ];
+
+  const localTransactions = [
+    { Transaction_ID: 500001, Customer_ID: 10001, Amount: 150.25, Category: "Shopping", Timestamp: "2026-06-01 10:20:00", Status: "Completed" },
+    { Transaction_ID: 500002, Customer_ID: 10001, Amount: 45.50, Category: "Dining", Timestamp: "2026-06-02 18:45:00", Status: "Completed" },
+    { Transaction_ID: 500003, Customer_ID: 10002, Amount: 1200.00, Category: "Investment", Timestamp: "2026-06-02 09:00:00", Status: "Completed" },
+    { Transaction_ID: 500004, Customer_ID: 10003, Amount: 15000.00, Category: "Transfer", Timestamp: "2026-06-03 14:15:00", Status: "Completed" },
+    { Transaction_ID: 500005, Customer_ID: 10004, Amount: 85.10, Category: "Utilities", Timestamp: "2026-06-03 11:30:00", Status: "Completed" },
+    { Transaction_ID: 500006, Customer_ID: 10005, Amount: 320.00, Category: "Shopping", Timestamp: "2026-06-04 16:00:00", Status: "Pending" },
+    { Transaction_ID: 500007, Customer_ID: 10006, Amount: 5000.00, Category: "Investment", Timestamp: "2026-06-04 10:05:00", Status: "Completed" },
+    { Transaction_ID: 500008, Customer_ID: 10007, Amount: 12.40, Category: "Dining", Timestamp: "2026-06-05 20:30:00", Status: "Completed" },
+    { Transaction_ID: 500009, Customer_ID: 10008, Amount: 2450.00, Category: "Transfer", Timestamp: "2026-06-05 13:50:00", Status: "Completed" },
+    { Transaction_ID: 500010, Customer_ID: 10009, Amount: 95.00, Category: "Utilities", Timestamp: "2026-06-06 08:10:00", Status: "Failed" }
+  ];
+
+  const sqlTemplates = {
+    cust_country: "SELECT Country, AVG(Balance) FROM customer_master GROUP BY Country;",
+    tx_cat: "SELECT Category, SUM(Amount) FROM transactions GROUP BY Category;",
+    wealth_retail: "SELECT Name, Segment, Country, Balance FROM customer_master WHERE Segment = 'Wealth' LIMIT 5;",
+    high_val_join: "SELECT c.Name, t.Category, t.Amount FROM transactions t JOIN customer_master c ON t.Customer_ID = c.Customer_ID LIMIT 10;"
+  };
+
+  function applySQLTemplate() {
+    const template = document.getElementById('sql-template-select').value;
+    if (sqlTemplates[template]) {
+      document.getElementById('sql-editor-input').value = sqlTemplates[template];
+    }
+  }
+
+  function runSQLQuery() {
+    const sql = document.getElementById('sql-editor-input').value;
+    const view = document.getElementById('sql-results-view');
+    const stats = document.getElementById('sql-meta-stats');
+    const runBtn = document.getElementById('sql-run-btn');
+
+    if (!sql.trim()) {
+      alert("Please enter a SQL query!");
+      return;
+    }
+
+    runBtn.disabled = true;
+    view.innerHTML = `<i class="ti ti-loader fa-spin"></i> Executing SQL on Northstar cluster compute...`;
+
+    const backendUrl = localStorage.getItem('modus_backend_url') || '';
+
+    if (backendUrl) {
+      fetch(`${backendUrl}/api/v1/query-data`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sql })
+      })
+      .then(res => {
+        if (!res.ok) return res.json().then(err => { throw new Error(err.detail || 'Query failed') });
+        return res.json();
+      })
+      .then(data => {
+        stats.innerText = `${data.total_rows} rows · ${data.elapsed_ms}ms`;
+        renderSQLResultTable(data.columns, data.records);
+        runBtn.disabled = false;
+      })
+      .catch(err => {
+        view.innerHTML = `<span style="color:var(--text-danger);"><i class="ti ti-alert-triangle"></i> SQL Error: ${err.message}</span>`;
+        runBtn.disabled = false;
+      });
+      return;
+    }
+
+    setTimeout(() => {
+      try {
+        const start = performance.now();
+        const res = executeLocalSQL(sql);
+        const elapsed = Math.round(performance.now() - start);
+        
+        if (res.error) {
+          view.innerHTML = `<span style="color:var(--text-danger);"><i class="ti ti-alert-triangle"></i> SQL Error: ${res.error}</span>`;
+        } else {
+          stats.innerText = `${res.records.length} rows · ${elapsed}ms (Static Sandbox)`;
+          renderSQLResultTable(res.columns, res.records);
+        }
+      } catch (e) {
+        view.innerHTML = `<span style="color:var(--text-danger);"><i class="ti ti-alert-triangle"></i> Parser Error: ${e.message}</span>`;
+      }
+      runBtn.disabled = false;
+    }, 400);
+  }
+
+  function executeLocalSQL(sql) {
+    let cleanSql = sql.replace(/\\s+/g, ' ').trim();
+    let queryLower = cleanSql.toLowerCase();
+
+    let table = "";
+    if (queryLower.includes("customer_master")) table = "customer_master";
+    else if (queryLower.includes("transactions")) table = "transactions";
+    else return { error: "Table not found. Supported tables: customer_master, transactions" };
+
+    let sourceData = table === "customer_master" ? localCustomers : localTransactions;
+    let data = JSON.parse(JSON.stringify(sourceData));
+
+    if (queryLower.includes("where")) {
+      let wherePart = cleanSql.split(/where/i)[1].split(/group by|limit/i)[0].trim();
+      let parts = wherePart.split("=");
+      if (parts.length === 2) {
+        let col = parts[0].trim();
+        let val = parts[1].replace(/['"]/g, "").trim();
+        data = data.filter(r => String(r[col]) === val);
+      }
+    }
+
+    if (queryLower.includes("join")) {
+      let joined = [];
+      localTransactions.forEach(tx => {
+        let cust = localCustomers.find(c => c.Customer_ID === tx.Customer_ID);
+        if (cust) {
+          joined.push({
+            "Name": cust.Name,
+            "Segment": cust.Segment,
+            "Category": tx.Category,
+            "Amount": tx.Amount,
+            "Status": tx.Status
+          });
+        }
+      });
+      data = joined;
+    }
+
+    if (queryLower.includes("group by")) {
+      let groupByPart = cleanSql.split(/group by/i)[1].split(/limit/i)[0].trim().replace(";", "");
+      let selectFields = cleanSql.split(/select/i)[1].split(/from/i)[0].trim().split(",");
+      
+      let aggCol = "", aggFunc = "";
+      selectFields.forEach(f => {
+        let fl = f.toLowerCase();
+        if (fl.includes("sum(")) { aggFunc = "sum"; aggCol = f.match(/\\(([^)]+)\\)/)[1].trim(); }
+        if (fl.includes("avg(")) { aggFunc = "avg"; aggCol = f.match(/\\(([^)]+)\\)/)[1].trim(); }
+        if (fl.includes("count(")) { aggFunc = "count"; }
+      });
+
+      let groups = {};
+      data.forEach(r => {
+        let key = r[groupByPart];
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(r);
+      });
+
+      let results = [];
+      for (let key in groups) {
+        let row = {};
+        row[groupByPart] = key;
+        let vals = groups[key];
+        
+        if (aggFunc === "sum") {
+          let sum = vals.reduce((s, x) => s + (parseFloat(x[aggCol]) || 0), 0);
+          row[`SUM(\${aggCol})`] = parseFloat(sum.toFixed(2));
+        } else if (aggFunc === "avg") {
+          let sum = vals.reduce((s, x) => s + (parseFloat(x[aggCol]) || 0), 0);
+          row[`AVG(\${aggCol})`] = parseFloat((sum / vals.length).toFixed(2));
+        } else if (aggFunc === "count") {
+          row["COUNT(*)"] = vals.length;
+        } else {
+          row["Records"] = vals.length;
+        }
+        results.push(row);
+      }
+      data = results;
+    }
+
+    if (queryLower.includes("limit")) {
+      let limitParts = cleanSql.split(/limit/i);
+      let limitVal = parseInt(limitParts[1].replace(";", "").trim());
+      if (!isNaN(limitVal)) {
+        data = data.slice(0, limitVal);
+      }
+    }
+
+    return { columns: Object.keys(data[0] || {}), records: data };
+  }
+
+  function renderSQLResultTable(columns, records) {
+    const view = document.getElementById('sql-results-view');
+    if (!records || records.length === 0) {
+      view.innerHTML = `<span style="color:var(--text-secondary);">Query returned 0 records.</span>`;
+      return;
+    }
+
+    let html = `<table class="system-table" style="width: 100%; border-collapse: collapse;">`;
+    html += `<thead><tr>` + columns.map(c => `<th style="border-bottom: 2px solid var(--border-strong); padding: 6px 12px; text-align: left;">\${c}</th>`).join('') + `</tr></thead>`;
+    html += `<tbody>`;
+    records.forEach(r => {
+      html += `<tr>` + columns.map(c => `<td style="padding: 6px 12px; border-bottom: 0.5px solid var(--border);">\${r[c] !== undefined ? r[c] : ''}</td>`).join('') + `</tr>`;
+    });
+    html += `</tbody></table>`;
+    view.innerHTML = html;
   }
 
   // Startup Init
