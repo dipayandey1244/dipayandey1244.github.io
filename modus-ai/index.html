@@ -439,6 +439,10 @@
               <option value="standard">Standard: M-Pesa Transaction Limits</option>
               <option value="security">Attack: SYSTEM BYPASS Override</option>
               <option value="hallucination">Hallucination: Price Prediction</option>
+              <option value="foxsports">Fox Sports: Live Event Search Query Ingestion</option>
+              <option value="jpmc">JPMC: Petabyte Data Lakehouse Migration Audit</option>
+              <option value="qualcomm">Qualcomm: Production Agentic Workflow Verification</option>
+              <option value="spokane">City of Spokane: Automated ETL & Infrastructure Audit</option>
             </select>
           </div>
 
@@ -1049,6 +1053,30 @@ mlflow.autolog(log_traces=True)</pre>
       strategy: "sparse",
       dim: "256",
       rerank: true
+    },
+    foxsports: {
+      query: "Explain search optimization and partitioning metrics co-built for Fox Sports processing 200,000+ live concurrent requests.",
+      strategy: "hybrid",
+      dim: "256",
+      rerank: true
+    },
+    jpmc: {
+      query: "Audit migration pipelines for 5 petabytes of compliance tables and 500 notebooks on Databricks Data Intelligence Platform.",
+      strategy: "dense",
+      dim: "1536",
+      rerank: true
+    },
+    qualcomm: {
+      query: "Verify safety guardrails and latency bounds of the Qualcomm production agentic model reducing workflows to minutes.",
+      strategy: "hybrid",
+      dim: "256",
+      rerank: true
+    },
+    spokane: {
+      query: "Analyze Spokane automated ETL pipelines across GIS, finance and permits verifying the 80% deduplication and 50% savings.",
+      strategy: "sparse",
+      dim: "256",
+      rerank: false
     }
   };
 
@@ -1222,6 +1250,11 @@ mlflow.autolog(log_traces=True)</pre>
       setTimeout(() => {
         let isSecurity = query.includes('SYSTEM BYPASS');
         let isHallucination = query.includes('speculative price');
+        let isFoxSports = query.includes('Fox Sports');
+        let isJPMC = query.includes('5 petabytes');
+        let isQualcomm = query.includes('Qualcomm');
+        let isSpokane = query.includes('Spokane');
+
         let status = "PASS", score = 0.92;
         let modelOutput = "The daily transaction limit is 300,000 KES.";
 
@@ -1233,6 +1266,22 @@ mlflow.autolog(log_traces=True)</pre>
           status = "WARN";
           score = 0.65;
           modelOutput = "No speculative predictions are permitted under financial guidelines.";
+        } else if (isFoxSports) {
+          status = "PASS";
+          score = 0.96;
+          modelOutput = "Fox Sports search query latency optimized by co-building high-throughput search partitions; search success rate doubled during live event workloads exceeding 200,000 requests.";
+        } else if (isJPMC) {
+          status = "PASS";
+          score = 0.94;
+          modelOutput = "JPMC data lake migration completed: 5 petabytes of schemas and 500 notebooks migrated to Databricks Data Intelligence Platform in 4 months with full ACID transaction checks.";
+        } else if (isQualcomm) {
+          status = "PASS";
+          score = 0.97;
+          modelOutput = "Qualcomm production agentic system validated: multi-day engineering workflows reduced to minutes with safety guardrails and trace limits successfully audited.";
+        } else if (isSpokane) {
+          status = "PASS";
+          score = 0.95;
+          modelOutput = "City of Spokane ETL automated: duplicate data records reduced by 80%, infrastructure costs reduced by 50% across permit, GIS, and financial data sources.";
         }
 
         const mockEval = {
