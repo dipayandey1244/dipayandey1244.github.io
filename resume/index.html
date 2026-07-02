@@ -759,7 +759,7 @@
                         <div class="timeline-header">
                             <div class="company-role">
                                 <h3>Modus AI</h3>
-                                <div class="company">GenAI Observability Platform</div>
+                                <div class="company">GenAI Observability &amp; Lakehouse Control Center</div>
                             </div>
                             <div class="location-date">
                                 <div>India</div>
@@ -767,10 +767,10 @@
                             </div>
                         </div>
                         <ul class="timeline-list">
-                            <li><strong>Lakehouse Observability</strong>: Architected a production-grade GenAI observability platform for end-to-end RAG pipeline telemetry, streaming trace-level logs via Delta Live Tables (DLT) and structured streaming into Delta Lake for near-zero latency retrieval, LLM faithfulness, and latency auditing.</li>
-                            <li><strong>LLM-as-a-Judge Council</strong>: Implemented an enterprise-grade LLM-as-a-Judge council (Claude, GPT-4o, Gemini) integrated with MLflow Tracing and MLflow Autologging to calculate weighted RAG consensus metrics (faithfulness, context recall, coherence); automated regression and drift detection on production deployments.</li>
-                            <li><strong>Retrieval Scaling</strong>: Engineered a high-performance hybrid search (dense vector + sparse BM25) retrieval pipeline scaling over multi-million row catalogs with Matryoshka-reduced embeddings and Cohere Rerank; optimized Spark vector lookup plans and query times by 65%.</li>
-                            <li><strong>Governance & Deploy</strong>: Productionized the inference layer utilizing a FastAPI Gateway with token-level rate limiting, governed under Databricks Unity Catalog for strict data access controls, and containerized via Docker for Kubernetes deployment.</li>
+                            <li>Built a production-grade GenAI observability platform on Databricks Lakehouse for end-to-end RAG telemetry and pipeline monitoring, ingesting trace-level logs via Structured Streaming into Delta Lake to audit retrieval quality, latency, and LLM faithfulness.</li>
+                            <li>LLM-as-a-Judge Framework: Implemented a multi-model evaluation council integrated with MLflow Tracing and an agentic LangGraph Co-pilot (Spark Code Generator, SQL Optimizer, Pipeline Debugger) scoring faithfulness, recall, and groundedness against ground-truth.</li>
+                            <li>Retrieval Engineering: Engineered a high-performance interactive SQL console and Spark Root Cause Analyzer executing ad-hoc queries, joins, and custom CSV datasets over a client-side database compiler and an in-memory SQLite backend.</li>
+                            <li>Productionization: FastAPI inference gateway with /api/v1/copilot and /api/v1/query-data endpoints; React-based observability control center; containerized via Docker and deployed to mirror Databricks Professional Services rollout standards.</li>
                         </ul>
                     </div>
                 </div>
