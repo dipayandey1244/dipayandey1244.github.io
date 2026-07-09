@@ -247,15 +247,17 @@
             border: 1px solid rgba(46, 79, 36, 0.25);
         }
         
-        /* Ghibli Light Theme overrides */
+        /* Ghibli Light Theme overrides (Notebook Journal Page) */
         body.theme-ghibli {
             background-color: #faf9f6;
             color: #1c1917;
+            font-family: Georgia, serif;
         }
         
         body.theme-ghibli nav.main-nav {
             background: #faf9f6;
             border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            font-family: Georgia, serif;
         }
         
         body.theme-ghibli nav.main-nav a {
@@ -279,34 +281,92 @@
         
         body.theme-ghibli .logo {
             color: #1c1917 !important;
+            font-family: Georgia, serif;
         }
         
-        body.theme-ghibli .container,
+        body.theme-ghibli .container {
+            display: block; /* Stacks the split layout */
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 50px;
+            background: #fdfcf7;
+            border: 2px solid #57534e;
+            border-radius: 12px 24px 18px 24px;
+            box-shadow: 15px 15px 0px #e7e3d4;
+            position: relative;
+        }
+        
+        /* Notebook margin red line */
+        body.theme-ghibli .container::after {
+            content: "";
+            position: absolute;
+            top: 0; bottom: 0; left: 45px;
+            width: 1px;
+            background: rgba(220, 38, 38, 0.2);
+            pointer-events: none;
+        }
+        
         body.theme-ghibli .text-container,
         body.theme-ghibli .image-container {
-            background: #faf9f6;
+            width: 100%;
+            background: transparent !important;
+            padding: 10px 0 10px 40px;
+            border: none;
+            box-shadow: none;
+        }
+        
+        body.theme-ghibli .hero-image {
+            max-width: 320px;
+            margin: 0 auto 30px auto;
+            border-radius: 12px 18px 8px 14px;
+            border: 2px solid #57534e;
+            box-shadow: 6px 6px 0px #e7e3d4;
+        }
+        
+        body.theme-ghibli .hero-image img {
+            border-radius: 10px 16px 6px 12px;
+        }
+        
+        body.theme-ghibli .hero-image::after {
+            display: none; /* Remove cyber gradient fade */
         }
         
         body.theme-ghibli .author-container {
             color: #1c1917;
+            text-align: center;
+            margin-bottom: 40px;
         }
         
         body.theme-ghibli .author-container .author {
             color: #1c1917;
+            font-family: Georgia, serif;
+            font-size: 3.5rem;
+            letter-spacing: -1px;
+            text-shadow: none;
         }
         
         body.theme-ghibli .author-container .role {
             color: #d97706;
+            font-family: Georgia, serif;
             opacity: 1;
+            font-size: 1.3rem;
+            border-bottom: 1px dashed rgba(87, 83, 78, 0.2);
+            padding-bottom: 16px;
+            max-width: 400px;
+            margin: 8px auto 20px auto;
         }
         
         body.theme-ghibli .image-text {
             color: #44403c;
             opacity: 1;
+            font-family: Georgia, serif;
+            line-height: 1.8;
+            text-align: left;
         }
         
         body.theme-ghibli .image-text a {
             color: #d97706;
+            font-weight: bold;
         }
         
         body.theme-ghibli .image-text a:hover {
@@ -317,11 +377,18 @@
         body.theme-ghibli .studies-container h3 {
             color: #57534e;
             opacity: 1;
+            font-family: Georgia, serif;
+            border-bottom: 2px solid #57534e;
+            padding-bottom: 8px;
+            text-transform: none;
+            letter-spacing: 0;
+            font-size: 1.4rem;
         }
         
         body.theme-ghibli figure.thumb h2 {
             color: #57534e;
             opacity: 0.8;
+            font-family: Georgia, serif;
         }
         
         body.theme-ghibli figure.thumb:hover h2 {
@@ -332,7 +399,7 @@
         body.theme-ghibli .system-cover {
             border-radius: 8px 16px 16px 8px;
             border: 2px solid #57534e;
-            box-shadow: 6px 12px 24px rgba(0,0,0,0.15);
+            box-shadow: 6px 12px 24px rgba(0,0,0,0.1);
             background: #fdfaf2;
         }
         
@@ -350,7 +417,7 @@
         }
         
         body.theme-ghibli .system-cover .cover-title {
-            font-family: 'Outfit', sans-serif;
+            font-family: Georgia, serif;
             color: #57534e !important;
             font-size: 1.05rem;
             line-height: 1.3;
@@ -358,13 +425,16 @@
         
         body.theme-ghibli .system-cover .metadata {
             color: #878580 !important;
-            font-family: 'Outfit', sans-serif;
+            font-family: Georgia, serif;
         }
         
         body.theme-ghibli .system-cover .tag {
             background: rgba(223, 177, 91, 0.12);
             color: #d97706 !important;
             border-color: rgba(223, 177, 91, 0.25);
+            font-family: Georgia, serif;
+            letter-spacing: 0;
+            text-transform: none;
         }
         
         body.theme-ghibli .system-cover.risk-engine { background: #fbf6eb; }
@@ -383,20 +453,24 @@
         body.theme-ghibli .system-card {
             background: #ffffff;
             border-color: rgba(0, 0, 0, 0.08);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            border-radius: 12px 18px 8px 14px;
+            border: 2px solid #57534e;
+            box-shadow: 4px 4px 0px #e7e3d4;
         }
         
         body.theme-ghibli .system-card:hover {
             border-color: #dfb15b;
-            box-shadow: 0 10px 30px rgba(223, 177, 91, 0.15);
+            box-shadow: 8px 8px 0px rgba(223, 177, 91, 0.2);
         }
         
         body.theme-ghibli .system-card h4 {
             color: #1c1917;
+            font-family: Georgia, serif;
         }
         
         body.theme-ghibli .system-card p {
             color: #57534e;
+            font-family: Georgia, serif;
         }
         
         body.theme-ghibli .system-card .badge {
@@ -407,15 +481,16 @@
         
         body.theme-ghibli .study-card {
             background: #ffffff;
-            border-color: rgba(0, 0, 0, 0.08);
+            border-radius: 12px 18px 8px 14px;
+            border: 2px solid #57534e;
             color: #1c1917;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+            box-shadow: 4px 4px 0px #e7e3d4;
         }
         
         body.theme-ghibli .study-card:hover {
             border-color: #dfb15b;
             color: #d97706;
-            box-shadow: 0 6px 20px rgba(223, 177, 91, 0.15);
+            box-shadow: 6px 6px 0px rgba(223, 177, 91, 0.2);
         }
         
         body.theme-ghibli .study-card i {
@@ -424,37 +499,48 @@
         
         body.theme-ghibli .section-title {
             color: #1c1917;
-            border-bottom-color: rgba(0, 0, 0, 0.08);
+            border-bottom: 2px solid #57534e;
+            font-family: Georgia, serif;
+            font-size: 1.8rem;
+            text-transform: none;
+            letter-spacing: 0;
+            padding-bottom: 8px;
+            margin-top: 40px;
         }
         
         body.theme-ghibli .thoughts-item-ai {
             background: #ffffff;
-            border-color: rgba(0, 0, 0, 0.08);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+            border-radius: 12px 18px 8px 14px;
+            border: 2px solid #57534e;
+            box-shadow: 4px 4px 0px #e7e3d4;
             color: #1c1917;
         }
         
         body.theme-ghibli .thoughts-item-ai h3 {
             color: #1c1917;
+            font-family: Georgia, serif;
         }
         
         body.theme-ghibli .thoughts-item-ai:hover {
             border-color: #dfb15b;
-            box-shadow: 0 10px 30px rgba(223, 177, 91, 0.15);
+            box-shadow: 8px 8px 0px rgba(223, 177, 91, 0.25);
         }
         
         body.theme-ghibli .audit-title {
             color: #1c1917;
+            font-family: Georgia, serif;
         }
         
         body.theme-ghibli .audit-meta,
         body.theme-ghibli .audit-summary {
             color: #57534e;
+            font-family: Georgia, serif;
         }
         
         body.theme-ghibli .audit-thumbnail {
             background: #fcfbfa;
-            border-color: rgba(0, 0, 0, 0.06);
+            border: 1px dashed #57534e;
+            border-radius: 8px;
         }
         
         body.theme-ghibli .audit-thumbnail .emblem {
@@ -463,34 +549,46 @@
         }
         
         body.theme-ghibli .timeline-item {
-            border-left-color: rgba(0, 0, 0, 0.08);
+            border-left: 2px dashed #878580;
+            padding-left: 30px;
         }
         
         body.theme-ghibli .timeline-item::before {
             background: #faf9f6;
-            border-color: #dfb15b;
+            border: 2px solid #dfb15b;
+            width: 12px;
+            height: 12px;
+            left: -8px;
         }
         
         body.theme-ghibli ._date {
             color: #d97706;
+            font-family: Georgia, serif;
+            font-weight: bold;
         }
         
         body.theme-ghibli ._institution h3 {
             color: #1c1917;
+            font-family: Georgia, serif;
         }
         
         body.theme-ghibli ._summary {
             color: #44403c;
+            font-family: Georgia, serif;
         }
         
         body.theme-ghibli ._desc {
             color: #57534e;
+            font-family: Georgia, serif;
+            line-height: 1.6;
         }
         
         body.theme-ghibli ._bubble {
             background: #faf9f6;
-            border-color: rgba(0,0,0,0.08);
+            border: 2px solid #57534e;
             color: #d97706;
+            width: 44px;
+            height: 44px;
         }
         
         body.theme-ghibli .list-item:hover ._bubble {
@@ -501,18 +599,22 @@
         
         body.theme-ghibli .list-detail ._title-block h3 {
             color: #1c1917;
+            font-family: Georgia, serif;
         }
         
         body.theme-ghibli .list-detail ._summary {
             color: #d97706;
+            font-family: Georgia, serif;
         }
         
         body.theme-ghibli .list-detail p._desc {
             color: #57534e;
+            font-family: Georgia, serif;
         }
         
         body.theme-ghibli .list-detail ul li {
             color: #57534e;
+            font-family: Georgia, serif;
         }
         
         body.theme-ghibli .list-detail ul li::before {
@@ -521,569 +623,799 @@
         
         body.theme-ghibli #footer {
             background: #f6f5f2;
-            border-top-color: rgba(0, 0, 0, 0.08);
+            border-top: 2px solid #57534e;
+            margin-top: 60px;
         }
         
         body.theme-ghibli #footer p.disclaimer,
         body.theme-ghibli #footer p.copyright {
             color: #57534e;
+            font-family: Georgia, serif;
         }
-        
-        /* Attio Theme overrides */
-        body.theme-attio {
-            background-color: #000000;
-            color: #ffffff;
-        }
-        
-        body.theme-attio nav.main-nav {
-            background: #000000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        body.theme-attio nav.main-nav a {
-            color: #888888;
-        }
-        
-        body.theme-attio nav.main-nav a:hover {
-            color: #ffffff;
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        body.theme-attio nav.main-nav a.cta {
-            background: #ffffff;
-            color: #000000;
-            font-weight: 700;
-        }
-        
-        body.theme-attio nav.main-nav a.cta:hover {
-            background: #cccccc;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-        }
-        
-        body.theme-attio .logo {
-            color: #ffffff !important;
-        }
-        
-        body.theme-attio .container,
-        body.theme-attio .text-container,
-        body.theme-attio .image-container {
-            background: #000000;
-        }
-        
-        body.theme-attio .author-container {
-            color: #ffffff;
-        }
-        
-        body.theme-attio .author-container .author {
-            color: #ffffff;
-        }
-        
-        body.theme-attio .author-container .role {
-            color: #ffffff;
-            opacity: 0.9;
-        }
-        
-        body.theme-attio .image-text {
-            color: #888888;
-            opacity: 1;
-        }
-        
-        body.theme-attio .image-text a {
-            color: #ffffff;
-            border-bottom-color: rgba(255,255,255,0.4);
-        }
-        
-        body.theme-attio .image-text a:hover {
-            border-bottom-color: #ffffff;
-        }
-        
-        body.theme-attio .books-container h3,
-        body.theme-attio .studies-container h3 {
-            color: #888888;
-            opacity: 1;
-        }
-        
-        body.theme-attio figure.thumb h2 {
-            color: #888888;
-            opacity: 0.8;
-        }
-        
-        body.theme-attio figure.thumb:hover h2 {
-            opacity: 1;
-            color: #ffffff;
-        }
-        
-        body.theme-attio .system-cover {
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: #080808;
-            box-shadow: none;
-        }
-        
-        body.theme-attio .system-cover .spine {
-            background: linear-gradient(90deg, rgba(255,255,255,0.02) 0%, rgba(0,0,0,0.5) 100%);
-            border-right: 1px solid rgba(255,255,255,0.05);
-        }
-        
-        body.theme-attio .system-cover .cover-title {
-            color: #ffffff !important;
-        }
-        
-        body.theme-attio .system-cover .metadata {
-            color: #888888 !important;
-        }
-        
-        body.theme-attio .system-cover .tag {
-            color: #888888 !important;
-            background: transparent;
-            border-color: transparent;
-        }
-        
-        body.theme-attio .system-cover.risk-engine,
-        body.theme-attio .system-cover.modus-ai,
-        body.theme-attio .system-cover.retail-intel,
-        body.theme-attio .system-cover.finance-dna,
-        body.theme-attio .system-cover.frugalgpt,
-        body.theme-attio .system-cover.aethercrawl,
-        body.theme-attio .system-cover.decision-ml {
-            background: #080808;
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-        
-        body.theme-attio figure.thumb:hover .system-cover {
-            outline: 5px solid #ffffff;
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
-        }
-        
-        body.theme-attio .system-card {
-            background: #080808;
-            border-color: rgba(255, 255, 255, 0.1);
-            box-shadow: none;
-        }
-        
-        body.theme-attio .system-card:hover {
-            border-color: #ffffff;
-            box-shadow: 0 4px 30px rgba(255, 255, 255, 0.05);
-        }
-        
-        body.theme-attio .system-card h4 {
-            color: #ffffff;
-        }
-        
-        body.theme-attio .system-card p {
-            color: #888888;
-        }
-        
-        body.theme-attio .system-card .badge {
-            background: rgba(255, 255, 255, 0.05);
-            color: #ffffff;
-            border-color: rgba(255, 255, 255, 0.15);
-        }
-        
-        body.theme-attio .study-card {
-            background: #080808;
-            border-color: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            box-shadow: none;
-        }
-        
-        body.theme-attio .study-card:hover {
-            border-color: #ffffff;
-            color: #ffffff;
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.05);
-        }
-        
-        body.theme-attio .study-card i {
-            color: #ffffff;
-        }
-        
-        body.theme-attio .studies-container h3,
-        body.theme-attio .section-title {
-            color: #ffffff;
-            border-bottom-color: rgba(255, 255, 255, 0.1);
-        }
-        
-        body.theme-attio .thoughts-item-ai {
-            background: #080808;
-            border-color: rgba(255, 255, 255, 0.1);
-            box-shadow: none;
-            color: #ffffff;
-        }
-        
-        body.theme-attio .thoughts-item-ai h3 {
-            color: #ffffff;
-        }
-        
-        body.theme-attio .thoughts-item-ai:hover {
-            border-color: #ffffff;
-            box-shadow: 0 4px 30px rgba(255, 255, 255, 0.05);
-        }
-        
-        body.theme-attio .audit-title {
-            color: #ffffff;
-        }
-        
-        body.theme-attio .audit-meta,
-        body.theme-attio .audit-summary {
-            color: #888888;
-        }
-        
-        body.theme-attio .audit-thumbnail {
-            background: #000000;
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-        
-        body.theme-attio .audit-thumbnail .emblem {
-            color: #ffffff;
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        body.theme-attio .timeline-item {
-            border-left-color: rgba(255, 255, 255, 0.1);
-        }
-        
-        body.theme-attio .timeline-item::before {
-            background: #000000;
-            border-color: #ffffff;
-        }
-        
-        body.theme-attio ._date {
-            color: #ffffff;
-        }
-        
-        body.theme-attio ._institution h3 {
-            color: #ffffff;
-        }
-        
-        body.theme-attio ._summary {
-            color: #888888;
-        }
-        
-        body.theme-attio ._desc {
-            color: #666666;
-        }
-        
-        body.theme-attio ._bubble {
-            background: #080808;
-            border-color: rgba(255,255,255,0.1);
-            color: #ffffff;
-        }
-        
-        body.theme-attio .list-item:hover ._bubble {
-            background: #ffffff;
-            color: #000;
-            border-color: #ffffff;
-        }
-        
-        body.theme-attio .list-detail ._title-block h3 {
-            color: #ffffff;
-        }
-        
-        body.theme-attio .list-detail ._summary {
-            color: #ffffff;
-        }
-        
-        body.theme-attio .list-detail p._desc {
-            color: #888888;
-        }
-        
-        body.theme-attio .list-detail ul li {
-            color: #888888;
-        }
-        
-        body.theme-attio .list-detail ul li::before {
-            color: #ffffff;
-        }
-        
-        body.theme-attio #footer {
-            background: #080808;
-            border-top-color: rgba(255, 255, 255, 0.1);
-        }
-        
-        body.theme-attio #footer p.disclaimer,
-        body.theme-attio #footer p.copyright {
-            color: #888888;
-        }
-        
-        /* Huly Theme overrides */
-        body.theme-huly {
-            background-color: #0b071e;
-            color: #f1ecff;
-        }
-        
-        body.theme-huly nav.main-nav {
-            background: #0b071e;
-            border-bottom: 1px solid rgba(255, 110, 48, 0.15);
-        }
-        
-        body.theme-huly nav.main-nav a {
-            color: #a89eff;
-        }
-        
-        body.theme-huly nav.main-nav a:hover {
-            color: #ffffff;
-            background: rgba(255, 110, 48, 0.08);
-        }
-        
-        body.theme-huly nav.main-nav a.cta {
-            background: #ff6e30;
-            color: #fff;
-        }
-        
-        body.theme-huly nav.main-nav a.cta:hover {
-            background: #e0531b;
-            box-shadow: 0 0 15px rgba(255, 110, 48, 0.4);
-        }
-        
-        body.theme-huly .logo {
-            color: #ffffff !important;
-        }
-        
-        body.theme-huly .container,
-        body.theme-huly .text-container,
-        body.theme-huly .image-container {
-            background: #0b071e;
-        }
-        
-        body.theme-huly .author-container {
-            color: #ffffff;
-        }
-        
-        body.theme-huly .author-container .author {
-            color: #ffffff;
-        }
-        
-        body.theme-huly .author-container .role {
-            color: #ff6e30;
-            opacity: 1;
-        }
-        
-        body.theme-huly .image-text {
-            color: #c0b9ff;
-            opacity: 1;
-        }
-        
-        body.theme-huly .image-text a {
-            color: #ff6e30;
-        }
-        
-        body.theme-huly .image-text a:hover {
-            border-bottom-color: #ff6e30;
-        }
-        
-        body.theme-huly .books-container h3,
-        body.theme-huly .studies-container h3 {
-            color: #a89eff;
-            opacity: 1;
-        }
-        
-        body.theme-huly figure.thumb h2 {
-            color: #a89eff;
-            opacity: 0.8;
-        }
-        
-        body.theme-huly figure.thumb:hover h2 {
-            opacity: 1;
-            color: #ffffff;
-        }
-        
-        body.theme-huly .system-cover {
-            border-radius: 8px;
-            border: 1px solid rgba(255, 110, 48, 0.15);
-            background: rgba(16, 11, 46, 0.7);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        
-        body.theme-huly .system-cover .spine {
-            background: linear-gradient(90deg, rgba(255,110,48,0.05) 0%, rgba(0,0,0,0.5) 100%);
-            border-right: 1px solid rgba(255,110,48,0.1);
-        }
-        
-        body.theme-huly .system-cover .cover-title {
-            color: #ffffff !important;
-        }
-        
-        body.theme-huly .system-cover .metadata {
-            color: #c0b9ff !important;
-        }
-        
-        body.theme-huly .system-cover .tag {
-            color: #ff6e30 !important;
-            background: rgba(255, 110, 48, 0.05);
-            border-color: rgba(255, 110, 48, 0.15);
-        }
-        
-        body.theme-huly .system-cover.risk-engine,
-        body.theme-huly .system-cover.modus-ai,
-        body.theme-huly .system-cover.retail-intel,
-        body.theme-huly .system-cover.finance-dna,
-        body.theme-huly .system-cover.frugalgpt,
-        body.theme-huly .system-cover.aethercrawl,
-        body.theme-huly .system-cover.decision-ml {
-            background: rgba(16, 11, 46, 0.7);
-            border-color: rgba(255, 110, 48, 0.15);
-        }
-        
-        body.theme-huly figure.thumb:hover .system-cover {
-            outline: 5px solid #ff007f;
-            box-shadow: 0 0 30px rgba(255, 0, 127, 0.35);
-        }
-        
-        body.theme-huly .system-card {
-            background: rgba(16, 11, 46, 0.6);
-            border-color: rgba(255, 110, 48, 0.15);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-        }
-        
-        body.theme-huly .system-card:hover {
-            border-color: #ff007f;
-            box-shadow: 0 10px 30px rgba(255, 0, 127, 0.2);
-        }
-        
-        body.theme-huly .system-card h4 {
-            color: #ffffff;
-        }
-        
-        body.theme-huly .system-card p {
-            color: #c0b9ff;
-        }
-        
-        body.theme-huly .system-card .badge {
-            background: rgba(255, 110, 48, 0.1);
-            color: #ff6e30;
-            border-color: rgba(255, 110, 48, 0.2);
-        }
-        
-        body.theme-huly .study-card {
-            background: rgba(16, 11, 46, 0.6);
-            border-color: rgba(255, 110, 48, 0.15);
-            color: #ffffff;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        body.theme-huly .study-card:hover {
-            border-color: #ff007f;
-            color: #ff6e30;
-            box-shadow: 0 6px 20px rgba(255, 0, 127, 0.2);
-        }
-        
-        body.theme-huly .study-card i {
-            color: #ff6e30;
-        }
-        
-        body.theme-huly .studies-container h3,
-        body.theme-huly .section-title {
-            color: #ffffff;
-            border-bottom-color: rgba(255, 110, 48, 0.15);
-        }
-        
-        body.theme-huly .thoughts-item-ai {
-            background: rgba(16, 11, 46, 0.6);
-            border-color: rgba(255, 110, 48, 0.15);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            color: #ffffff;
-        }
-        
-        body.theme-huly .thoughts-item-ai h3 {
-            color: #ffffff;
-        }
-        
-        body.theme-huly .thoughts-item-ai:hover {
-            border-color: #ff007f;
-            box-shadow: 0 10px 30px rgba(255, 0, 127, 0.2);
-        }
-        
-        body.theme-huly .audit-title {
-            color: #ffffff;
-        }
-        
-        body.theme-huly .audit-meta,
-        body.theme-huly .audit-summary {
-            color: #c0b9ff;
-        }
-        
-        body.theme-huly .audit-thumbnail {
-            background: #0b071e;
-            border-color: rgba(255, 110, 48, 0.15);
-        }
-        
-        body.theme-huly .audit-thumbnail .emblem {
-            color: #ff6e30;
-            background: rgba(255, 110, 48, 0.1);
-        }
-        
-        body.theme-huly .timeline-item {
-            border-left-color: rgba(255, 110, 48, 0.15);
-        }
-        
-        body.theme-huly .timeline-item::before {
-            background: #0b071e;
-            border-color: #ff007f;
-        }
-        
-        body.theme-huly ._date {
-            color: #ff6e30;
-        }
-        
-        body.theme-huly ._institution h3 {
-            color: #ffffff;
-        }
-        
-        body.theme-huly ._summary {
-            color: #c0b9ff;
-        }
-        
-        body.theme-huly ._desc {
-            color: #a89eff;
-        }
-        
-        body.theme-huly ._bubble {
-            background: rgba(16, 11, 46, 0.6);
-            border-color: rgba(255, 110, 48, 0.15);
-            color: #ff6e30;
-        }
-        
-        body.theme-huly .list-item:hover ._bubble {
-            background: #ff007f;
-            color: #fff;
-            border-color: #ff007f;
-        }
-        
-        body.theme-huly .list-detail ._title-block h3 {
-            color: #ffffff;
-        }
-        
-        body.theme-huly .list-detail ._summary {
-            color: #ff6e30;
-        }
-        
-        body.theme-huly .list-detail p._desc {
-            color: #c0b9ff;
-        }
-        
-        body.theme-huly .list-detail ul li {
-            color: #a89eff;
-        }
-        
-        body.theme-huly .list-detail ul li::before {
-            color: #ff6e30;
-        }
-        
-        body.theme-huly #footer {
-            background: #070414;
-            border-top-color: rgba(255, 110, 48, 0.15);
-        }
-        
-        body.theme-huly #footer p.disclaimer,
-        body.theme-huly #footer p.copyright {
-            color: #c0b9ff;
-        }
-        
 
+        /* OASIS (Ready Player One Retro-Synthwave) Theme overrides (CRT Arcade HUD) */
+        body.theme-oasis {
+            background-color: #05021a;
+            background-image: linear-gradient(rgba(18, 10, 36, 1) 50%, rgba(0, 0, 0, 0.4) 50%), 
+                              linear-gradient(90deg, rgba(255, 0, 127, 0.03) 1px, transparent 1px), 
+                              linear-gradient(0deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+            background-size: 100% 4px, 40px 40px, 40px 40px;
+            color: #00f0ff;
+            font-family: 'JetBrains Mono', monospace !important;
+        }
         
-        .hero-image img {
+        body.theme-oasis::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 99999;
+            background-size: 100% 3px, 6px 100%;
+            pointer-events: none;
+        }
+        
+        body.theme-oasis nav.main-nav {
+            background: #05021a;
+            border-bottom: 2px solid #ff007f;
+            font-family: 'JetBrains Mono', monospace !important;
+            box-shadow: 0 0 10px rgba(255, 0, 127, 0.4);
+        }
+        
+        body.theme-oasis nav.main-nav a {
+            color: #ff007f;
+            text-shadow: 0 0 5px rgba(255, 0, 127, 0.5);
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        
+        body.theme-oasis nav.main-nav a:hover {
+            color: #00f0ff;
+            background: rgba(0, 240, 255, 0.08);
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.8);
+        }
+        
+        body.theme-oasis nav.main-nav a.cta {
+            background: #ff007f;
+            color: #ffffff;
+            font-weight: 700;
+            border: 1px solid #00f0ff;
+            text-shadow: 0 0 5px #fff;
+            box-shadow: 0 0 10px rgba(255, 0, 127, 0.5);
+        }
+        
+        body.theme-oasis nav.main-nav a.cta:hover {
+            background: #00f0ff;
+            color: #000000;
+            text-shadow: none;
+            box-shadow: 0 0 20px #00f0ff;
+        }
+        
+        body.theme-oasis .logo {
+            color: #ff007f !important;
+            text-shadow: 0 0 8px #ff007f;
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        
+        body.theme-oasis .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            border: 3px double #00f0ff;
+            padding: 30px;
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.25), inset 0 0 25px rgba(0, 240, 255, 0.1);
+            border-radius: 0;
+            background: #040212;
+        }
+        
+        body.theme-oasis .text-container,
+        body.theme-oasis .image-container {
+            background: transparent !important;
+            border: none;
+            box-shadow: none;
+            padding: 0;
+        }
+        
+        body.theme-oasis .hero-image {
+            border: 2px solid #ff007f;
+            border-radius: 0;
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.3);
+        }
+        
+        body.theme-oasis .hero-image::after {
+            background-image: linear-gradient(180deg, rgba(0,0,0,0) 60%, #040212 100%);
+        }
+        
+        body.theme-oasis .author-container {
+            color: #00f0ff;
+        }
+        
+        body.theme-oasis .author-container .author {
+            color: #ffffff;
+            text-shadow: 0 0 15px rgba(255, 0, 127, 0.6), 0 0 30px rgba(0, 240, 255, 0.3);
+            font-family: 'JetBrains Mono', monospace !important;
+            font-size: 3.5rem;
+            text-transform: uppercase;
+        }
+        
+        body.theme-oasis .author-container .role {
+            color: #ffff00;
+            text-shadow: 0 0 8px rgba(255, 255, 0, 0.5);
+            opacity: 1;
+            font-size: 1.1rem;
+            font-family: 'JetBrains Mono', monospace !important;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        body.theme-oasis .image-text {
+            color: #c9d3da;
+            opacity: 1;
+            font-family: 'JetBrains Mono', monospace !important;
+            line-height: 1.7;
+        }
+        
+        body.theme-oasis .image-text a {
+            color: #ff007f;
+            text-shadow: 0 0 4px rgba(255,0,127,0.4);
+            border-bottom-color: rgba(255,0,127,0.4);
+        }
+        
+        body.theme-oasis .image-text a:hover {
+            color: #00f0ff;
+            text-shadow: 0 0 6px #00f0ff;
+            border-bottom-color: #00f0ff;
+        }
+        
+        body.theme-oasis .books-container h3,
+        body.theme-oasis .studies-container h3 {
+            color: #ff007f;
+            text-shadow: 0 0 5px rgba(255,0,127,0.4);
+            opacity: 1;
+            font-family: 'JetBrains Mono', monospace !important;
+            font-size: 1.1rem;
+            border-bottom: 2px solid #ff007f;
+            padding-bottom: 6px;
+        }
+        
+        body.theme-oasis figure.thumb h2 {
+            color: #00f0ff;
+            opacity: 0.8;
+            font-family: 'JetBrains Mono', monospace !important;
+            font-size: 0.75rem;
+        }
+        
+        body.theme-oasis figure.thumb:hover h2 {
+            opacity: 1;
+            color: #ffffff;
+            text-shadow: 0 0 8px #00f0ff;
+        }
+        
+        body.theme-oasis .system-cover {
+            border-radius: 0;
+            border: 2px solid #00f0ff;
+            background: #08051e;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+        }
+        
+        body.theme-oasis .system-cover .spine {
+            background: linear-gradient(90deg, rgba(0,240,255,0.05) 0%, rgba(0,0,0,0.5) 100%);
+            border-right: 1px solid rgba(0,240,255,0.25);
+        }
+        
+        body.theme-oasis .system-cover .cover-title {
+            color: #ffffff !important;
+            text-shadow: 0 0 5px rgba(0,240,255,0.5);
+            font-family: 'JetBrains Mono', monospace !important;
+            font-size: 1.05rem;
+        }
+        
+        body.theme-oasis .system-cover .metadata {
+            color: #ffff00 !important;
+            text-shadow: 0 0 3px rgba(255,255,0,0.4);
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        
+        body.theme-oasis .system-cover .tag {
+            color: #ff007f !important;
+            background: rgba(255, 0, 127, 0.05);
+            border-color: rgba(255, 0, 127, 0.15);
+            text-shadow: 0 0 3px rgba(255,0,127,0.4);
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        
+        body.theme-oasis .system-cover.risk-engine,
+        body.theme-oasis .system-cover.modus-ai,
+        body.theme-oasis .system-cover.retail-intel,
+        body.theme-oasis .system-cover.finance-dna,
+        body.theme-oasis .system-cover.frugalgpt,
+        body.theme-oasis .system-cover.aethercrawl,
+        body.theme-oasis .system-cover.decision-ml {
+            background: #08051e;
+            border-color: #00f0ff;
+        }
+        
+        body.theme-oasis figure.thumb:hover .system-cover {
+            outline: 5px solid #ff007f;
+            box-shadow: 0 0 35px #ff007f;
+        }
+        
+        body.theme-oasis .system-card {
+            background: #08051e;
+            border-color: #00f0ff;
+            border-radius: 0;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.1);
+        }
+        
+        body.theme-oasis .system-card:hover {
+            border-color: #ff007f;
+            box-shadow: 0 0 25px rgba(255, 0, 127, 0.3);
+        }
+        
+        body.theme-oasis .system-card h4 {
+            color: #ffffff;
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        
+        body.theme-oasis .system-card p {
+            color: #c9d3da;
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        
+        body.theme-oasis .system-card .badge {
+            background: rgba(0, 240, 255, 0.05);
+            color: #00f0ff;
+            border-color: rgba(0, 240, 255, 0.2);
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        
+        body.theme-oasis .study-card {
+            background: #08051e;
+            border-color: #00f0ff;
+            border-radius: 0;
+            color: #00f0ff;
+            box-shadow: 0 0 8px rgba(0,240,255,0.1);
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        
+        body.theme-oasis .study-card:hover {
+            border-color: #ff007f;
+            color: #ffffff;
+            text-shadow: 0 0 5px #ff007f;
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.25);
+        }
+        
+        body.theme-oasis .study-card i {
+            color: #ff007f;
+        }
+        
+        body.theme-oasis .section-title {
+            color: #ff007f;
+            border-bottom: 2px solid #ff007f;
+            text-shadow: 0 0 5px rgba(255,0,127,0.4);
+            font-family: 'JetBrains Mono', monospace !important;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+        }
+        
+        body.theme-oasis .thoughts-item-ai {
+            background: #08051e;
+            border-color: #00f0ff;
+            color: #00f0ff;
+            border-radius: 0;
+            box-shadow: 0 0 10px rgba(0,240,255,0.1);
+        }
+        
+        body.theme-oasis .thoughts-item-ai h3 {
+            color: #ffffff;
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        
+        body.theme-oasis .thoughts-item-ai:hover {
+            border-color: #ff007f;
+            box-shadow: 0 0 25px rgba(255, 0, 127, 0.3);
+        }
+        
+        body.theme-oasis .audit-title {
+            color: #00f0ff;
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        
+        body.theme-oasis .audit-meta,
+        body.theme-oasis .audit-summary {
+            color: #c9d3da;
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        
+        body.theme-oasis .audit-thumbnail {
+            background: #05021a;
+            border: 1px solid #00f0ff;
+            border-radius: 0;
+        }
+        
+        body.theme-oasis .audit-thumbnail .emblem {
+            color: #ff007f;
+            background: rgba(255, 0, 127, 0.05);
+        }
+        
+        body.theme-oasis .timeline-item {
+            border-left: 2px solid #00f0ff;
+            padding-left: 25px;
+        }
+        
+        body.theme-oasis .timeline-item::before {
+            background: #05021a;
+            border: 2px solid #ff007f;
+            border-radius: 0;
+            width: 10px;
+            height: 10px;
+            left: -6px;
+        }
+        
+        body.theme-oasis ._date {
+            color: #ffff00;
+            font-family: 'JetBrains Mono', monospace !important;
+            font-weight: bold;
+        }
+        
+        body.theme-oasis ._institution h3 {
+            color: #ffffff;
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        
+        body.theme-oasis ._summary {
+            color: #00f0ff;
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        
+        body.theme-oasis ._desc {
+            color: #c9d3da;
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        
+        body.theme-oasis ._bubble {
+            background: #08051e;
+            border: 1px solid #00f0ff;
+            color: #ffff00;
+            border-radius: 0;
+        }
+        
+        body.theme-oasis .list-item:hover ._bubble {
+            background: #ff007f;
+            color: #ffffff;
+            border-color: #ff007f;
+        }
+        
+        body.theme-oasis .list-detail ._title-block h3 {
+            color: #ffffff;
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        
+        body.theme-oasis .list-detail ._summary {
+            color: #ffff00;
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        
+        body.theme-oasis .list-detail p._desc {
+            color: #c9d3da;
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        
+        body.theme-oasis .list-detail ul li {
+            color: #c9d3da;
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        
+        body.theme-oasis .list-detail ul li::before {
+            color: #ff007f;
+        }
+        
+        body.theme-oasis #footer {
+            background: #05021a;
+            border-top: 2px solid #ff007f;
+            margin-top: 60px;
+        }
+        
+        body.theme-oasis #footer p.disclaimer,
+        body.theme-oasis #footer p.copyright {
+            color: #c9d3da;
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+
+        /* Forrest Gump Theme overrides (Americana Vintage Newspaper Scrapbook) */
+        body.theme-forrest {
+            background-color: #fdf8e6;
+            color: #4e3629;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        
+        body.theme-forrest nav.main-nav {
+            background: #fdf8e6;
+            border-bottom: 2px solid #4e3629;
+            font-family: Georgia, serif;
+        }
+        
+        body.theme-forrest nav.main-nav a {
+            color: #5c4335;
+            font-family: Georgia, serif;
+        }
+        
+        body.theme-forrest nav.main-nav a:hover {
+            color: #2e4f24;
+            background: rgba(46, 79, 36, 0.05);
+        }
+        
+        body.theme-forrest nav.main-nav a.cta {
+            background: #5c4335;
+            color: #fdf8e6;
+            font-family: Georgia, serif;
+            font-weight: bold;
+        }
+        
+        body.theme-forrest nav.main-nav a.cta:hover {
+            background: #2e4f24;
+            box-shadow: 0 0 15px rgba(46, 79, 36, 0.3);
+        }
+        
+        body.theme-forrest .logo {
+            color: #2e4f24 !important;
+            font-family: Georgia, serif;
+            font-weight: 900;
+        }
+        
+        body.theme-forrest .container {
+            display: block; /* Stacks the split layout */
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 50px;
+            border: 4px double #4e3629;
+            background: #fdf8e6;
+            box-shadow: 0 0 25px rgba(78, 54, 41, 0.06);
+        }
+        
+        /* Dynamic Newspaper Banner Header! */
+        body.theme-forrest .container::before {
+            content: "THE GREENBOW CHRONICLE\A--- Daily Quantitative Edition — Greenbow, Alabama ---";
+            display: block;
+            text-align: center;
+            font-family: Georgia, serif;
+            font-size: 2.2rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #4e3629;
+            border-bottom: 4px double #4e3629;
+            padding-bottom: 15px;
+            margin-bottom: 35px;
+            white-space: pre-wrap;
+        }
+        
+        body.theme-forrest .text-container,
+        body.theme-forrest .image-container {
+            width: 100%;
+            background: transparent !important;
+            border: none;
+            box-shadow: none;
+            padding: 10px 0;
+        }
+        
+        body.theme-forrest .text-container {
+            border-bottom: 2px solid #4e3629;
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+        }
+        
+        body.theme-forrest .hero-image {
+            max-width: 300px;
+            margin: 0 auto 30px auto;
+            border: 3px double #4e3629;
+            border-radius: 0;
+            box-shadow: none;
+        }
+        
+        body.theme-forrest .hero-image img {
+            border-radius: 0;
+        }
+        
+        body.theme-forrest .hero-image::after {
+            display: none;
+        }
+        
+        body.theme-forrest .author-container {
+            color: #4e3629;
+            text-align: center;
+        }
+        
+        body.theme-forrest .author-container .author {
+            color: #4e3629;
+            font-family: Georgia, serif;
+            font-size: 3.2rem;
+            text-transform: capitalize;
+            letter-spacing: 0;
+        }
+        
+        body.theme-forrest .author-container .role {
+            color: #2e4f24;
+            opacity: 1;
+            font-family: Georgia, serif;
+            font-size: 1.25rem;
+            font-style: italic;
+            border-bottom: 1px solid rgba(78, 54, 41, 0.15);
+            padding-bottom: 12px;
+            max-width: 500px;
+            margin: 10px auto 24px auto;
+        }
+        
+        body.theme-forrest .image-text {
+            color: #5c4335;
+            opacity: 1;
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 1.7;
+            font-size: 1.05rem;
+            text-align: justify;
+        }
+        
+        body.theme-forrest .image-text a {
+            color: #2e4f24;
+            border-bottom-color: rgba(46, 79, 36, 0.3);
+            font-weight: bold;
+        }
+        
+        body.theme-forrest .image-text a:hover {
+            border-bottom-color: #2e4f24;
+        }
+        
+        body.theme-forrest .books-container h3,
+        body.theme-forrest .studies-container h3 {
+            color: #5c4335;
+            opacity: 1;
+            font-family: Georgia, serif;
+            font-size: 1.3rem;
+            text-transform: none;
+            letter-spacing: 0;
+            border-bottom: 2px solid #4e3629;
+            padding-bottom: 6px;
+        }
+        
+        body.theme-forrest figure.thumb h2 {
+            color: #5c4335;
+            opacity: 0.8;
+            font-family: Georgia, serif;
+        }
+        
+        body.theme-forrest figure.thumb:hover h2 {
+            opacity: 1;
+            color: #4e3629;
+        }
+        
+        body.theme-forrest .system-cover {
+            border-radius: 0;
+            border: 2px solid #5c4335;
+            background: #fbf3d3;
+            box-shadow: 4px 8px 16px rgba(78,54,41,0.08);
+        }
+        
+        body.theme-forrest .system-cover .spine {
+            background: linear-gradient(90deg, rgba(78,54,41,0.03) 0%, rgba(78,54,41,0.2) 100%);
+            border-right: 1px solid rgba(78,54,41,0.25);
+        }
+        
+        body.theme-forrest .system-cover .cover-title {
+            color: #4e3629 !important;
+            font-family: Georgia, serif;
+        }
+        
+        body.theme-forrest .system-cover .metadata {
+            color: #5c4335 !important;
+            font-family: Georgia, serif;
+        }
+        
+        body.theme-forrest .system-cover .tag {
+            color: #2e4f24 !important;
+            background: rgba(46, 79, 36, 0.05);
+            border-color: rgba(46, 79, 36, 0.15);
+            font-family: Georgia, serif;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+        
+        body.theme-forrest .system-cover.risk-engine,
+        body.theme-forrest .system-cover.modus-ai,
+        body.theme-forrest .system-cover.retail-intel,
+        body.theme-forrest .system-cover.finance-dna,
+        body.theme-forrest .system-cover.frugalgpt,
+        body.theme-forrest .system-cover.aethercrawl,
+        body.theme-forrest .system-cover.decision-ml {
+            background: #fbf3d3;
+            border-color: #5c4335;
+        }
+        
+        body.theme-forrest figure.thumb:hover .system-cover {
+            outline: 5px solid #2e4f24;
+            box-shadow: 0 0 30px rgba(46, 79, 36, 0.3);
+        }
+        
+        body.theme-forrest .system-card {
+            background: #ffffff;
+            border-color: rgba(78, 54, 41, 0.12);
+            border-radius: 0;
+            border: 1px solid #4e3629;
+            box-shadow: 4px 4px 0px rgba(78, 54, 41, 0.15);
+        }
+        
+        body.theme-forrest .system-card:hover {
+            border-color: #2e4f24;
+            box-shadow: 6px 6px 0px rgba(46, 79, 36, 0.2);
+        }
+        
+        body.theme-forrest .system-card h4 {
+            color: #4e3629;
+            font-family: Georgia, serif;
+        }
+        
+        body.theme-forrest .system-card p {
+            color: #5c4335;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        
+        body.theme-forrest .system-card .badge {
+            background: rgba(46, 79, 36, 0.05);
+            color: #2e4f24;
+            border-color: rgba(46, 79, 36, 0.12);
+            font-family: Georgia, serif;
+        }
+        
+        body.theme-forrest .study-card {
+            background: #ffffff;
+            border-radius: 0;
+            border: 1px solid #4e3629;
+            color: #4e3629;
+            box-shadow: 3px 3px 0px rgba(78, 54, 41, 0.15);
+        }
+        
+        body.theme-forrest .study-card:hover {
+            border-color: #2e4f24;
+            color: #2e4f24;
+            box-shadow: 5px 5px 0px rgba(46, 79, 36, 0.2);
+        }
+        
+        body.theme-forrest .study-card i {
+            color: #2e4f24;
+        }
+        
+        body.theme-forrest .section-title {
+            color: #4e3629;
+            border-bottom: 2px solid #4e3629;
+            font-family: Georgia, serif;
+            font-size: 1.6rem;
+            text-transform: none;
+            letter-spacing: 0;
+            margin-top: 40px;
+            padding-bottom: 6px;
+        }
+        
+        body.theme-forrest .thoughts-item-ai {
+            background: #ffffff;
+            border-radius: 0;
+            border: 1px solid #4e3629;
+            box-shadow: 4px 4px 0px rgba(78, 54, 41, 0.15);
+            color: #4e3629;
+        }
+        
+        body.theme-forrest .thoughts-item-ai h3 {
+            color: #4e3629;
+            font-family: Georgia, serif;
+        }
+        
+        body.theme-forrest .thoughts-item-ai:hover {
+            border-color: #2e4f24;
+            box-shadow: 6px 6px 0px rgba(46, 79, 36, 0.2);
+        }
+        
+        body.theme-forrest .audit-title {
+            color: #4e3629;
+            font-family: Georgia, serif;
+        }
+        
+        body.theme-forrest .audit-meta,
+        body.theme-forrest .audit-summary {
+            color: #5c4335;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        
+        body.theme-forrest .audit-thumbnail {
+            background: #fdf8e6;
+            border: 1px solid #4e3629;
+            border-radius: 0;
+        }
+        
+        body.theme-forrest .audit-thumbnail .emblem {
+            color: #2e4f24;
+            background: rgba(46, 79, 36, 0.05);
+        }
+        
+        body.theme-forrest .timeline-item {
+            border-left: 2px solid #4e3629;
+            padding-left: 30px;
+        }
+        
+        body.theme-forrest .timeline-item::before {
+            background: #fdf8e6;
+            border: 2px solid #2e4f24;
+            width: 10px;
+            height: 10px;
+            left: -6px;
+            border-radius: 0;
+        }
+        
+        body.theme-forrest ._date {
+            color: #2e4f24;
+            font-family: Georgia, serif;
+            font-weight: bold;
+        }
+        
+        body.theme-forrest ._institution h3 {
+            color: #4e3629;
+            font-family: Georgia, serif;
+        }
+        
+        body.theme-forrest ._summary {
+            color: #5c4335;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        
+        body.theme-forrest ._desc {
+            color: #66554b;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        
+        body.theme-forrest ._bubble {
+            background: #ffffff;
+            border: 1px solid #4e3629;
+            color: #2e4f24;
+            border-radius: 0;
+        }
+        
+        body.theme-forrest .list-item:hover ._bubble {
+            background: #2e4f24;
+            color: #ffffff;
+            border-color: #2e4f24;
+        }
+        
+        body.theme-forrest .list-detail ._title-block h3 {
+            color: #4e3629;
+            font-family: Georgia, serif;
+        }
+        
+        body.theme-forrest .list-detail ._summary {
+            color: #2e4f24;
+            font-family: Georgia, serif;
+        }
+        
+        body.theme-forrest .list-detail p._desc {
+            color: #5c4335;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        
+        body.theme-forrest .list-detail ul li {
+            color: #5c4335;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        
+        body.theme-forrest .list-detail ul li::before {
+            color: #2e4f24;
+        }
+        
+        body.theme-forrest #footer {
+            background: #fcf6e0;
+            border-top: 2px solid #4e3629;
+            margin-top: 60px;
+        }
+        
+        body.theme-forrest #footer p.disclaimer,
+        body.theme-forrest #footer p.copyright {
+            color: #5c4335;
+            font-family: 'Times New Roman', Times, serif;
+        }\n\n        .hero-image img {
             width: 100%;
             height: auto;
             display: block;
