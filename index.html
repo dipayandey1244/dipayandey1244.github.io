@@ -177,20 +177,18 @@
             75% { transform: rotate(2deg) scale(1.06); }
         }
         
-        .avatar-theme-selector {
-            position: absolute;
-            top: 16px;
-            left: 16px;
-            z-index: 10;
+        .site-theme-selector {
             display: flex;
             gap: 6px;
-            background: rgba(0, 0, 0, 0.65);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.08);
             padding: 3px;
             border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        
+        body.theme-ghibli .site-theme-selector {
+            background: rgba(0, 0, 0, 0.03);
+            border-color: rgba(0, 0, 0, 0.08);
         }
         
         .theme-btn {
@@ -211,12 +209,16 @@
             letter-spacing: 0.5px;
         }
         
+        body.theme-ghibli .theme-btn {
+            color: #57534e;
+        }
+        
         .theme-btn:hover {
             color: #fff;
         }
         
-        .theme-btn.active {
-            color: #fff;
+        body.theme-ghibli .theme-btn:hover {
+            color: #1c1917;
         }
         
         .theme-btn[data-theme="cyber"].active {
@@ -229,6 +231,627 @@
             color: #dfb15b;
             background: rgba(223, 177, 91, 0.12);
             border: 1px solid rgba(223, 177, 91, 0.25);
+        }
+        
+        .theme-btn[data-theme="attio"].active {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .theme-btn[data-theme="huly"].active {
+            color: #ff6e30;
+            background: rgba(255, 110, 48, 0.12);
+            border: 1px solid rgba(255, 110, 48, 0.25);
+        }
+        
+        /* Ghibli Light Theme overrides */
+        body.theme-ghibli {
+            background-color: #faf9f6;
+            color: #1c1917;
+        }
+        
+        body.theme-ghibli nav.main-nav {
+            background: #faf9f6;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        
+        body.theme-ghibli nav.main-nav a {
+            color: #44403c;
+        }
+        
+        body.theme-ghibli nav.main-nav a:hover {
+            color: #000;
+            background: rgba(0, 0, 0, 0.04);
+        }
+        
+        body.theme-ghibli .container,
+        body.theme-ghibli .text-container,
+        body.theme-ghibli .image-container {
+            background: #faf9f6;
+        }
+        
+        body.theme-ghibli .role-title {
+            color: #d97706;
+        }
+        
+        body.theme-ghibli .name-title {
+            color: #1c1917;
+        }
+        
+        body.theme-ghibli .bio-intro,
+        body.theme-ghibli .bio-narrative {
+            color: #44403c;
+        }
+        
+        body.theme-ghibli .system-card {
+            background: #ffffff;
+            border-color: rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+        
+        body.theme-ghibli .system-card:hover {
+            border-color: #dfb15b;
+            box-shadow: 0 10px 30px rgba(223, 177, 91, 0.15);
+        }
+        
+        body.theme-ghibli .system-card h4 {
+            color: #1c1917;
+        }
+        
+        body.theme-ghibli .system-card p {
+            color: #57534e;
+        }
+        
+        body.theme-ghibli .system-card .badge {
+            background: rgba(13, 148, 136, 0.08);
+            color: #0d9488;
+            border-color: rgba(13, 148, 136, 0.15);
+        }
+        
+        body.theme-ghibli .study-card {
+            background: #ffffff;
+            border-color: rgba(0, 0, 0, 0.08);
+            color: #1c1917;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+        }
+        
+        body.theme-ghibli .study-card:hover {
+            border-color: #dfb15b;
+            color: #d97706;
+            box-shadow: 0 6px 20px rgba(223, 177, 91, 0.15);
+        }
+        
+        body.theme-ghibli .study-card i {
+            color: #dfb15b;
+        }
+        
+        body.theme-ghibli .studies-container h3,
+        body.theme-ghibli .section-title {
+            color: #1c1917;
+            border-bottom-color: rgba(0, 0, 0, 0.08);
+        }
+        
+        body.theme-ghibli .thoughts-item-ai {
+            background: #ffffff;
+            border-color: rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        }
+        
+        body.theme-ghibli .thoughts-item-ai:hover {
+            border-color: #dfb15b;
+            box-shadow: 0 10px 30px rgba(223, 177, 91, 0.15);
+        }
+        
+        body.theme-ghibli .audit-title {
+            color: #1c1917;
+        }
+        
+        body.theme-ghibli .audit-meta,
+        body.theme-ghibli .audit-summary {
+            color: #57534e;
+        }
+        
+        body.theme-ghibli .audit-thumbnail {
+            background: #fcfbfa;
+            border-color: rgba(0, 0, 0, 0.06);
+        }
+        
+        body.theme-ghibli .audit-thumbnail .emblem {
+            color: #dfb15b;
+            background: rgba(223, 177, 91, 0.08);
+        }
+        
+        body.theme-ghibli .timeline-item {
+            border-left-color: rgba(0, 0, 0, 0.08);
+        }
+        
+        body.theme-ghibli .timeline-item::before {
+            background: #faf9f6;
+            border-color: #dfb15b;
+        }
+        
+        body.theme-ghibli ._date {
+            color: #d97706;
+        }
+        
+        body.theme-ghibli ._institution h3 {
+            color: #1c1917;
+        }
+        
+        body.theme-ghibli ._summary {
+            color: #44403c;
+        }
+        
+        body.theme-ghibli ._desc {
+            color: #57534e;
+        }
+        
+        body.theme-ghibli #footer {
+            background: #f6f5f2;
+            border-top-color: rgba(0, 0, 0, 0.08);
+        }
+        
+        body.theme-ghibli #footer p.disclaimer,
+        body.theme-ghibli #footer p.copyright {
+            color: #57534e;
+        }
+        
+        /* Attio Theme overrides */
+        body.theme-attio {
+            background-color: #000000;
+            color: #ffffff;
+        }
+        
+        body.theme-attio nav.main-nav {
+            background: #000000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        body.theme-attio nav.main-nav a {
+            color: #888888;
+        }
+        
+        body.theme-attio nav.main-nav a:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        body.theme-attio .container,
+        body.theme-attio .text-container,
+        body.theme-attio .image-container {
+            background: #000000;
+        }
+        
+        body.theme-attio .role-title {
+            color: #ffffff;
+            font-weight: 800;
+        }
+        
+        body.theme-attio .name-title {
+            color: #ffffff;
+        }
+        
+        body.theme-attio .bio-intro,
+        body.theme-attio .bio-narrative {
+            color: #888888;
+        }
+        
+        body.theme-attio .system-card {
+            background: #080808;
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow: none;
+        }
+        
+        body.theme-attio .system-card:hover {
+            border-color: #ffffff;
+            box-shadow: 0 4px 30px rgba(255, 255, 255, 0.05);
+        }
+        
+        body.theme-attio .system-card h4 {
+            color: #ffffff;
+        }
+        
+        body.theme-attio .system-card p {
+            color: #888888;
+        }
+        
+        body.theme-attio .system-card .badge {
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        body.theme-attio .study-card {
+            background: #080808;
+            border-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            box-shadow: none;
+        }
+        
+        body.theme-attio .study-card:hover {
+            border-color: #ffffff;
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.05);
+        }
+        
+        body.theme-attio .study-card i {
+            color: #ffffff;
+        }
+        
+        body.theme-attio .studies-container h3,
+        body.theme-attio .section-title {
+            color: #ffffff;
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        body.theme-attio .thoughts-item-ai {
+            background: #080808;
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow: none;
+        }
+        
+        body.theme-attio .thoughts-item-ai:hover {
+            border-color: #ffffff;
+            box-shadow: 0 4px 30px rgba(255, 255, 255, 0.05);
+        }
+        
+        body.theme-attio .audit-title {
+            color: #ffffff;
+        }
+        
+        body.theme-attio .audit-meta,
+        body.theme-attio .audit-summary {
+            color: #888888;
+        }
+        
+        body.theme-attio .audit-thumbnail {
+            background: #000000;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        body.theme-attio .audit-thumbnail .emblem {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        body.theme-attio .timeline-item {
+            border-left-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        body.theme-attio .timeline-item::before {
+            background: #000000;
+            border-color: #ffffff;
+        }
+        
+        body.theme-attio ._date {
+            color: #ffffff;
+        }
+        
+        body.theme-attio ._institution h3 {
+            color: #ffffff;
+        }
+        
+        body.theme-attio ._summary {
+            color: #888888;
+        }
+        
+        body.theme-attio ._desc {
+            color: #666666;
+        }
+        
+        body.theme-attio #footer {
+            background: #080808;
+            border-top-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        body.theme-attio #footer p.disclaimer,
+        body.theme-attio #footer p.copyright {
+            color: #888888;
+        }
+        
+        /* Huly Theme overrides */
+        body.theme-huly {
+            background-color: #0b071e;
+            color: #f1ecff;
+        }
+        
+        body.theme-huly nav.main-nav {
+            background: #0b071e;
+            border-bottom: 1px solid rgba(255, 110, 48, 0.15);
+        }
+        
+        body.theme-huly nav.main-nav a {
+            color: #a89eff;
+        }
+        
+        body.theme-huly nav.main-nav a:hover {
+            color: #ffffff;
+            background: rgba(255, 110, 48, 0.08);
+        }
+        
+        body.theme-huly .container,
+        body.theme-huly .text-container,
+        body.theme-huly .image-container {
+            background: #0b071e;
+        }
+        
+        body.theme-huly .role-title {
+            color: #ff6e30;
+        }
+        
+        body.theme-huly .name-title {
+            color: #ffffff;
+        }
+        
+        body.theme-huly .bio-intro,
+        body.theme-huly .bio-narrative {
+            color: #c0b9ff;
+        }
+        
+        body.theme-huly .system-card {
+            background: rgba(16, 11, 46, 0.6);
+            border-color: rgba(255, 110, 48, 0.15);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        body.theme-huly .system-card:hover {
+            border-color: #ff007f;
+            box-shadow: 0 10px 30px rgba(255, 0, 127, 0.2);
+        }
+        
+        body.theme-huly .system-card h4 {
+            color: #ffffff;
+        }
+        
+        body.theme-huly .system-card p {
+            color: #c0b9ff;
+        }
+        
+        body.theme-huly .system-card .badge {
+            background: rgba(255, 110, 48, 0.1);
+            color: #ff6e30;
+            border-color: rgba(255, 110, 48, 0.2);
+        }
+        
+        body.theme-huly .study-card {
+            background: rgba(16, 11, 46, 0.6);
+            border-color: rgba(255, 110, 48, 0.15);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        body.theme-huly .study-card:hover {
+            border-color: #ff007f;
+            color: #ff6e30;
+            box-shadow: 0 6px 20px rgba(255, 0, 127, 0.2);
+        }
+        
+        body.theme-huly .study-card i {
+            color: #ff6e30;
+        }
+        
+        body.theme-huly .studies-container h3,
+        body.theme-huly .section-title {
+            color: #ffffff;
+            border-bottom-color: rgba(255, 110, 48, 0.15);
+        }
+        
+        body.theme-huly .thoughts-item-ai {
+            background: rgba(16, 11, 46, 0.6);
+            border-color: rgba(255, 110, 48, 0.15);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        body.theme-huly .thoughts-item-ai:hover {
+            border-color: #ff007f;
+            box-shadow: 0 10px 30px rgba(255, 0, 127, 0.2);
+        }
+        
+        body.theme-huly .audit-title {
+            color: #ffffff;
+        }
+        
+        body.theme-huly .audit-meta,
+        body.theme-huly .audit-summary {
+            color: #c0b9ff;
+        }
+        
+        body.theme-huly .audit-thumbnail {
+            background: #0b071e;
+            border-color: rgba(255, 110, 48, 0.15);
+        }
+        
+        body.theme-huly .audit-thumbnail .emblem {
+            color: #ff6e30;
+            background: rgba(255, 110, 48, 0.1);
+        }
+        
+        body.theme-huly .timeline-item {
+            border-left-color: rgba(255, 110, 48, 0.15);
+        }
+        
+        body.theme-huly .timeline-item::before {
+            background: #0b071e;
+            border-color: #ff007f;
+        }
+        
+        body.theme-huly ._date {
+            color: #ff6e30;
+        }
+        
+        body.theme-huly ._institution h3 {
+            color: #ffffff;
+        }
+        
+        body.theme-huly ._summary {
+            color: #c0b9ff;
+        }
+        
+        body.theme-huly ._desc {
+            color: #a89eff;
+        }
+        
+        body.theme-huly #footer {
+            background: #070414;
+            border-top-color: rgba(255, 110, 48, 0.15);
+        }
+        
+        body.theme-huly #footer p.disclaimer,
+        body.theme-huly #footer p.copyright {
+            color: #c0b9ff;
+        }
+        
+        /* Ghibli Light Theme overrides */
+        body.theme-ghibli {
+            background-color: #faf9f6;
+            color: #1c1917;
+        }
+        
+        body.theme-ghibli nav.main-nav {
+            background: #faf9f6;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        
+        body.theme-ghibli nav.main-nav a {
+            color: #44403c;
+        }
+        
+        body.theme-ghibli nav.main-nav a:hover {
+            color: #000;
+            background: rgba(0, 0, 0, 0.04);
+        }
+        
+        body.theme-ghibli .container,
+        body.theme-ghibli .text-container,
+        body.theme-ghibli .image-container {
+            background: #faf9f6;
+        }
+        
+        body.theme-ghibli .role-title {
+            color: #d97706;
+        }
+        
+        body.theme-ghibli .name-title {
+            color: #1c1917;
+        }
+        
+        body.theme-ghibli .bio-intro,
+        body.theme-ghibli .bio-narrative {
+            color: #44403c;
+        }
+        
+        body.theme-ghibli .system-card {
+            background: #ffffff;
+            border-color: rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+        
+        body.theme-ghibli .system-card:hover {
+            border-color: #dfb15b;
+            box-shadow: 0 10px 30px rgba(223, 177, 91, 0.15);
+        }
+        
+        body.theme-ghibli .system-card h4 {
+            color: #1c1917;
+        }
+        
+        body.theme-ghibli .system-card p {
+            color: #57534e;
+        }
+        
+        body.theme-ghibli .system-card .badge {
+            background: rgba(13, 148, 136, 0.08);
+            color: #0d9488;
+            border-color: rgba(13, 148, 136, 0.15);
+        }
+        
+        body.theme-ghibli .study-card {
+            background: #ffffff;
+            border-color: rgba(0, 0, 0, 0.08);
+            color: #1c1917;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+        }
+        
+        body.theme-ghibli .study-card:hover {
+            border-color: #dfb15b;
+            color: #d97706;
+            box-shadow: 0 6px 20px rgba(223, 177, 91, 0.15);
+        }
+        
+        body.theme-ghibli .study-card i {
+            color: #dfb15b;
+        }
+        
+        body.theme-ghibli .studies-container h3,
+        body.theme-ghibli .section-title {
+            color: #1c1917;
+            border-bottom-color: rgba(0, 0, 0, 0.08);
+        }
+        
+        body.theme-ghibli .thoughts-item-ai {
+            background: #ffffff;
+            border-color: rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        }
+        
+        body.theme-ghibli .thoughts-item-ai:hover {
+            border-color: #dfb15b;
+            box-shadow: 0 10px 30px rgba(223, 177, 91, 0.15);
+        }
+        
+        body.theme-ghibli .audit-title {
+            color: #1c1917;
+        }
+        
+        body.theme-ghibli .audit-meta,
+        body.theme-ghibli .audit-summary {
+            color: #57534e;
+        }
+        
+        body.theme-ghibli .audit-thumbnail {
+            background: #fcfbfa;
+            border-color: rgba(0, 0, 0, 0.06);
+        }
+        
+        body.theme-ghibli .audit-thumbnail .emblem {
+            color: #dfb15b;
+            background: rgba(223, 177, 91, 0.08);
+        }
+        
+        body.theme-ghibli .timeline-item {
+            border-left-color: rgba(0, 0, 0, 0.08);
+        }
+        
+        body.theme-ghibli .timeline-item::before {
+            background: #faf9f6;
+            border-color: #dfb15b;
+        }
+        
+        body.theme-ghibli ._date {
+            color: #d97706;
+        }
+        
+        body.theme-ghibli ._institution h3 {
+            color: #1c1917;
+        }
+        
+        body.theme-ghibli ._summary {
+            color: #44403c;
+        }
+        
+        body.theme-ghibli ._desc {
+            color: #57534e;
+        }
+        
+        body.theme-ghibli #footer {
+            background: #f6f5f2;
+            border-top-color: rgba(0, 0, 0, 0.08);
+        }
+        
+        body.theme-ghibli #footer p.disclaimer,
+        body.theme-ghibli #footer p.copyright {
+            color: #57534e;
         }
         
         .hero-image img {
@@ -828,13 +1451,26 @@
 </head>
 <body>
 
-    <nav class="main-nav">
-        <a class="mobile-hidden" href="https://github.com/dipayandey1244" target="_blank">GitHub</a>
-        <a class="mobile-hidden" href="https://linkedin.com/in/dipayandey12" target="_blank">LinkedIn</a>
-        <a href="mailto:dipayandresearchwork@gmail.com">Email</a>
-        <a class="mobile-hidden" href="./resume/">Resume</a>
-        <a class="mobile-hidden" href="./playground/">SQL Playground</a>
-        <a class="cta" href="./risk-analytics-dashboard/">Launch Risk Engine</a>
+    <nav class="main-nav" style="display: flex; justify-content: space-between; align-items: center;">
+        <a href="./" class="logo" style="text-decoration: none; color: inherit; font-weight: 800; font-family: 'Outfit', sans-serif; font-size: 1.25rem;">
+            <span>DIPAYAN DEY</span>
+        </a>
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <a class="mobile-hidden" href="https://github.com/dipayandey1244" target="_blank">GitHub</a>
+            <a class="mobile-hidden" href="https://linkedin.com/in/dipayandey12" target="_blank">LinkedIn</a>
+            <a href="mailto:dipayandresearchwork@gmail.com">Email</a>
+            <a class="mobile-hidden" href="./resume/">Resume</a>
+            <a class="mobile-hidden" href="./playground/">SQL Playground</a>
+            
+            <div class="site-theme-selector">
+                <button class="theme-btn active" data-theme="cyber" onclick="setSiteTheme('cyber')" title="Cyber Mode"><i class="fa-solid fa-bolt"></i> Cyber</button>
+                <button class="theme-btn" data-theme="ghibli" onclick="setSiteTheme('ghibli')" title="Ghibli Mode"><i class="fa-solid fa-leaf"></i> Ghibli</button>
+                <button class="theme-btn" data-theme="attio" onclick="setSiteTheme('attio')" title="Attio Monochrome"><i class="fa-solid fa-circle-half-stroke"></i> Attio</button>
+                <button class="theme-btn" data-theme="huly" onclick="setSiteTheme('huly')" title="Huly Gradient"><i class="fa-solid fa-palette"></i> Huly</button>
+            </div>
+            
+            <a class="cta" href="./risk-analytics-dashboard/">Launch Risk Engine</a>
+        </div>
     </nav>
     
     <!-- Split Layout Grid Container -->
@@ -1025,10 +1661,6 @@
         <!-- Right Column: Hero Portrait -->
         <div class="image-container">
             <div class="hero-image-wrapper">
-                <div class="avatar-theme-selector">
-                    <button class="theme-btn active" data-theme="cyber" onclick="setAvatarTheme('cyber')"><i class="fa-solid fa-bolt"></i> Cyber</button>
-                    <button class="theme-btn" data-theme="ghibli" onclick="setAvatarTheme('ghibli')"><i class="fa-solid fa-leaf"></i> Ghibli</button>
-                </div>
                 <div class="hero-image">
                     <img alt="Pictured: Dipayan Dey." src="dipayan_cyber.png">
                 </div>
@@ -1178,19 +1810,32 @@
     <script src="./js/deip-agent.js"></script>
 
     <script>
-        function setAvatarTheme(theme) {
+        function setSiteTheme(theme) {
+            const body = document.body;
             const img = document.querySelector('.hero-image img');
             const btns = document.querySelectorAll('.theme-btn');
             
             btns.forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`.theme-btn[data-theme="${theme}"]`).classList.add('active');
+            document.querySelectorAll(`.theme-btn[data-theme="${theme}"]`).forEach(btn => btn.classList.add('active'));
+            
+            // Remove all custom theme classes
+            body.classList.remove('theme-ghibli', 'theme-attio', 'theme-huly');
             
             if (theme === 'cyber') {
                 img.src = 'dipayan_cyber.png';
-                document.querySelector('.hero-image').style.borderColor = 'rgba(56, 189, 248, 0.15)';
+                document.querySelector('.hero-image').style.borderColor = 'rgba(255, 255, 255, 0.06)';
             } else if (theme === 'ghibli') {
+                body.classList.add('theme-ghibli');
                 img.src = 'dipayan_ghibli.png';
                 document.querySelector('.hero-image').style.borderColor = 'rgba(223, 177, 91, 0.15)';
+            } else if (theme === 'attio') {
+                body.classList.add('theme-attio');
+                img.src = 'dipayan_cyber.png';
+                document.querySelector('.hero-image').style.borderColor = 'rgba(255, 255, 255, 0.1)';
+            } else if (theme === 'huly') {
+                body.classList.add('theme-huly');
+                img.src = 'dipayan_cyber.png';
+                document.querySelector('.hero-image').style.borderColor = 'rgba(255, 110, 48, 0.15)';
             }
         }
     </script>
