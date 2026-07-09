@@ -177,6 +177,60 @@
             75% { transform: rotate(2deg) scale(1.06); }
         }
         
+        .avatar-theme-selector {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            z-index: 10;
+            display: flex;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 3px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        
+        .theme-btn {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.55);
+            font-family: var(--font-sans);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 5px 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.25s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .theme-btn:hover {
+            color: #fff;
+        }
+        
+        .theme-btn.active {
+            color: #fff;
+        }
+        
+        .theme-btn[data-theme="cyber"].active {
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.12);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+        }
+        
+        .theme-btn[data-theme="ghibli"].active {
+            color: #dfb15b;
+            background: rgba(223, 177, 91, 0.12);
+            border: 1px solid rgba(223, 177, 91, 0.25);
+        }
+        
         .hero-image img {
             width: 100%;
             height: auto;
@@ -971,8 +1025,12 @@
         <!-- Right Column: Hero Portrait -->
         <div class="image-container">
             <div class="hero-image-wrapper">
+                <div class="avatar-theme-selector">
+                    <button class="theme-btn active" data-theme="cyber" onclick="setAvatarTheme('cyber')"><i class="fa-solid fa-bolt"></i> Cyber</button>
+                    <button class="theme-btn" data-theme="ghibli" onclick="setAvatarTheme('ghibli')"><i class="fa-solid fa-leaf"></i> Ghibli</button>
+                </div>
                 <div class="hero-image">
-                    <img alt="Pictured: Dipayan Dey." src="dipayan_headshot.png">
+                    <img alt="Pictured: Dipayan Dey." src="dipayan_cyber.png">
                 </div>
             </div>
         </div>
@@ -1118,6 +1176,24 @@
 
     <!-- PERSISTENT DEIP AI AGENT -->
     <script src="./js/deip-agent.js"></script>
+
+    <script>
+        function setAvatarTheme(theme) {
+            const img = document.querySelector('.hero-image img');
+            const btns = document.querySelectorAll('.theme-btn');
+            
+            btns.forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.theme-btn[data-theme="${theme}"]`).classList.add('active');
+            
+            if (theme === 'cyber') {
+                img.src = 'dipayan_cyber.png';
+                document.querySelector('.hero-image').style.borderColor = 'rgba(56, 189, 248, 0.15)';
+            } else if (theme === 'ghibli') {
+                img.src = 'dipayan_ghibli.png';
+                document.querySelector('.hero-image').style.borderColor = 'rgba(223, 177, 91, 0.15)';
+            }
+        }
+    </script>
 
 </body>
 </html>
