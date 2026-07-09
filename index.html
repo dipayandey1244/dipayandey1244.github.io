@@ -327,6 +327,57 @@
             color: #1c1917;
         }
         
+        body.theme-ghibli .system-cover {
+            border-radius: 8px 16px 16px 8px;
+            border: 2px solid #57534e;
+            box-shadow: 6px 12px 24px rgba(0,0,0,0.15);
+            background: #fdfaf2;
+        }
+        
+        body.theme-ghibli .system-cover .spine {
+            background: linear-gradient(90deg, rgba(87,83,78,0.05) 0%, rgba(87,83,78,0.2) 100%);
+            border-right: 1px solid rgba(87,83,78,0.3);
+        }
+        
+        body.theme-ghibli .system-cover .cover-content {
+            border: 1px dashed rgba(87, 83, 78, 0.3);
+            border-radius: 6px 12px 12px 6px;
+            height: calc(100% - 10px);
+            margin: 5px;
+            padding: 15px;
+        }
+        
+        body.theme-ghibli .system-cover .cover-title {
+            font-family: 'Outfit', sans-serif;
+            color: #57534e !important;
+            font-size: 1.05rem;
+            line-height: 1.3;
+        }
+        
+        body.theme-ghibli .system-cover .metadata {
+            color: #878580 !important;
+            font-family: 'Outfit', sans-serif;
+        }
+        
+        body.theme-ghibli .system-cover .tag {
+            background: rgba(223, 177, 91, 0.12);
+            color: #d97706 !important;
+            border-color: rgba(223, 177, 91, 0.25);
+        }
+        
+        body.theme-ghibli .system-cover.risk-engine { background: #fbf6eb; }
+        body.theme-ghibli .system-cover.modus-ai { background: #f5fbf8; }
+        body.theme-ghibli .system-cover.retail-intel { background: #f6f5fb; }
+        body.theme-ghibli .system-cover.finance-dna { background: #f5fbfe; }
+        body.theme-ghibli .system-cover.frugalgpt { background: #fbfbf4; }
+        body.theme-ghibli .system-cover.aethercrawl { background: #fdf5fc; }
+        body.theme-ghibli .system-cover.decision-ml { background: #f5fcfb; }
+        
+        body.theme-ghibli figure.thumb:hover .system-cover {
+            outline: 5px solid #dfb15b;
+            box-shadow: 0 0 35px rgba(223, 177, 91, 0.35);
+        }
+        
         body.theme-ghibli .system-card {
             background: #ffffff;
             border-color: rgba(0, 0, 0, 0.08);
@@ -560,6 +611,48 @@
             color: #ffffff;
         }
         
+        body.theme-attio .system-cover {
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #080808;
+            box-shadow: none;
+        }
+        
+        body.theme-attio .system-cover .spine {
+            background: linear-gradient(90deg, rgba(255,255,255,0.02) 0%, rgba(0,0,0,0.5) 100%);
+            border-right: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        body.theme-attio .system-cover .cover-title {
+            color: #ffffff !important;
+        }
+        
+        body.theme-attio .system-cover .metadata {
+            color: #888888 !important;
+        }
+        
+        body.theme-attio .system-cover .tag {
+            color: #888888 !important;
+            background: transparent;
+            border-color: transparent;
+        }
+        
+        body.theme-attio .system-cover.risk-engine,
+        body.theme-attio .system-cover.modus-ai,
+        body.theme-attio .system-cover.retail-intel,
+        body.theme-attio .system-cover.finance-dna,
+        body.theme-attio .system-cover.frugalgpt,
+        body.theme-attio .system-cover.aethercrawl,
+        body.theme-attio .system-cover.decision-ml {
+            background: #080808;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        body.theme-attio figure.thumb:hover .system-cover {
+            outline: 5px solid #ffffff;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
+        }
+        
         body.theme-attio .system-card {
             background: #080808;
             border-color: rgba(255, 255, 255, 0.1);
@@ -790,6 +883,50 @@
         body.theme-huly figure.thumb:hover h2 {
             opacity: 1;
             color: #ffffff;
+        }
+        
+        body.theme-huly .system-cover {
+            border-radius: 8px;
+            border: 1px solid rgba(255, 110, 48, 0.15);
+            background: rgba(16, 11, 46, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        body.theme-huly .system-cover .spine {
+            background: linear-gradient(90deg, rgba(255,110,48,0.05) 0%, rgba(0,0,0,0.5) 100%);
+            border-right: 1px solid rgba(255,110,48,0.1);
+        }
+        
+        body.theme-huly .system-cover .cover-title {
+            color: #ffffff !important;
+        }
+        
+        body.theme-huly .system-cover .metadata {
+            color: #c0b9ff !important;
+        }
+        
+        body.theme-huly .system-cover .tag {
+            color: #ff6e30 !important;
+            background: rgba(255, 110, 48, 0.05);
+            border-color: rgba(255, 110, 48, 0.15);
+        }
+        
+        body.theme-huly .system-cover.risk-engine,
+        body.theme-huly .system-cover.modus-ai,
+        body.theme-huly .system-cover.retail-intel,
+        body.theme-huly .system-cover.finance-dna,
+        body.theme-huly .system-cover.frugalgpt,
+        body.theme-huly .system-cover.aethercrawl,
+        body.theme-huly .system-cover.decision-ml {
+            background: rgba(16, 11, 46, 0.7);
+            border-color: rgba(255, 110, 48, 0.15);
+        }
+        
+        body.theme-huly figure.thumb:hover .system-cover {
+            outline: 5px solid #ff007f;
+            box-shadow: 0 0 30px rgba(255, 0, 127, 0.35);
         }
         
         body.theme-huly .system-card {
