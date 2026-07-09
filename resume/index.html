@@ -175,22 +175,32 @@
             object-fit: cover;
             box-shadow: 0 0 15px rgba(99, 102, 241, 0.15);
             transition: var(--transition);
-            animation: float-resume-avatar 5s ease-in-out infinite;
+            animation: ghibli-resume-bounce 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            transform-origin: bottom center;
         }
 
         .profile-photo:hover {
-            transform: scale(1.08) rotate(3.5deg);
-            border-color: var(--color-info);
-            box-shadow: 0 0 25px rgba(56, 189, 248, 0.45);
+            animation: ghibli-wiggle 0.8s ease-in-out infinite;
+            border-color: #dfb15b;
+            box-shadow: 0 0 25px rgba(223, 177, 91, 0.55);
         }
 
-        @keyframes float-resume-avatar {
+        @keyframes ghibli-resume-bounce {
             0%, 100% {
-                transform: translateY(0);
+                transform: translateY(0) scale(1, 1);
             }
             50% {
-                transform: translateY(-6px);
+                transform: translateY(-8px) scale(0.96, 1.04);
             }
+            25%, 75% {
+                transform: translateY(-2px) scale(1.03, 0.97);
+            }
+        }
+
+        @keyframes ghibli-wiggle {
+            0%, 100% { transform: rotate(0deg) scale(1.05); }
+            25% { transform: rotate(-2deg) scale(1.06); }
+            75% { transform: rotate(2deg) scale(1.06); }
         }
 
         .resume-header {
