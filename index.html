@@ -265,23 +265,66 @@
             background: rgba(0, 0, 0, 0.04);
         }
         
+        body.theme-ghibli nav.main-nav a.cta {
+            background: #d97706;
+            color: #fff;
+        }
+        
+        body.theme-ghibli nav.main-nav a.cta:hover {
+            background: #b45309;
+            box-shadow: 0 0 15px rgba(217, 119, 6, 0.4);
+        }
+        
+        body.theme-ghibli .logo {
+            color: #1c1917 !important;
+        }
+        
         body.theme-ghibli .container,
         body.theme-ghibli .text-container,
         body.theme-ghibli .image-container {
             background: #faf9f6;
         }
         
-        body.theme-ghibli .role-title {
-            color: #d97706;
-        }
-        
-        body.theme-ghibli .name-title {
+        body.theme-ghibli .author-container {
             color: #1c1917;
         }
         
-        body.theme-ghibli .bio-intro,
-        body.theme-ghibli .bio-narrative {
+        body.theme-ghibli .author-container .author {
+            color: #1c1917;
+        }
+        
+        body.theme-ghibli .author-container .role {
+            color: #d97706;
+            opacity: 1;
+        }
+        
+        body.theme-ghibli .image-text {
             color: #44403c;
+            opacity: 1;
+        }
+        
+        body.theme-ghibli .image-text a {
+            color: #d97706;
+        }
+        
+        body.theme-ghibli .image-text a:hover {
+            border-bottom-color: #d97706;
+        }
+        
+        body.theme-ghibli .books-container h3,
+        body.theme-ghibli .studies-container h3 {
+            color: #57534e;
+            opacity: 1;
+        }
+        
+        body.theme-ghibli figure.thumb h2 {
+            color: #57534e;
+            opacity: 0.8;
+        }
+        
+        body.theme-ghibli figure.thumb:hover h2 {
+            opacity: 1;
+            color: #1c1917;
         }
         
         body.theme-ghibli .system-card {
@@ -326,48 +369,6 @@
             color: #dfb15b;
         }
         
-        body.theme-ghibli .system-cover {
-            border-radius: 8px 16px 16px 8px;
-            border: 2px solid #57534e;
-            box-shadow: 6px 12px 24px rgba(0,0,0,0.15);
-            background: #fdfaf2;
-        }
-        
-        body.theme-ghibli .system-cover .cover-content {
-            border: 1px dashed rgba(87, 83, 78, 0.3);
-            border-radius: 6px 12px 12px 6px;
-            height: calc(100% - 10px);
-            margin: 5px;
-            padding: 15px;
-        }
-        
-        body.theme-ghibli .system-cover .cover-title {
-            font-family: 'Outfit', sans-serif;
-            color: #57534e !important;
-            font-size: 1.05rem;
-            line-height: 1.3;
-        }
-        
-        body.theme-ghibli .system-cover .metadata {
-            color: #878580 !important;
-            font-family: 'Outfit', sans-serif;
-        }
-        
-        body.theme-ghibli .system-cover .tag {
-            background: rgba(223, 177, 91, 0.12);
-            color: #d97706 !important;
-            border-color: rgba(223, 177, 91, 0.25);
-        }
-        
-        body.theme-ghibli .system-cover.risk-engine { background: #fbf6eb; }
-        body.theme-ghibli .system-cover.modus-ai { background: #f5fbf8; }
-        body.theme-ghibli .system-cover.retail-intel { background: #f6f5fb; }
-        body.theme-ghibli .system-cover.finance-dna { background: #f5fbfe; }
-        body.theme-ghibli .system-cover.frugalgpt { background: #fbfbf4; }
-        body.theme-ghibli .system-cover.aethercrawl { background: #fdf5fc; }
-        body.theme-ghibli .system-cover.decision-ml { background: #f5fcfb; }
-        
-        body.theme-ghibli .studies-container h3,
         body.theme-ghibli .section-title {
             color: #1c1917;
             border-bottom-color: rgba(0, 0, 0, 0.08);
@@ -377,6 +378,11 @@
             background: #ffffff;
             border-color: rgba(0, 0, 0, 0.08);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+            color: #1c1917;
+        }
+        
+        body.theme-ghibli .thoughts-item-ai h3 {
+            color: #1c1917;
         }
         
         body.theme-ghibli .thoughts-item-ai:hover {
@@ -428,6 +434,38 @@
             color: #57534e;
         }
         
+        body.theme-ghibli ._bubble {
+            background: #faf9f6;
+            border-color: rgba(0,0,0,0.08);
+            color: #d97706;
+        }
+        
+        body.theme-ghibli .list-item:hover ._bubble {
+            background: #d97706;
+            color: #fff;
+            border-color: #d97706;
+        }
+        
+        body.theme-ghibli .list-detail ._title-block h3 {
+            color: #1c1917;
+        }
+        
+        body.theme-ghibli .list-detail ._summary {
+            color: #d97706;
+        }
+        
+        body.theme-ghibli .list-detail p._desc {
+            color: #57534e;
+        }
+        
+        body.theme-ghibli .list-detail ul li {
+            color: #57534e;
+        }
+        
+        body.theme-ghibli .list-detail ul li::before {
+            color: #d97706;
+        }
+        
         body.theme-ghibli #footer {
             background: #f6f5f2;
             border-top-color: rgba(0, 0, 0, 0.08);
@@ -458,24 +496,68 @@
             background: rgba(255, 255, 255, 0.05);
         }
         
+        body.theme-attio nav.main-nav a.cta {
+            background: #ffffff;
+            color: #000000;
+            font-weight: 700;
+        }
+        
+        body.theme-attio nav.main-nav a.cta:hover {
+            background: #cccccc;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+        
+        body.theme-attio .logo {
+            color: #ffffff !important;
+        }
+        
         body.theme-attio .container,
         body.theme-attio .text-container,
         body.theme-attio .image-container {
             background: #000000;
         }
         
-        body.theme-attio .role-title {
-            color: #ffffff;
-            font-weight: 800;
-        }
-        
-        body.theme-attio .name-title {
+        body.theme-attio .author-container {
             color: #ffffff;
         }
         
-        body.theme-attio .bio-intro,
-        body.theme-attio .bio-narrative {
+        body.theme-attio .author-container .author {
+            color: #ffffff;
+        }
+        
+        body.theme-attio .author-container .role {
+            color: #ffffff;
+            opacity: 0.9;
+        }
+        
+        body.theme-attio .image-text {
             color: #888888;
+            opacity: 1;
+        }
+        
+        body.theme-attio .image-text a {
+            color: #ffffff;
+            border-bottom-color: rgba(255,255,255,0.4);
+        }
+        
+        body.theme-attio .image-text a:hover {
+            border-bottom-color: #ffffff;
+        }
+        
+        body.theme-attio .books-container h3,
+        body.theme-attio .studies-container h3 {
+            color: #888888;
+            opacity: 1;
+        }
+        
+        body.theme-attio figure.thumb h2 {
+            color: #888888;
+            opacity: 0.8;
+        }
+        
+        body.theme-attio figure.thumb:hover h2 {
+            opacity: 1;
+            color: #ffffff;
         }
         
         body.theme-attio .system-card {
@@ -530,6 +612,11 @@
             background: #080808;
             border-color: rgba(255, 255, 255, 0.1);
             box-shadow: none;
+            color: #ffffff;
+        }
+        
+        body.theme-attio .thoughts-item-ai h3 {
+            color: #ffffff;
         }
         
         body.theme-attio .thoughts-item-ai:hover {
@@ -581,6 +668,38 @@
             color: #666666;
         }
         
+        body.theme-attio ._bubble {
+            background: #080808;
+            border-color: rgba(255,255,255,0.1);
+            color: #ffffff;
+        }
+        
+        body.theme-attio .list-item:hover ._bubble {
+            background: #ffffff;
+            color: #000;
+            border-color: #ffffff;
+        }
+        
+        body.theme-attio .list-detail ._title-block h3 {
+            color: #ffffff;
+        }
+        
+        body.theme-attio .list-detail ._summary {
+            color: #ffffff;
+        }
+        
+        body.theme-attio .list-detail p._desc {
+            color: #888888;
+        }
+        
+        body.theme-attio .list-detail ul li {
+            color: #888888;
+        }
+        
+        body.theme-attio .list-detail ul li::before {
+            color: #ffffff;
+        }
+        
         body.theme-attio #footer {
             background: #080808;
             border-top-color: rgba(255, 255, 255, 0.1);
@@ -611,23 +730,66 @@
             background: rgba(255, 110, 48, 0.08);
         }
         
+        body.theme-huly nav.main-nav a.cta {
+            background: #ff6e30;
+            color: #fff;
+        }
+        
+        body.theme-huly nav.main-nav a.cta:hover {
+            background: #e0531b;
+            box-shadow: 0 0 15px rgba(255, 110, 48, 0.4);
+        }
+        
+        body.theme-huly .logo {
+            color: #ffffff !important;
+        }
+        
         body.theme-huly .container,
         body.theme-huly .text-container,
         body.theme-huly .image-container {
             background: #0b071e;
         }
         
-        body.theme-huly .role-title {
-            color: #ff6e30;
-        }
-        
-        body.theme-huly .name-title {
+        body.theme-huly .author-container {
             color: #ffffff;
         }
         
-        body.theme-huly .bio-intro,
-        body.theme-huly .bio-narrative {
+        body.theme-huly .author-container .author {
+            color: #ffffff;
+        }
+        
+        body.theme-huly .author-container .role {
+            color: #ff6e30;
+            opacity: 1;
+        }
+        
+        body.theme-huly .image-text {
             color: #c0b9ff;
+            opacity: 1;
+        }
+        
+        body.theme-huly .image-text a {
+            color: #ff6e30;
+        }
+        
+        body.theme-huly .image-text a:hover {
+            border-bottom-color: #ff6e30;
+        }
+        
+        body.theme-huly .books-container h3,
+        body.theme-huly .studies-container h3 {
+            color: #a89eff;
+            opacity: 1;
+        }
+        
+        body.theme-huly figure.thumb h2 {
+            color: #a89eff;
+            opacity: 0.8;
+        }
+        
+        body.theme-huly figure.thumb:hover h2 {
+            opacity: 1;
+            color: #ffffff;
         }
         
         body.theme-huly .system-card {
@@ -682,6 +844,11 @@
             background: rgba(16, 11, 46, 0.6);
             border-color: rgba(255, 110, 48, 0.15);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            color: #ffffff;
+        }
+        
+        body.theme-huly .thoughts-item-ai h3 {
+            color: #ffffff;
         }
         
         body.theme-huly .thoughts-item-ai:hover {
@@ -731,6 +898,38 @@
         
         body.theme-huly ._desc {
             color: #a89eff;
+        }
+        
+        body.theme-huly ._bubble {
+            background: rgba(16, 11, 46, 0.6);
+            border-color: rgba(255, 110, 48, 0.15);
+            color: #ff6e30;
+        }
+        
+        body.theme-huly .list-item:hover ._bubble {
+            background: #ff007f;
+            color: #fff;
+            border-color: #ff007f;
+        }
+        
+        body.theme-huly .list-detail ._title-block h3 {
+            color: #ffffff;
+        }
+        
+        body.theme-huly .list-detail ._summary {
+            color: #ff6e30;
+        }
+        
+        body.theme-huly .list-detail p._desc {
+            color: #c0b9ff;
+        }
+        
+        body.theme-huly .list-detail ul li {
+            color: #a89eff;
+        }
+        
+        body.theme-huly .list-detail ul li::before {
+            color: #ff6e30;
         }
         
         body.theme-huly #footer {
