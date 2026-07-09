@@ -133,14 +133,38 @@
             padding-top: 20px;
         }
         
-        .hero-image {
+        .hero-image-wrapper {
             position: relative;
             width: 90%;
             max-width: 380px;
+            display: flex;
+            justify-content: center;
+            animation: float-avatar 6s ease-in-out infinite;
+        }
+        
+        .hero-image {
+            position: relative;
+            width: 100%;
             border-radius: 12px;
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.06);
             box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        .hero-image:hover {
+            transform: scale(1.05) rotate(1.5deg);
+            border-color: rgba(56, 189, 248, 0.6);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6), 0 0 35px rgba(56, 189, 248, 0.45);
+        }
+        
+        @keyframes float-avatar {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
         }
         
         .hero-image img {
@@ -171,7 +195,7 @@
             .image-container {
                 padding: 20px 24px 60px 24px;
             }
-            .hero-image {
+            .hero-image-wrapper {
                 max-width: 320px;
                 margin: 0 auto;
             }
@@ -931,8 +955,10 @@
         
         <!-- Right Column: Hero Portrait -->
         <div class="image-container">
-            <div class="hero-image">
-                <img alt="Pictured: Dipayan Dey." src="dipayan_headshot.png">
+            <div class="hero-image-wrapper">
+                <div class="hero-image">
+                    <img alt="Pictured: Dipayan Dey." src="dipayan_headshot.png">
+                </div>
             </div>
         </div>
         

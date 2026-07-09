@@ -175,12 +175,22 @@
             object-fit: cover;
             box-shadow: 0 0 15px rgba(99, 102, 241, 0.15);
             transition: var(--transition);
+            animation: float-resume-avatar 5s ease-in-out infinite;
         }
 
         .profile-photo:hover {
-            transform: scale(1.05);
-            border-color: var(--color-accent);
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.35);
+            transform: scale(1.08) rotate(3.5deg);
+            border-color: var(--color-info);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.45);
+        }
+
+        @keyframes float-resume-avatar {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
         }
 
         .resume-header {
