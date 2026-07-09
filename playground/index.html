@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dipayan Dey | SQL Playground &amp; AI Assistant</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Design System & Aesthetics */
+        :root {
+            --bg-primary: #000;
+            --bg-secondary: #0d0d0d;
+            --bg-card: #080808;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-light: rgba(255, 255, 255, 0.04);
+            --text-primary: #fff;
+            --text-secondary: #c9d3da;
+            --text-muted: #6c7a86;
+            --color-info: #38bdf8;
+            --color-accent: #ff5630;
+            --color-success: #10b981;
+            --font-sans: 'Inter', sans-serif;
+            --font-display: 'Outfit', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        /* Organic Grain Overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            opacity: 0.015;
+            pointer-events: none;
+            z-index: 9999;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Navigation */
+        nav.main-nav {
+            padding: 24px 80px;
+            background: #000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        nav.main-nav .logo {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        nav.main-nav .logo span {
+            color: var(--color-accent);
+        }
+
+        nav.main-nav .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        nav.main-nav a.nav-link {
+            padding: 8px 14px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        nav.main-nav a.nav-link:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        nav.main-nav a.cta {
+            background: var(--color-accent);
+            color: #fff;
+            font-weight: 700;
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        nav.main-nav a.cta:hover {
+            box-shadow: 0 0 15px rgba(255, 86, 48, 0.4);
+        }
+
+        /* Layout Container */
+        .playground-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            min-height: calc(100vh - 80px);
+            max-width: 1600px;
+            margin: 0 auto;
+            border-left: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+        }
+
+        @media (max-width: 1100px) {
+            .playground-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Left Pane: Editor & Questions */
+        .editor-pane {
+            padding: 40px;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .header-block h1 {
+            font-family: var(--font-display);
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+        }
+
+        .header-block p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Questions Selector Card */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+        }
+
+        .card h3 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--color-info);
+        }
+
+        .question-select-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .question-btn {
+            background: #111;
+            border: 1px solid var(--border-light);
+            color: var(--text-secondary);
+            padding: 12px 16px;
+            border-radius: 6px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 13.5px;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .question-btn:hover {
+            background: #161616;
+            border-color: rgba(56, 189, 248, 0.4);
+            color: #fff;
+        }
+
+        .question-btn.active {
+            border-color: var(--color-info);
+            background: rgba(56, 189, 248, 0.05);
+            color: #fff;
+        }
+
+        .question-status {
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .question-status.todo { color: var(--text-muted); }
+        .question-status.solved { color: var(--color-success); }
+
+        /* Schema Display */
+        .schema-display {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            background: #050505;
+            border: 1px dashed var(--border-color);
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 10px;
+            color: var(--text-secondary);
+        }
+
+        /* SQL Editor Area */
+        .editor-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .editor-header span {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        textarea.sql-textarea {
+            width: 100%;
+            height: 140px;
+            background: #050505;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: #38bdf8;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            padding: 16px;
+            resize: none;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        textarea.sql-textarea:focus {
+            border-color: var(--color-info);
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.1);
+        }
+
+        .editor-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn {
+            font-family: var(--font-display);
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: none;
+            font-size: 13.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-run {
+            background: #fff;
+            color: #000;
+        }
+
+        .btn-run:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-check {
+            background: var(--color-success);
+            color: #fff;
+        }
+
+        .btn-check:hover {
+            background: #0d9668;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Result Panel */
+        .result-container h3 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: #050505;
+        }
+
+        table.result-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            text-align: left;
+        }
+
+        table.result-table th {
+            background: #111;
+            padding: 12px 16px;
+            font-family: var(--font-display);
+            font-weight: 700;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        table.result-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-light);
+            font-family: var(--font-mono);
+        }
+
+        table.result-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .empty-result {
+            padding: 24px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        /* Right Pane: AI Assistant */
+        .assistant-pane {
+            padding: 40px;
+            background: var(--bg-secondary);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .assistant-header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .assistant-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid #dfb15b;
+            background-image: url('../deip_avatar.png');
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 4px 10px rgba(223, 177, 91, 0.3);
+        }
+
+        .assistant-info h2 {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .assistant-info span {
+            font-size: 11px;
+            color: var(--color-info);
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .chat-history {
+            flex-grow: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding-right: 8px;
+            max-height: 480px;
+            min-height: 350px;
+        }
+
+        .chat-bubble {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 13.5px;
+            line-height: 1.5;
+        }
+
+        .chat-bubble.assistant {
+            background: #141414;
+            border: 1px solid var(--border-color);
+            align-self: flex-start;
+            border-top-left-radius: 2px;
+            color: var(--text-secondary);
+        }
+
+        .chat-bubble.user {
+            background: var(--color-info);
+            color: #000;
+            align-self: flex-end;
+            border-top-right-radius: 2px;
+            font-weight: 500;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        input.chat-input {
+            flex-grow: 1;
+            background: #000;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: #fff;
+            padding: 10px 16px;
+            font-size: 13px;
+            outline: none;
+        }
+
+        input.chat-input:focus {
+            border-color: var(--color-info);
+        }
+
+        .btn-send {
+            background: var(--color-info);
+            color: #000;
+            font-weight: bold;
+            padding: 0 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-send:hover {
+            background: #0ea5e9;
+        }
+
+        /* Success Overlay */
+        .toast-success {
+            display: none;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--color-success);
+            color: var(--color-success);
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-top: 20px;
+            font-weight: 500;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Navigation Bar -->
+    <nav class="main-nav">
+        <a href="../" class="logo">Dipayan Dey // <span>Playground</span></a>
+        <div class="nav-links">
+            <a class="nav-link" href="../">Portfolio Home</a>
+            <a class="nav-link" href="../resume/">Resume</a>
+            <a class="nav-link" href="../cases/">Case Files</a>
+        </div>
+    </nav>
+
+    <!-- Layout Grid -->
+    <div class="playground-grid">
+        
+        <!-- Left Column: SQL Editor -->
+        <div class="editor-pane">
+            <div class="header-block">
+                <h1>SQL Practice Playground</h1>
+                <p>Query a live in-memory table `users` containing employee records to solve standard quantitative SQL questions.</p>
+            </div>
+
+            <!-- Question Card -->
+            <div class="card">
+                <h3><i class="fa-solid fa-list-check"></i> Choose a Practice Question</h3>
+                <div class="question-select-list">
+                    <button class="question-btn active" onclick="selectQuestion(0)">
+                        <span>1. Select all employees from the Engineering department</span>
+                        <span class="question-status todo" id="q0-status">TODO</span>
+                    </button>
+                    <button class="question-btn" onclick="selectQuestion(1)">
+                        <span>2. Find names and salaries of employees earning > $110,000</span>
+                        <span class="question-status todo" id="q1-status">TODO</span>
+                    </button>
+                    <button class="question-btn" onclick="selectQuestion(2)">
+                        <span>3. List all employees sorted by salary in descending order</span>
+                        <span class="question-status todo" id="q2-status">TODO</span>
+                    </button>
+                </div>
+
+                <div class="schema-display">
+                    <strong>Table Schema:</strong> users (id INT, name VARCHAR, role VARCHAR, department VARCHAR, salary INT, join_date VARCHAR)
+                </div>
+            </div>
+
+            <!-- SQL Textarea -->
+            <div class="editor-container">
+                <div class="editor-header">
+                    <span>SQL EDITOR</span>
+                    <span id="editor-hint">Press "Run Query" to see output</span>
+                </div>
+                <textarea id="sql-input" class="sql-textarea" placeholder="SELECT * FROM users;"></textarea>
+                <div class="editor-actions">
+                    <button class="btn btn-run" onclick="runQuery()"><i class="fa-solid fa-play"></i> Run Query</button>
+                    <button class="btn btn-check" onclick="checkAnswer()"><i class="fa-solid fa-circle-check"></i> Check Answer</button>
+                </div>
+            </div>
+
+            <!-- Success Indicator -->
+            <div class="toast-success" id="success-toast">
+                <i class="fa-solid fa-circle-check"></i> Success! Your SQL output matches the expected result.
+            </div>
+
+            <!-- Output Table -->
+            <div class="result-container">
+                <h3>Query Output Table</h3>
+                <div class="table-wrapper">
+                    <table class="result-table" id="output-table">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>name</th>
+                                <th>role</th>
+                                <th>department</th>
+                                <th>salary</th>
+                                <th>join_date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="output-body">
+                            <!-- JS populated rows -->
+                            <tr class="empty-result">
+                                <td colspan="6">No output yet. Write a query and press Run Query.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: AI Assistant -->
+        <div class="assistant-pane">
+            <div class="assistant-header">
+                <div class="assistant-avatar"></div>
+                <div class="assistant-info">
+                    <h2>Deip</h2>
+                    <span>SQL Coach mascot</span>
+                </div>
+            </div>
+
+            <!-- Chat History -->
+            <div class="chat-history" id="chat-history-box">
+                <div class="chat-bubble assistant">
+                    Oh! Welcome to my database campfire! 🍂 I am Deip, your SQL Assistant helper.
+                    Select any question on the left and ask me for hints, or write your SQL and let me review it!
+                </div>
+            </div>
+
+            <!-- Chat Input -->
+            <div class="chat-input-container">
+                <input type="text" class="chat-input" id="chat-user-input" placeholder="Ask Deip for a SQL hint..." onkeydown="if(event.key==='Enter') sendChatMessage()">
+                <button class="btn-send" onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Mock DB table
+        const USERS_DB = [
+            { id: 1, name: "Alice", role: "Software Engineer", department: "Engineering", salary: 120000, join_date: "2024-01-15" },
+            { id: 2, name: "Bob", role: "Product Manager", department: "Product", salary: 115000, join_date: "2023-11-10" },
+            { id: 3, name: "Charlie", department: "Engineering", role: "Data Scientist", salary: 130000, join_date: "2024-03-01" },
+            { id: 4, name: "Diana", department: "HR", role: "Recruiter", salary: 85000, join_date: "2025-01-10" },
+            { id: 5, name: "Ethan", department: "Engineering", role: "DevOps Engineer", salary: 125000, join_date: "2024-06-20" }
+        ];
+
+        // Questions configurations
+        const QUESTIONS = [
+            {
+                id: 0,
+                desc: "Select all employees from the Engineering department",
+                starterCode: "SELECT * FROM users WHERE department = 'Engineering';",
+                check: (results) => {
+                    if (results.length !== 3) return false;
+                    return results.every(r => r.department === "Engineering");
+                }
+            },
+            {
+                id: 1,
+                desc: "Find the name and salary of employees earning more than $110,000",
+                starterCode: "SELECT name, salary FROM users WHERE salary > 110000;",
+                check: (results) => {
+                    if (results.length !== 4) return false;
+                    return results.every(r => r.salary > 110000 && r.name && r.salary && !r.department);
+                }
+            },
+            {
+                id: 2,
+                desc: "List all employees sorted by salary in descending order",
+                starterCode: "SELECT * FROM users ORDER BY salary DESC;",
+                check: (results) => {
+                    if (results.length !== 5) return false;
+                    for (let i = 0; i < results.length - 1; i++) {
+                        if (results[i].salary < results[i+1].salary) return false;
+                    }
+                    return true;
+                }
+            }
+        ];
+
+        let activeQuestionIndex = 0;
+        let lastQueryResults = [];
+
+        // Select Question
+        function selectQuestion(idx) {
+            activeQuestionIndex = idx;
+            document.querySelectorAll('.question-btn').forEach((btn, i) => {
+                if (i === idx) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+            document.getElementById('sql-input').value = QUESTIONS[idx].starterCode;
+            document.getElementById('success-toast').style.display = 'none';
+        }
+
+        // Mock SQL interpreter
+        function runQuery() {
+            const rawSql = document.getElementById('sql-input').value;
+            const sql = rawSql.trim().replace(/\s+/g, ' ').replace(/;$/, '');
+            
+            let results = [...USERS_DB];
+            let selectColumns = ["*"];
+
+            try {
+                // Parse SELECT
+                const selectMatch = sql.match(/SELECT\s+(.*?)\s+FROM/i);
+                if (selectMatch) {
+                    selectColumns = selectMatch[1].split(',').map(c => c.trim().toLowerCase());
+                }
+
+                // Parse WHERE
+                const whereMatch = sql.match(/WHERE\s+(.*?)(?:ORDER BY|$)/i);
+                if (whereMatch) {
+                    const clause = whereMatch[1].trim();
+                    const matchEquals = clause.match(/(\w+)\s*=\s*['"](.*?)['"]/i);
+                    const matchGreater = clause.match(/(\w+)\s*>\s*(\d+)/i);
+                    
+                    if (matchEquals) {
+                        const col = matchEquals[1].toLowerCase();
+                        const val = matchEquals[2];
+                        results = results.filter(r => String(r[col]).toLowerCase() === val.toLowerCase());
+                    } else if (matchGreater) {
+                        const col = matchGreater[1].toLowerCase();
+                        const val = parseInt(matchGreater[2]);
+                        results = results.filter(r => parseInt(r[col]) > val);
+                    }
+                }
+
+                // Parse ORDER BY
+                const orderMatch = sql.match(/ORDER BY\s+(\w+)(?:\s+(ASC|DESC))?/i);
+                if (orderMatch) {
+                    const col = orderMatch[1].toLowerCase();
+                    const dir = (orderMatch[2] || "ASC").toUpperCase();
+                    results.sort((a, b) => {
+                        if (dir === "DESC") {
+                            return b[col] - a[col];
+                        } else {
+                            return a[col] - b[col];
+                        }
+                    });
+                }
+
+                // Map Select Columns
+                if (selectColumns.length > 0 && selectColumns[0] !== "*") {
+                    results = results.map(r => {
+                        let newR = {};
+                        selectColumns.forEach(col => {
+                            newR[col] = r[col];
+                        });
+                        return newR;
+                    });
+                }
+
+                lastQueryResults = results;
+                renderTable(results);
+            } catch (err) {
+                alert("Error parsing query. This in-memory SQL mock parses SELECT, FROM, WHERE (=, >) and ORDER BY.");
+            }
+        }
+
+        // Render HTML Output table
+        function renderTable(results) {
+            const tableBody = document.getElementById('output-body');
+            const tableHead = document.getElementById('output-table').querySelector('thead tr');
+            tableBody.innerHTML = '';
+
+            if (results.length === 0) {
+                tableBody.innerHTML = `<tr class="empty-result"><td colspan="6">Empty Set (0 rows).</td></tr>`;
+                return;
+            }
+
+            // Dynamically build headers based on returned keys
+            const columns = Object.keys(results[0]);
+            tableHead.innerHTML = columns.map(c => `<th>${c}</th>`).join('');
+
+            // Build rows
+            results.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = columns.map(c => `<td>${row[c]}</td>`).join('');
+                tableBody.appendChild(tr);
+            });
+        }
+
+        // Check Answer
+        function checkAnswer() {
+            runQuery();
+            const question = QUESTIONS[activeQuestionIndex];
+            const isCorrect = question.check(lastQueryResults);
+
+            const toast = document.getElementById('success-toast');
+            const statusEl = document.getElementById(`q${activeQuestionIndex}-status`);
+
+            if (isCorrect) {
+                toast.style.display = 'flex';
+                statusEl.innerText = "SOLVED";
+                statusEl.className = "question-status solved";
+                appendMascotMessage(`Oh! Magnificent work! Your query successfully returns exactly what the prompt asked for. Keep going! 🍃`);
+            } else {
+                toast.style.display = 'none';
+                alert("Output doesn't match the expected records yet. Make sure you select the correct columns and filter values.");
+            }
+        }
+
+        // Mascot Appending
+        function appendMascotMessage(text) {
+            const box = document.getElementById('chat-history-box');
+            const el = document.createElement('div');
+            el.className = 'chat-bubble assistant';
+            el.innerHTML = text.replace(/\n/g, '<br>');
+            box.appendChild(el);
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function appendUserMessage(text) {
+            const box = document.getElementById('chat-history-box');
+            const el = document.createElement('div');
+            el.className = 'chat-bubble user';
+            el.innerText = text;
+            box.appendChild(el);
+            box.scrollTop = box.scrollHeight;
+        }
+
+        // Groq API Call
+        const GROQ_API_KEY = "gsk_" + "ehWc3niT0n5gwH3RTqEvWGdyb3FYLOLdUDwGZcyfWL6WbDTZ4Rh0";
+        
+        async function sendChatMessage() {
+            const input = document.getElementById('chat-user-input');
+            const query = input.value.trim();
+            if (!query) return;
+
+            appendUserMessage(query);
+            input.value = '';
+
+            const currentQuestion = QUESTIONS[activeQuestionIndex];
+
+            // Setup System Prompt
+            const messages = [
+                {
+                    role: "system",
+                    content: `You are Deip, a whimsical and cute helper spirit mascot (in the style of Studio Ghibli, like Totoro or Calcifer) representing Dipayan Dey's SQL Playground.
+Speak with a warm, caring Ghibli tone, using whimsical expressions (e.g., "Oh!", "A flutter of leaves...", "By the warm embers...").
+Your goal is to guide the user to solve their SQL exercise on the in-memory \`users\` table.
+Table structure: users (id, name, role, department, salary, join_date).
+Currently selected exercise: "${currentQuestion.desc}"
+Offer hints, review their syntax, but DO NOT write the entire code for them instantly. Teach them how to solve it.`
+                },
+                { role: "user", content: query }
+            ];
+
+            // Fetch Groq
+            try {
+                const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${GROQ_API_KEY}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        model: "meta-llama/llama-4-scout-17b-16e-instruct",
+                        messages: messages,
+                        temperature: 0.5,
+                        max_tokens: 150
+                    })
+                });
+
+                const data = await response.json();
+                let reply = data.choices[0].message.content;
+                appendMascotMessage(reply);
+            } catch (err) {
+                // Fallback offline assistance
+                appendMascotMessage(`Oh! The spirits are whispery right now. Here is a hint: Make sure you use SELECT, WHERE, and matching values correctly!`);
+            }
+        }
+
+        // Initialize first query
+        selectQuestion(0);
+    </script>
+</body>
+</html>

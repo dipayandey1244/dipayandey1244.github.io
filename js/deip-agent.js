@@ -25,6 +25,7 @@ You have deep knowledge about Dipayan Dey:
    - Paper Implementation & Open Source: Core patches and interactive showcases for PyTorch (differentiable Expected Shortfall Loss quantile optimization paper, ArXiv:2006.01244), LangGraph (cycles), LightGBM, FastAPI, and Pydantic (located at '/contributions/'). Mention his custom package 'pytorch-risk-extensions' for differentiable tail-risk.
    - Decision ML Engine: A framework for causal inference and MDP policy optimization, evaluating trade-off matrices and dynamic constraints in quantitative decision-making (located at '/cases/').
    - Systemic Business Cases: Audit reports detailing XGBoost surveillance, BNY LangGraph councils, and Morgan Stanley spoofing audits (located at '/cases/').
+   - SQL Practice Playground: An interactive SQL editor where users practice database queries on mock employee tables and get hints from the Ghibli SQL Assistant (located at '/playground/').
    - Interactive Resume: Comprehensive timeline and skills CV (located at '/resume/').
 4. Contact Info:
    - Email: dipayandey44@gmail.com
