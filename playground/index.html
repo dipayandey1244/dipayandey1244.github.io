@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dipayan Dey | SQL Practice Arena</title>
+    <title>Google SQL practice playground</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,29 +14,26 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* Design Tokens & Theme Configuration */
+        /* Google Playful Palette & Tokens */
         :root {
-            --bg-primary: #040508;
-            --bg-secondary: #0a0c12;
-            --bg-glass: rgba(10, 12, 20, 0.6);
+            --bg-primary: #090b11;
+            --bg-secondary: #0f121d;
+            --bg-card: rgba(20, 24, 38, 0.65);
             --border-color: rgba(255, 255, 255, 0.08);
-            --border-glow: rgba(56, 189, 248, 0.15);
+            
+            --google-blue: #1a73e8;
+            --google-red: #ea4335;
+            --google-yellow: #fbbc05;
+            --google-green: #34a853;
+            
             --text-primary: #f8fafc;
             --text-secondary: #cbd5e1;
             --text-muted: #64748b;
             
-            --color-blue: #38bdf8;
-            --color-blue-glow: rgba(56, 189, 248, 0.35);
-            --color-accent: #ff5630;
-            --color-accent-glow: rgba(255, 86, 48, 0.35);
-            --color-success: #10b981;
-            --color-success-glow: rgba(16, 185, 129, 0.35);
-            --color-gold: #dfb15b;
-            --color-gold-glow: rgba(223, 177, 91, 0.35);
-            
             --font-sans: 'Plus Jakarta Sans', sans-serif;
             --font-display: 'Outfit', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
+            --transition-bounce: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -56,37 +53,39 @@
             position: relative;
         }
 
-        /* Ambient Glowing Background Blobs */
-        body::after {
-            content: '';
+        /* Confetti Canvas Overlay */
+        #confetti-canvas {
             position: fixed;
-            top: -20%;
-            left: -15%;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(56, 189, 248, 0.06) 0%, rgba(56, 189, 248, 0) 70%);
-            z-index: -2;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             pointer-events: none;
-            filter: blur(80px);
+            z-index: 1000;
         }
 
-        body::before {
-            content: "";
+        /* Ambient Glowing Background Blobs (Google Themed) */
+        .glow-blob {
             position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            opacity: 0.012;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            z-index: -2;
             pointer-events: none;
-            z-index: 9999;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-            z-index: -1;
+            filter: blur(120px);
+            opacity: 0.04;
         }
+        #blob-blue { top: -10%; left: -10%; background: var(--google-blue); }
+        #blob-red { bottom: 10%; right: 10%; background: var(--google-red); }
+        #blob-yellow { top: 40%; right: 20%; background: var(--google-yellow); }
+        #blob-green { bottom: -10%; left: 30%; background: var(--google-green); }
 
         /* Navigation */
         nav.main-nav {
-            padding: 20px 80px;
-            background: rgba(4, 5, 8, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            padding: 16px 80px;
+            background: rgba(9, 11, 17, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -98,19 +97,31 @@
 
         nav.main-nav .logo {
             font-family: var(--font-display);
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             font-weight: 800;
             color: #fff;
             text-decoration: none;
-            letter-spacing: -0.5px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
         }
 
-        nav.main-nav .logo i {
-            color: var(--color-blue);
-            text-shadow: 0 0 10px var(--color-blue-glow);
+        /* Google Letters color layout */
+        .google-color-letter:nth-child(1) { color: var(--google-blue); }
+        .google-color-letter:nth-child(2) { color: var(--google-red); }
+        .google-color-letter:nth-child(3) { color: var(--google-yellow); }
+        .google-color-letter:nth-child(4) { color: var(--google-blue); }
+        .google-color-letter:nth-child(5) { color: var(--google-green); }
+        .google-color-letter:nth-child(6) { color: var(--google-red); }
+
+        nav.main-nav .logo span.tag {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border-color);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 20px;
+            color: var(--text-secondary);
         }
 
         nav.main-nav .nav-links {
@@ -162,12 +173,9 @@
 
         .header-block h1 {
             font-family: var(--font-display);
-            font-size: 2.4rem;
+            font-size: 2.5rem;
             font-weight: 800;
             letter-spacing: -1.2px;
-            background: linear-gradient(135deg, #ffffff 40%, #a5b4fc 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
             margin-bottom: 6px;
         }
 
@@ -177,35 +185,44 @@
             line-height: 1.5;
         }
 
-        /* Glassmorphic Panel Cards */
+        /* Playful Glassmorphic Panel Cards */
         .glass-card {
-            background: var(--bg-glass);
+            background: var(--bg-card);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
+            border-radius: 16px;
             padding: 24px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
             transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
         }
 
-        .glass-card:hover {
-            border-color: rgba(56, 189, 248, 0.2);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.05);
+        /* Card accent lines (Google style) */
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--google-blue) 0%, var(--google-red) 25%, var(--google-yellow) 50%, var(--google-green) 75%, var(--google-blue) 100%);
         }
 
         .glass-card h3 {
             font-family: var(--font-display);
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             font-weight: 700;
             margin-bottom: 16px;
             display: flex;
             align-items: center;
             gap: 10px;
-            color: var(--color-blue);
+            color: #fff;
         }
 
-        /* Interactive Selectors */
+        .glass-card h3 i {
+            color: var(--google-blue);
+        }
+
+        /* Problem select list buttons */
         .question-select-list {
             display: flex;
             flex-direction: column;
@@ -214,70 +231,69 @@
 
         .question-btn {
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border-light);
+            border: 1px solid var(--border-color);
             color: var(--text-secondary);
-            padding: 14px 18px;
-            border-radius: 8px;
+            padding: 16px 20px;
+            border-radius: 12px;
             text-align: left;
             cursor: pointer;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: var(--transition-smooth);
+            transition: var(--transition-bounce);
         }
 
         .question-btn:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(56, 189, 248, 0.35);
-            transform: translateX(4px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--google-blue);
+            transform: scale(1.01) translateY(-2px);
             color: #fff;
         }
 
         .question-btn.active {
-            border-color: var(--color-blue);
-            background: rgba(56, 189, 248, 0.06);
+            border-color: var(--google-blue);
+            background: rgba(26, 115, 232, 0.08);
             color: #fff;
-            box-shadow: inset 0 0 12px rgba(56, 189, 248, 0.08);
+            box-shadow: 0 4px 20px rgba(26, 115, 232, 0.15);
         }
 
         .question-status {
-            font-size: 10.5px;
-            font-weight: 700;
+            font-size: 10px;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 3px 8px;
-            border-radius: 4px;
+            letter-spacing: 1px;
+            padding: 4px 10px;
+            border-radius: 20px;
             background: rgba(255,255,255,0.05);
         }
 
         .question-status.todo { color: var(--text-muted); }
         .question-status.solved {
-            color: var(--color-success);
-            background: rgba(16, 185, 129, 0.12);
-            border: 1px solid rgba(16, 185, 129, 0.25);
-            box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
+            color: #fff;
+            background: var(--google-green);
+            box-shadow: 0 0 15px rgba(52, 168, 83, 0.4);
         }
 
-        /* Database Schema display */
+        /* Schema Display */
         .schema-display {
             font-family: var(--font-mono);
-            font-size: 11.5px;
-            background: rgba(0, 0, 0, 0.4);
+            font-size: 12px;
+            background: rgba(0, 0, 0, 0.5);
             border: 1px dashed var(--border-color);
-            padding: 14px;
-            border-radius: 8px;
-            margin-top: 14px;
+            padding: 16px;
+            border-radius: 10px;
+            margin-top: 16px;
             color: var(--text-secondary);
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
         /* Editor Section */
         .editor-container {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 14px;
         }
 
         .editor-header {
@@ -290,33 +306,34 @@
             font-family: var(--font-mono);
             font-size: 11px;
             color: var(--text-muted);
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             text-transform: uppercase;
         }
 
-        /* SQL Editor Textarea & Focus glow */
+        /* SQL Editor input (styled like a Google Search pill bar) */
         textarea.sql-textarea {
             width: 100%;
             height: 150px;
-            background: #030406;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            color: var(--color-blue);
+            background: #06070a;
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            color: var(--text-primary);
             font-family: var(--font-mono);
-            font-size: 14px;
-            line-height: 1.5;
-            padding: 16px;
+            font-size: 14.5px;
+            line-height: 1.6;
+            padding: 20px;
             resize: none;
             outline: none;
             transition: var(--transition-smooth);
         }
 
         textarea.sql-textarea:focus {
-            border-color: var(--color-blue);
-            box-shadow: 0 0 25px rgba(56, 189, 248, 0.15);
+            border-color: var(--google-blue);
+            box-shadow: 0 0 25px rgba(26, 115, 232, 0.2);
+            background: #080a0f;
         }
 
-        /* Editor Actions & Transitions */
+        /* Action Buttons */
         .editor-actions {
             display: flex;
             justify-content: flex-end;
@@ -325,60 +342,68 @@
 
         .btn {
             font-family: var(--font-display);
-            font-weight: 600;
-            padding: 12px 22px;
-            border-radius: 8px;
+            font-weight: 700;
+            padding: 12px 24px;
+            border-radius: 30px;
             cursor: pointer;
             border: none;
             font-size: 13.5px;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            transition: var(--transition-smooth);
+            transition: var(--transition-bounce);
+        }
+
+        .btn-lucky {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--google-yellow);
+            border: 1px solid rgba(250, 188, 5, 0.2);
+        }
+        .btn-lucky:hover {
+            background: rgba(250, 188, 5, 0.1);
+            border-color: var(--google-yellow);
+            transform: scale(1.05) translateY(-2.5deg);
+            box-shadow: 0 0 15px rgba(250, 188, 5, 0.2);
         }
 
         .btn-run {
-            background: #fff;
-            color: #000;
+            background: var(--google-blue);
+            color: #fff;
         }
-
         .btn-run:hover {
-            background: #e2e8f0;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 5px 20px rgba(26, 115, 232, 0.4);
         }
 
         .btn-check {
-            background: var(--color-success);
+            background: var(--google-green);
             color: #fff;
         }
-
         .btn-check:hover {
-            background: #0ea875;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 5px 20px rgba(52, 168, 83, 0.4);
         }
 
-        /* Success Confetti and Toast styling */
+        /* Success Card overlay (Google Confetti celebration) */
         .toast-success {
             display: none;
-            background: rgba(16, 185, 129, 0.08);
-            border: 1px solid var(--color-success);
-            color: var(--color-success);
-            padding: 16px 20px;
-            border-radius: 10px;
-            font-size: 14.5px;
-            font-weight: 600;
+            background: rgba(52, 168, 83, 0.08);
+            border: 2px solid var(--google-green);
+            color: var(--google-green);
+            padding: 18px 24px;
+            border-radius: 16px;
+            font-size: 15px;
+            font-weight: 700;
             align-items: center;
-            gap: 12px;
-            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.15);
-            animation: slideInDown 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            gap: 14px;
+            box-shadow: 0 15px 40px rgba(52, 168, 83, 0.2);
+            animation: slideInDown 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
-        /* Table Output and transitions */
+        /* Results table & animations */
         .result-container h3 {
             font-family: var(--font-display);
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             margin-bottom: 12px;
             color: var(--text-secondary);
         }
@@ -387,8 +412,9 @@
             width: 100%;
             overflow-x: auto;
             border: 1px solid var(--border-color);
-            border-radius: 10px;
-            background: #030406;
+            border-radius: 16px;
+            background: #06070a;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.8);
             transition: var(--transition-smooth);
         }
 
@@ -399,13 +425,13 @@
         table.result-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 13px;
+            font-size: 13.5px;
             text-align: left;
         }
 
         table.result-table th {
-            background: rgba(255, 255, 255, 0.02);
-            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.01);
+            padding: 16px 20px;
             font-family: var(--font-display);
             font-weight: 700;
             border-bottom: 1px solid var(--border-color);
@@ -413,11 +439,11 @@
         }
 
         table.result-table td {
-            padding: 14px 18px;
+            padding: 16px 20px;
             border-bottom: 1px solid var(--border-light);
             font-family: var(--font-mono);
             color: var(--text-secondary);
-            animation: rowFadeIn 0.4s ease-in-out forwards;
+            animation: rowFadeIn 0.4s ease-out forwards;
             opacity: 0;
         }
 
@@ -426,7 +452,7 @@
         }
 
         .empty-result {
-            padding: 32px;
+            padding: 36px;
             text-align: center;
             color: var(--text-muted);
             font-size: 13.5px;
@@ -435,9 +461,9 @@
         /* Right Column: AI Assistant Pane */
         .assistant-pane {
             padding: 40px;
-            background: rgba(6, 8, 12, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: rgba(15, 18, 29, 0.9);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -453,34 +479,50 @@
             gap: 14px;
         }
 
+        /* Mascot avatar wearing a tiny Google propeller hat! */
+        .assistant-avatar-wrapper {
+            position: relative;
+        }
+
         .assistant-avatar {
-            width: 48px;
-            height: 48px;
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
-            border: 2px solid var(--color-gold);
+            border: 2px solid var(--google-yellow);
             background-image: url('../deip_avatar.png');
             background-size: cover;
             background-position: center;
-            box-shadow: 0 0 20px var(--color-gold-glow);
+            box-shadow: 0 0 20px rgba(250, 188, 5, 0.4);
             animation: mascot-float 5s ease-in-out infinite;
+        }
+
+        /* Propeller hat element over avatar */
+        .propeller-hat {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            pointer-events: none;
+            animation: spin-propeller 2s linear infinite;
         }
 
         .assistant-info h2 {
             font-family: var(--font-display);
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             font-weight: 800;
             letter-spacing: -0.3px;
         }
 
         .assistant-info span {
-            font-size: 10.5px;
-            color: var(--color-gold);
+            font-size: 10px;
+            color: var(--google-yellow);
             font-weight: 800;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             text-transform: uppercase;
         }
 
-        /* Chat bubbles & list */
+        /* Chat history & bubbles */
         .chat-history {
             flex-grow: 1;
             overflow-y: auto;
@@ -495,10 +537,10 @@
         .chat-bubble {
             max-width: 85%;
             padding: 14px 18px;
-            border-radius: 12px;
+            border-radius: 16px;
             font-size: 13.5px;
-            line-height: 1.55;
-            animation: bubbleScale 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            line-height: 1.6;
+            animation: bubbleScale 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
             transform-origin: left bottom;
         }
 
@@ -511,16 +553,16 @@
         }
 
         .chat-bubble.user {
-            background: var(--color-blue);
-            color: #030406;
+            background: var(--google-blue);
+            color: #fff;
             align-self: flex-end;
             border-top-right-radius: 2px;
             font-weight: 600;
             transform-origin: right bottom;
-            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.25);
+            box-shadow: 0 4px 20px rgba(26, 115, 232, 0.35);
         }
 
-        /* Typing indicator styling */
+        /* Typing Dots */
         .typing-dots {
             display: inline-flex;
             gap: 4px;
@@ -535,11 +577,10 @@
             border-radius: 50%;
             animation: dot-pulse 1.4s infinite ease-in-out;
         }
-
         .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
         .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
 
-        /* Chat input deck */
+        /* Chat input desk */
         .chat-input-container {
             display: flex;
             gap: 10px;
@@ -550,70 +591,83 @@
 
         input.chat-input {
             flex-grow: 1;
-            background: #030406;
+            background: #06070a;
             border: 1px solid var(--border-color);
-            border-radius: 8px;
+            border-radius: 30px;
             color: #fff;
-            padding: 12px 18px;
+            padding: 14px 22px;
             font-size: 13.5px;
             outline: none;
             transition: var(--transition-smooth);
         }
 
         input.chat-input:focus {
-            border-color: var(--color-blue);
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.1);
+            border-color: var(--google-blue);
+            box-shadow: 0 0 15px rgba(26, 115, 232, 0.25);
         }
 
         .btn-send {
-            background: var(--color-blue);
-            color: #030406;
+            background: var(--google-blue);
+            color: #fff;
             font-weight: 700;
-            padding: 0 20px;
-            border-radius: 8px;
+            padding: 0 22px;
+            border-radius: 30px;
             cursor: pointer;
             border: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: var(--transition-smooth);
+            transition: var(--transition-bounce);
         }
 
         .btn-send:hover {
-            background: #0ea5e9;
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.35);
+            transform: scale(1.08);
+            box-shadow: 0 0 15px rgba(26, 115, 232, 0.45);
         }
 
-        /* keyframe animations */
-        @keyframes float-avatar {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+        /* Playful Google Disclaimer Footer */
+        .playful-footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 11.5px;
+            color: var(--text-muted);
         }
 
+        .playful-footer span.heart {
+            color: var(--google-red);
+            animation: heart-beat 1.2s infinite;
+            display: inline-block;
+        }
+
+        /* Animations */
         @keyframes mascot-float {
             0%, 100% { transform: translateY(0) rotate(0); }
-            50% { transform: translateY(-5px) rotate(2deg); }
+            50% { transform: translateY(-6px) rotate(1.5deg); }
+        }
+
+        @keyframes spin-propeller {
+            from { transform: translateX(-50%) rotate(0deg); }
+            to { transform: translateX(-50%) rotate(360deg); }
         }
 
         @keyframes bubbleScale {
-            from { transform: scale(0.9); opacity: 0; }
+            from { transform: scale(0.85); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
         }
 
         @keyframes rowFadeIn {
-            from { opacity: 0; transform: translateY(5px); }
+            from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes pulse-border {
-            0% { box-shadow: 0 0 0 rgba(56, 189, 248, 0); }
-            50% { box-shadow: 0 0 20px var(--color-blue-glow); border-color: var(--color-blue); }
-            100% { box-shadow: 0 0 0 rgba(56, 189, 248, 0); }
+            0% { box-shadow: 0 0 0 rgba(26, 115, 232, 0); }
+            50% { box-shadow: 0 0 25px rgba(26, 115, 232, 0.4); border-color: var(--google-blue); }
+            100% { box-shadow: 0 0 0 rgba(26, 115, 232, 0); }
         }
 
         @keyframes slideInDown {
-            from { transform: translateY(-20px); opacity: 0; }
+            from { transform: translateY(-30px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
 
@@ -621,13 +675,39 @@
             0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
             40% { transform: scale(1); opacity: 1; }
         }
+
+        @keyframes heart-beat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.25); }
+        }
     </style>
 </head>
 <body>
 
+    <!-- Confetti Particle Canvas -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Ambient Blobs -->
+    <div class="glow-blob" id="blob-blue"></div>
+    <div class="glow-blob" id="blob-red"></div>
+    <div class="glow-blob" id="blob-yellow"></div>
+    <div class="glow-blob" id="blob-green"></div>
+
     <!-- Main Navigation Bar -->
     <nav class="main-nav">
-        <a href="../" class="logo"><i class="fa-solid fa-square-poll-vertical"></i> Dipayan Dey // <span>SQL Practice</span></a>
+        <a href="../" class="logo">
+            <i class="fa-solid fa-code"></i>
+            <div>
+                <span class="google-color-letter">G</span>
+                <span class="google-color-letter">o</span>
+                <span class="google-color-letter">o</span>
+                <span class="google-color-letter">g</span>
+                <span class="google-color-letter">l</span>
+                <span class="google-color-letter">e</span>
+                <span>SQL Practice</span>
+            </div>
+            <span class="tag">Beta</span>
+        </a>
         <div class="nav-links">
             <a class="nav-link" href="../">Home</a>
             <a class="nav-link" href="../resume/">Resume</a>
@@ -638,16 +718,16 @@
     <!-- Layout Grid -->
     <div class="playground-grid">
         
-        <!-- Left Column: SQL Practice Panel -->
+        <!-- Left Column: Practice Arena -->
         <div class="editor-pane">
             <div class="header-block">
-                <h1>Interactive SQL practice</h1>
+                <h1>Google SQL Practice Playground</h1>
                 <p>Run query operations against the local database table `users` to test your query capability and resolve tasks.</p>
             </div>
 
             <!-- Problem selectors -->
             <div class="glass-card">
-                <h3><i class="fa-solid fa-clipboard-list"></i> Select active challenge</h3>
+                <h3><i class="fa-solid fa-terminal"></i> Select active challenge</h3>
                 <div class="question-select-list">
                     <button class="question-btn active" onclick="selectQuestion(0)">
                         <span>1. Retrieve all personnel records belonging to the 'Engineering' department</span>
@@ -676,6 +756,7 @@
                 </div>
                 <textarea id="sql-input" class="sql-textarea" placeholder="SELECT * FROM users;"></textarea>
                 <div class="editor-actions">
+                    <button class="btn btn-lucky" onclick="triggerLuckyQuery()"><i class="fa-solid fa-wand-magic-sparkles"></i> I'm Feeling Lucky</button>
                     <button class="btn btn-run" onclick="runQuery()"><i class="fa-solid fa-play"></i> Run Query</button>
                     <button class="btn btn-check" onclick="checkAnswer()"><i class="fa-solid fa-circle-check"></i> Check Answer</button>
                 </div>
@@ -683,8 +764,8 @@
 
             <!-- Success slide-in toast -->
             <div class="toast-success" id="success-toast">
-                <i class="fa-solid fa-award" style="font-size: 20px;"></i>
-                <span>Task solved successfully! Your query output matches the expected result schema.</span>
+                <i class="fa-solid fa-trophy" style="font-size: 24px;"></i>
+                <span>Splendid work! Your query returned exactly the expected records. Celebrating with confetti! 🎉</span>
             </div>
 
             <!-- Output Container -->
@@ -715,18 +796,21 @@
         <!-- Right Column: AI Assistant Pane -->
         <div class="assistant-pane">
             <div class="assistant-header">
-                <div class="assistant-avatar"></div>
+                <div class="assistant-avatar-wrapper">
+                    <div class="assistant-avatar"></div>
+                    <div class="propeller-hat">🛸</div>
+                </div>
                 <div class="assistant-info">
                     <h2>Deip</h2>
-                    <span>SQL Helper mascot</span>
+                    <span>Google SQL Mascot</span>
                 </div>
             </div>
 
             <!-- Chat logs -->
             <div class="chat-history" id="chat-history-box">
                 <div class="chat-bubble assistant">
-                    Oh! Welcome! 🍂 I am Deip, your Ghibli spirit SQL assistant. 
-                    If you get stuck on a query or need hints, just type a message and ask me! I am here to guide you.
+                    Oh! Welcome! 🍂 I am Deip, your Ghibli spirit SQL assistant, currently wearing my colorful Google propeller hat! 🛸
+                    If you get stuck on a query or need hints, just type a message and ask me! I am here to guide you. Try clicking "I'm Feeling Lucky" for some Google easter eggs!
                 </div>
             </div>
 
@@ -734,6 +818,10 @@
             <div class="chat-input-container">
                 <input type="text" class="chat-input" id="chat-user-input" placeholder="Ask Deip for a SQL hint..." onkeydown="if(event.key==='Enter') sendChatMessage()">
                 <button class="btn-send" onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+
+            <div class="playful-footer">
+                Made with <span class="heart">❤️</span> by a Googler | Intern Database '26
             </div>
         </div>
 
@@ -747,6 +835,27 @@
             { id: 3, name: "Charlie", department: "Engineering", role: "Data Scientist", salary: 130000, join_date: "2024-03-01" },
             { id: 4, name: "Diana", department: "HR", role: "Recruiter", salary: 85000, join_date: "2025-01-10" },
             { id: 5, name: "Ethan", department: "Engineering", role: "DevOps Engineer", salary: 125000, join_date: "2024-06-20" }
+        ];
+
+        // Easter Egg Database queries
+        const LUCKY_QUERIES = [
+            {
+                query: "SELECT * FROM google_secret_projects;",
+                data: [
+                    { id: 1, project: "Gemini Mind Reader", status: "Thinking about pizza 🍕", lead: "Deip" },
+                    { id: 2, project: "Google Propeller Hat 2.0", status: "Active flight trials 🛸", lead: "Interns" },
+                    { id: 3, project: "Stadia Resurrection", status: "Nice try, maybe next year", lead: "Spirits" },
+                    { id: 4, project: "Android Oreo Backup", status: "Stored in kitchen jars", lead: "Chef" }
+                ]
+            },
+            {
+                query: "SELECT * FROM office_dogs;",
+                data: [
+                    { id: 1, name: "Barnaby", breed: "Golden Retriever", role: "Chief Morale Officer 🐕", snack: "Data Bytes" },
+                    { id: 2, name: "Waffles", breed: "Corgi", role: "Lead Napper 💤", snack: "Lost Socks" },
+                    { id: 3, name: "Pip", breed: "French Bulldog", role: "Code Reviewer", snack: "Treats" }
+                ]
+            }
         ];
 
         // Questions configurations
@@ -785,6 +894,7 @@
 
         let activeQuestionIndex = 0;
         let lastQueryResults = [];
+        let luckyIndex = 0;
 
         // Select Question
         function selectQuestion(idx) {
@@ -797,17 +907,43 @@
             document.getElementById('success-toast').style.display = 'none';
         }
 
-        // Mock SQL interpreter
-        function runQuery() {
-            // Pulse wrapper animation
+        // Playful Easter Egg Query trigger
+        function triggerLuckyQuery() {
+            const currentLucky = LUCKY_QUERIES[luckyIndex];
+            document.getElementById('sql-input').value = currentLucky.query;
+            
+            // Run it immediately with a custom pulse
             const wrapper = document.getElementById('table-wrapper');
             wrapper.classList.remove('pulse-run');
-            void wrapper.offsetWidth; // Trigger reflow
+            void wrapper.offsetWidth; 
+            wrapper.classList.add('pulse-run');
+            
+            lastQueryResults = currentLucky.data;
+            renderTable(currentLucky.data);
+            
+            appendMascotMessage(`Oh! 🌟 You triggered a secret Google Easter Egg! You ran \`${currentLucky.query}\`. Pretty fun, isn't it?`);
+            
+            luckyIndex = (luckyIndex + 1) % LUCKY_QUERIES.length;
+        }
+
+        // Mock SQL interpreter
+        function runQuery() {
+            const wrapper = document.getElementById('table-wrapper');
+            wrapper.classList.remove('pulse-run');
+            void wrapper.offsetWidth; 
             wrapper.classList.add('pulse-run');
 
             const rawSql = document.getElementById('sql-input').value;
             const sql = rawSql.trim().replace(/\s+/g, ' ').replace(/;$/, '');
             
+            // Check if user runs a custom query that matches easter eggs
+            const matchingLucky = LUCKY_QUERIES.find(l => l.query.replace(/;$/, '').toLowerCase() === sql.toLowerCase());
+            if (matchingLucky) {
+                lastQueryResults = matchingLucky.data;
+                renderTable(matchingLucky.data);
+                return;
+            }
+
             let results = [...USERS_DB];
             let selectColumns = ["*"];
 
@@ -868,7 +1004,7 @@
             }
         }
 
-        // Render HTML Output table
+        // Render Output table
         function renderTable(results) {
             const tableBody = document.getElementById('output-body');
             const tableHead = document.getElementById('output-table').querySelector('thead tr');
@@ -884,7 +1020,7 @@
 
             results.forEach((row, rowIndex) => {
                 const tr = document.createElement('tr');
-                tr.innerHTML = columns.map(c => `<td style="animation-delay: ${rowIndex * 0.05}s">${row[c]}</td>`).join('');
+                tr.innerHTML = columns.map(c => `<td style="animation-delay: ${rowIndex * 0.04}s">${row[c]}</td>`).join('');
                 tableBody.appendChild(tr);
             });
         }
@@ -902,7 +1038,8 @@
                 toast.style.display = 'flex';
                 statusEl.innerText = "SOLVED";
                 statusEl.className = "question-status solved";
-                appendMascotMessage(`Oh! Truly brilliant coding! 🌟 Your query yields the exact schema and records expected. Excellent logic!`);
+                appendMascotMessage(`Oh! Absolutely outstanding work! 🌟 Pushing Google-colored confetti particles to your viewport! Keep it up!`);
+                triggerConfetti();
             } else {
                 toast.style.display = 'none';
                 alert("The SQL results do not match the expected dataset yet. Double check columns, constraints, or sorting requirements!");
@@ -943,6 +1080,66 @@
             if (el) el.remove();
         }
 
+        // Playful Google-colored confetti generator
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const colors = [ '#1a73e8', '#ea4335', '#fbbc05', '#34a853' ];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function triggerConfetti() {
+            particles = [];
+            for (let i = 0; i < 120; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: canvas.height + 20,
+                    size: Math.random() * 8 + 4,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    speedX: Math.random() * 6 - 3,
+                    speedY: Math.random() * -15 - 10,
+                    gravity: 0.3,
+                    rotation: Math.random() * 360,
+                    rotationSpeed: Math.random() * 4 - 2
+                });
+            }
+            animateConfetti();
+        }
+
+        let animationFrameId;
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let active = false;
+
+            particles.forEach(p => {
+                p.y += p.speedY;
+                p.x += p.speedX;
+                p.speedY += p.gravity;
+                p.rotation += p.rotationSpeed;
+
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rotation * Math.PI / 180);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+                ctx.restore();
+
+                if (p.y < canvas.height + 20) active = true;
+            });
+
+            if (active) {
+                animationFrameId = requestAnimationFrame(animateConfetti);
+            } else {
+                cancelAnimationFrame(animationFrameId);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
         // Groq API Call
         const GROQ_API_KEY = "gsk_" + "ehWc3niT0n5gwH3RTqEvWGdyb3FYLOLdUDwGZcyfWL6WbDTZ4Rh0";
         
@@ -957,16 +1154,14 @@
             const currentQuestion = QUESTIONS[activeQuestionIndex];
             appendTypingIndicator();
 
-            // Setup System Prompt
             const messages = [
                 {
                     role: "system",
-                    content: `You are Deip, a whimsical and cute helper spirit mascot (in the style of Studio Ghibli, like Totoro or Calcifer) representing Dipayan Dey's SQL Playground.
-Speak with a warm, caring Ghibli tone, using whimsical expressions (e.g., "Oh!", "A flutter of leaves...", "By the warm embers...").
+                    content: `You are Deip, a whimsical Ghibli-style spirit mascot representing Dipayan Dey's Google SQL Playground, currently wearing a tiny colorful Google propeller hat.
+Speak with a warm, playful, and caring Ghibli tone. Always add some cute playfulness or Google database humor to your response.
 Your goal is to guide the user to solve their SQL exercise on the in-memory \`users\` table.
-Table structure: users (id, name, role, department, salary, join_date).
 Currently selected exercise: "${currentQuestion.desc}"
-Offer hints, review their syntax, but DO NOT write the entire code for them instantly. Teach them how to solve it.`
+Offer hints, review syntax, but do not write the entire code for them instantly. Guide them step by step.`
                 },
                 { role: "user", content: query }
             ];
@@ -981,7 +1176,7 @@ Offer hints, review their syntax, but DO NOT write the entire code for them inst
                     body: JSON.stringify({
                         model: "meta-llama/llama-4-scout-17b-16e-instruct",
                         messages: messages,
-                        temperature: 0.5,
+                        temperature: 0.6,
                         max_tokens: 150
                     })
                 });
@@ -992,11 +1187,10 @@ Offer hints, review their syntax, but DO NOT write the entire code for them inst
                 appendMascotMessage(reply);
             } catch (err) {
                 removeTypingIndicator();
-                appendMascotMessage(`Oh! The spirits are whispery right now. Here is a hint: Make sure you use SELECT, WHERE, and matching values correctly!`);
+                appendMascotMessage(`Oh! The database spirits are whispery right now. Here is a quick hint: Make sure you filter the 'Engineering' value correctly!`);
             }
         }
 
-        // Initialize first query
         selectQuestion(0);
     </script>
 </body>
