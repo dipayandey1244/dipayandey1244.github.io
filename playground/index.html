@@ -3,39 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Robodox SQL Arena</title>
+    <title>SQL Practice Workspace</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
     
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* Robodox Tech Cyber Palette & Tokens */
+        /* Calm Light Composed Theme Tokens */
         :root {
-            --bg-primary: #020204;
-            --bg-secondary: #07070b;
-            --bg-panel: rgba(11, 11, 18, 0.7);
-            --border-color: rgba(255, 255, 255, 0.05);
+            --bg-primary: #fcfbfa; /* Warm minimalist off-white */
+            --bg-secondary: #f6f5f2; /* Soft warm gray */
+            --bg-panel: #ffffff; /* Pure white */
+            --border-color: rgba(0, 0, 0, 0.06);
+            --border-light: rgba(0, 0, 0, 0.03);
             
-            --cyber-cyan: #00f0ff;
-            --cyber-cyan-glow: rgba(0, 240, 255, 0.25);
-            --cyber-magenta: #ff0055;
-            --cyber-magenta-glow: rgba(255, 0, 85, 0.25);
-            --cyber-lime: #39ff14;
-            --cyber-lime-glow: rgba(57, 255, 20, 0.25);
+            --color-indigo: #6366f1;
+            --color-indigo-glow: rgba(99, 102, 241, 0.08);
+            --color-teal: #0d9488;
+            --color-teal-glow: rgba(13, 148, 136, 0.08);
+            --color-amber: #d97706;
+            --color-amber-glow: rgba(217, 119, 6, 0.08);
             
-            --text-primary: #f1f1f4;
-            --text-secondary: #a9a9b3;
-            --text-muted: #4e4e5a;
+            --text-primary: #1c1917; /* Soft warm black */
+            --text-secondary: #57534e; /* Composed slate stone gray */
+            --text-muted: #a8a29e; /* Muted stone gray */
             
-            --font-sans: 'Space Grotesk', sans-serif;
+            --font-sans: 'Plus Jakarta Sans', sans-serif;
             --font-display: 'Outfit', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
-            --transition-cyber: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --transition-composed: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * {
@@ -51,35 +52,6 @@
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 240, 255, 0.03) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(255, 0, 85, 0.03) 0%, transparent 40%);
-        }
-
-        /* Digital Terminal Scanline Overlay */
-        body::before {
-            content: " ";
-            display: block;
-            position: fixed;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 999;
-            background-size: 100% 3px, 3px 100%;
-            pointer-events: none;
-        }
-
-        /* Telemetry Scanning laser overlay */
-        #laser-scanner {
-            position: fixed;
-            top: -20px;
-            left: 0;
-            width: 100vw;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, var(--cyber-cyan), transparent);
-            box-shadow: 0 0 15px var(--cyber-cyan);
-            z-index: 1000;
-            pointer-events: none;
-            display: none;
         }
 
         /* Confetti Canvas Overlay */
@@ -93,10 +65,26 @@
             z-index: 1001;
         }
 
+        /* Calm Scan Laser line */
+        #laser-scanner {
+            position: fixed;
+            top: -20px;
+            left: 0;
+            width: 100vw;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--color-indigo), transparent);
+            box-shadow: 0 0 10px var(--color-indigo-glow);
+            z-index: 1000;
+            pointer-events: none;
+            display: none;
+        }
+
         /* Navigation */
         nav.main-nav {
             padding: 16px 80px;
-            background: rgba(2, 2, 4, 0.95);
+            background: rgba(252, 251, 250, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
@@ -108,28 +96,27 @@
 
         nav.main-nav .logo {
             font-family: var(--font-display);
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
             text-decoration: none;
-            letter-spacing: 0.5px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        nav.main-nav .logo span.highlight {
-            color: var(--cyber-cyan);
-            text-shadow: 0 0 10px var(--cyber-cyan-glow);
+        nav.main-nav .logo i {
+            color: var(--color-indigo);
         }
 
         nav.main-nav .logo span.tag {
             font-family: var(--font-mono);
             font-size: 10px;
-            border: 1px solid var(--cyber-cyan);
+            border: 1px solid var(--border-color);
             padding: 2px 6px;
             border-radius: 4px;
-            color: var(--cyber-cyan);
+            color: var(--text-muted);
+            background: rgba(0, 0, 0, 0.02);
         }
 
         nav.main-nav .nav-links {
@@ -144,13 +131,13 @@
             font-size: 13px;
             font-weight: 500;
             text-decoration: none;
-            border-radius: 4px;
-            transition: var(--transition-cyber);
+            border-radius: 6px;
+            transition: var(--transition-composed);
         }
 
         nav.main-nav a.nav-link:hover {
-            color: #fff;
-            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-primary);
+            background: rgba(0, 0, 0, 0.03);
         }
 
         /* Layout Grid */
@@ -177,45 +164,54 @@
             display: flex;
             flex-direction: column;
             gap: 28px;
+            background: #faf9f6; /* Soft warm stone texture background */
         }
 
         .header-block h1 {
             font-family: var(--font-display);
-            font-size: 2.3rem;
-            font-weight: 800;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
             letter-spacing: -0.5px;
             margin-bottom: 6px;
         }
 
         .header-block p {
-            font-size: 14px;
+            font-size: 14.5px;
             color: var(--text-secondary);
+            line-height: 1.5;
         }
 
-        /* Robodox Cyber Card */
-        .cyber-card {
+        /* Composed Calm Panel Card */
+        .composed-card {
             background: var(--bg-panel);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
+            border-radius: 12px;
             padding: 24px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            transition: var(--transition-cyber);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02), 0 2px 4px rgba(0, 0, 0, 0.01);
+            transition: var(--transition-composed);
             position: relative;
         }
 
-        /* Left side glowing strip */
-        .cyber-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 3px; height: 100%;
-            background: var(--cyber-cyan);
-            box-shadow: 0 0 10px var(--cyber-cyan-glow);
+        .composed-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-primary);
         }
 
-        /* Single Question View & Slider */
+        .composed-card h3 i {
+            color: var(--color-indigo);
+        }
+
+        /* Single Question View */
         .challenge-slider {
             position: relative;
-            min-height: 120px;
+            min-height: 100px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -234,36 +230,38 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .challenge-title {
-            font-size: 15px;
+            font-size: 14.5px;
             font-weight: 700;
-            color: #fff;
+            color: var(--text-primary);
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
         .challenge-title i {
-            color: var(--cyber-cyan);
+            color: var(--color-indigo);
         }
 
         .challenge-meta {
             font-family: var(--font-mono);
-            font-size: 11px;
-            color: var(--cyber-cyan);
-            border: 1px solid rgba(0, 240, 255, 0.3);
-            padding: 3px 8px;
+            font-size: 10px;
+            color: var(--color-indigo);
+            background: rgba(99, 102, 241, 0.06);
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            padding: 2px 8px;
             border-radius: 4px;
+            font-weight: 600;
         }
 
         .challenge-body {
             font-size: 14px;
             color: var(--text-secondary);
-            line-height: 1.5;
-            margin-bottom: 16px;
+            line-height: 1.55;
+            margin-bottom: 14px;
         }
 
         /* Slider Controls */
@@ -271,17 +269,17 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-top: 1px solid var(--border-color);
+            border-top: 1px solid var(--border-light);
             padding-top: 16px;
-            margin-top: 16px;
+            margin-top: 14px;
         }
 
         .slider-btn {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(0, 0, 0, 0.01);
             border: 1px solid var(--border-color);
             color: var(--text-secondary);
             padding: 8px 14px;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             font-family: var(--font-sans);
             font-size: 12.5px;
@@ -289,17 +287,17 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            transition: var(--transition-cyber);
+            transition: var(--transition-composed);
         }
 
         .slider-btn:hover:not(:disabled) {
-            background: rgba(0, 240, 255, 0.05);
-            border-color: var(--cyber-cyan);
-            color: #fff;
+            background: rgba(0, 0, 0, 0.03);
+            border-color: var(--color-indigo);
+            color: var(--text-primary);
         }
 
         .slider-btn:disabled {
-            opacity: 0.3;
+            opacity: 0.35;
             cursor: not-allowed;
         }
 
@@ -307,13 +305,14 @@
             font-family: var(--font-mono);
             font-size: 12px;
             color: var(--text-muted);
+            font-weight: 500;
         }
 
         /* Schema Display */
         .schema-display {
             font-family: var(--font-mono);
             font-size: 11.5px;
-            background: rgba(0,0,0,0.4);
+            background: rgba(0, 0, 0, 0.02);
             border: 1px dashed var(--border-color);
             padding: 12px;
             border-radius: 6px;
@@ -322,7 +321,7 @@
             line-height: 1.4;
         }
 
-        /* SQL Editor Area */
+        /* Editor Section */
         .editor-container {
             display: flex;
             flex-direction: column;
@@ -339,29 +338,30 @@
             font-family: var(--font-mono);
             font-size: 11px;
             color: var(--text-muted);
-            letter-spacing: 1px;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         textarea.sql-textarea {
             width: 100%;
             height: 140px;
-            background: #040407;
+            background: #ffffff;
             border: 1px solid var(--border-color);
-            border-radius: 6px;
-            color: var(--cyber-cyan);
+            border-radius: 8px;
+            color: var(--text-primary);
             font-family: var(--font-mono);
             font-size: 14px;
-            line-height: 1.5;
+            line-height: 1.55;
             padding: 16px;
             resize: none;
             outline: none;
-            transition: var(--transition-cyber);
+            transition: var(--transition-composed);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
         }
 
         textarea.sql-textarea:focus {
-            border-color: var(--cyber-cyan);
-            box-shadow: 0 0 15px var(--cyber-cyan-glow);
+            border-color: var(--color-indigo);
+            box-shadow: 0 0 15px var(--color-indigo-glow);
         }
 
         /* Actions */
@@ -373,61 +373,62 @@
 
         .btn {
             font-family: var(--font-sans);
-            font-weight: 700;
+            font-weight: 600;
             padding: 10px 18px;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             border: none;
             font-size: 13px;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            transition: var(--transition-cyber);
+            transition: var(--transition-composed);
         }
 
         .btn-run {
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
+            background: #ffffff;
+            color: var(--text-primary);
             border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
         }
 
         .btn-run:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.02);
             transform: translateY(-1px);
         }
 
         .btn-check {
-            background: var(--cyber-cyan);
-            color: #000;
+            background: var(--color-indigo);
+            color: #ffffff;
         }
 
         .btn-check:hover {
-            box-shadow: 0 0 15px var(--cyber-cyan-glow);
+            opacity: 0.9;
             transform: translateY(-1px);
+            box-shadow: 0 4px 12px var(--color-indigo-glow);
         }
 
-        /* Success Animation Decrypting block */
-        .decrypt-overlay {
+        /* Success Card overlay (Calm sage green) */
+        .success-overlay {
             display: none;
-            background: rgba(57, 255, 20, 0.08);
-            border: 1px solid var(--cyber-lime);
-            color: var(--cyber-lime);
+            background: rgba(13, 148, 136, 0.04);
+            border: 1px solid var(--color-teal);
+            color: var(--color-teal);
             padding: 16px;
-            border-radius: 6px;
-            font-family: var(--font-mono);
-            font-size: 13px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 500;
             text-align: center;
-            letter-spacing: 0.5px;
-            box-shadow: 0 0 20px rgba(57, 255, 20, 0.15);
+            box-shadow: 0 4px 15px var(--color-teal-glow);
             animation: slideInDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        /* Output table details */
+        /* Results table */
         .result-container h3 {
             font-family: var(--font-sans);
-            font-size: 14px;
+            font-size: 13px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             margin-bottom: 12px;
             color: var(--text-secondary);
         }
@@ -436,9 +437,10 @@
             width: 100%;
             overflow-x: auto;
             border: 1px solid var(--border-color);
-            border-radius: 6px;
-            background: #040407;
-            transition: var(--transition-cyber);
+            border-radius: 8px;
+            background: #ffffff;
+            transition: var(--transition-composed);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.01);
         }
 
         .table-wrapper.pulse-run {
@@ -453,11 +455,11 @@
         }
 
         table.result-table th {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(0, 0, 0, 0.01);
             padding: 12px 16px;
             font-weight: 700;
             border-bottom: 1px solid var(--border-color);
-            color: var(--text-secondary);
+            color: var(--text-primary);
         }
 
         table.result-table td {
@@ -483,7 +485,7 @@
         /* Right Column: AI Assistant Pane */
         .assistant-pane {
             padding: 40px;
-            background: rgba(7, 7, 11, 0.95);
+            background: var(--bg-secondary);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -502,28 +504,29 @@
         .assistant-avatar {
             width: 44px;
             height: 44px;
-            border-radius: 8px;
-            border: 2px solid var(--cyber-magenta);
+            border-radius: 50%;
+            border: 2px solid var(--color-amber);
             background-image: url('../deip_avatar.png');
             background-size: cover;
             background-position: center;
-            box-shadow: 0 0 15px var(--cyber-magenta-glow);
+            box-shadow: 0 0 12px var(--color-amber-glow);
             animation: mascot-float 5s ease-in-out infinite;
         }
 
         .assistant-info h2 {
             font-family: var(--font-sans);
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            color: var(--text-primary);
         }
 
         .assistant-info span {
             font-family: var(--font-mono);
-            font-size: 10px;
-            color: var(--cyber-magenta);
+            font-size: 9.5px;
+            color: var(--color-amber);
             font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         /* Chat History */
@@ -541,29 +544,29 @@
         .chat-bubble {
             max-width: 85%;
             padding: 12px 16px;
-            border-radius: 6px;
+            border-radius: 12px;
             font-size: 13px;
-            line-height: 1.5;
+            line-height: 1.55;
             animation: bubbleScale 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             transform-origin: left bottom;
         }
 
         .chat-bubble.assistant {
-            background: rgba(255, 255, 255, 0.02);
+            background: #ffffff;
             border: 1px solid var(--border-color);
             align-self: flex-start;
             border-top-left-radius: 2px;
             color: var(--text-secondary);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.01);
         }
 
         .chat-bubble.user {
-            background: rgba(0, 240, 255, 0.1);
-            border: 1px solid var(--cyber-cyan);
-            color: #fff;
+            background: var(--color-indigo);
+            color: #ffffff;
             align-self: flex-end;
             border-top-right-radius: 2px;
-            box-shadow: 0 0 10px var(--cyber-cyan-glow);
             transform-origin: right bottom;
+            box-shadow: 0 3px 10px rgba(99, 102, 241, 0.15);
         }
 
         /* Typing Dots */
@@ -584,7 +587,7 @@
         .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
         .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
 
-        /* Chat input desk */
+        /* Chat input */
         .chat-input-container {
             display: flex;
             gap: 10px;
@@ -595,41 +598,44 @@
 
         input.chat-input {
             flex-grow: 1;
-            background: #040407;
+            background: #ffffff;
             border: 1px solid var(--border-color);
-            border-radius: 4px;
-            color: #fff;
+            border-radius: 8px;
+            color: var(--text-primary);
             padding: 12px 16px;
-            font-size: 13px;
+            font-size: 13.5px;
             outline: none;
-            transition: var(--transition-cyber);
+            transition: var(--transition-composed);
             font-family: var(--font-sans);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.01);
         }
 
         input.chat-input:focus {
-            border-color: var(--cyber-cyan);
+            border-color: var(--color-indigo);
         }
 
         .btn-send {
-            background: rgba(255, 255, 255, 0.03);
+            background: #ffffff;
             border: 1px solid var(--border-color);
             color: var(--text-secondary);
             font-weight: 700;
             padding: 0 18px;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: var(--transition-cyber);
+            transition: var(--transition-composed);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
         }
 
         .btn-send:hover {
-            border-color: var(--cyber-cyan);
-            color: #fff;
+            border-color: var(--color-indigo);
+            color: var(--text-primary);
+            transform: translateY(-1px);
         }
 
-        /* Robotic Telemetry style footer */
+        /* Composed Telemetry footer */
         .playful-footer {
             margin-top: 20px;
             text-align: center;
@@ -641,11 +647,11 @@
         /* Keyframes */
         @keyframes mascot-float {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+            50% { transform: translateY(-4px); }
         }
 
         @keyframes bubbleScale {
-            from { transform: scale(0.92); opacity: 0; }
+            from { transform: scale(0.94); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
         }
 
@@ -655,13 +661,13 @@
         }
 
         @keyframes pulse-border {
-            0% { box-shadow: 0 0 0 rgba(0, 240, 255, 0); }
-            50% { box-shadow: 0 0 15px var(--cyber-cyan-glow); border-color: var(--cyber-cyan); }
-            100% { box-shadow: 0 0 0 rgba(0, 240, 255, 0); }
+            0% { box-shadow: 0 0 0 rgba(99, 102, 241, 0); }
+            50% { box-shadow: 0 0 12px var(--color-indigo-glow); border-color: var(--color-indigo); }
+            100% { box-shadow: 0 0 0 rgba(99, 102, 241, 0); }
         }
 
         @keyframes slideInDown {
-            from { transform: translateY(-15px); opacity: 0; }
+            from { transform: translateY(-12px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
 
@@ -671,12 +677,13 @@
         }
 
         @keyframes laser-sweep {
-            0% { top: -20px; }
-            100% { top: 105%; }
+            0% { top: -20px; opacity: 1; }
+            50% { opacity: 1; }
+            100% { top: 105%; opacity: 0; }
         }
 
         @keyframes slideFadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
@@ -692,11 +699,11 @@
     <!-- Main Navigation Bar -->
     <nav class="main-nav">
         <a href="../" class="logo">
-            <i class="fa-solid fa-microchip"></i>
+            <i class="fa-solid fa-graduation-cap"></i>
             <div>
-                <span>ROBODOX</span> // <span class="highlight">SQL</span>
+                <span>SQL Practice</span> Workspace
             </div>
-            <span class="tag">SECURE_CON_01</span>
+            <span class="tag">V1.0</span>
         </a>
         <div class="nav-links">
             <a class="nav-link" href="../">Home</a>
@@ -711,12 +718,12 @@
         <!-- Left Column: Practice Arena -->
         <div class="editor-pane">
             <div class="header-block">
-                <h1>SQL Practice Arena</h1>
+                <h1>SQL Practice Workspace</h1>
                 <p>Run query operations against the local database table `users` to test your query capability and resolve tasks.</p>
             </div>
 
             <!-- Single Question Card (Question by Question Slider) -->
-            <div class="cyber-card">
+            <div class="composed-card">
                 <div class="challenge-slider">
                     
                     <!-- Question 1 -->
@@ -783,9 +790,10 @@
                 </div>
             </div>
 
-            <!-- Success slide-in toast (Decrypting animation log) -->
-            <div class="decrypt-overlay" id="success-toast">
-                [SYSTEM OK] - CHALLENGE SOLVED / TELEMETRY CONFIRMED. DEPLOYING PARTICLES...
+            <!-- Success slide-in toast (Calm design) -->
+            <div class="success-overlay" id="success-toast">
+                <i class="fa-solid fa-circle-check" style="font-size: 16px; margin-right: 6px;"></i>
+                Challenge solved successfully! Query output matches the expected result.
             </div>
 
             <!-- Output Container -->
@@ -819,15 +827,15 @@
                 <div class="assistant-avatar"></div>
                 <div class="assistant-info">
                     <h2>Deip</h2>
-                    <span>ROBODOX SYSTEM GUIDE</span>
+                    <span>SQL STUDY ASSISTANT</span>
                 </div>
             </div>
 
             <!-- Chat logs -->
             <div class="chat-history" id="chat-history-box">
                 <div class="chat-bubble assistant">
-                    [DEIP CORE_ACTIVE] - Oh! Welcome to the Robodox terminal sandbox. 🍂 
-                    Ask me for any SQL query hints or schema guidelines. I am here to help you decrypt the query inputs!
+                    Welcome to the practice workspace! 🍂 I am Deip, your Ghibli spirit SQL assistant. 
+                    If you get stuck on a query or need hints, just type a message and ask me! I am here to guide you.
                 </div>
             </div>
 
@@ -838,7 +846,7 @@
             </div>
 
             <div class="playful-footer">
-                TELEMETRY CONSOLE // SECURITY PORT_01 // ROBO_INT_DB
+                SQL WORKSPACE // PORT_01 // INT_DB
             </div>
         </div>
 
@@ -896,14 +904,11 @@
             const nextIdx = activeQuestionIndex + dir;
             if (nextIdx < 0 || nextIdx >= QUESTIONS.length) return;
             
-            // Hide old card
             document.getElementById(`q${activeQuestionIndex}-container`).classList.remove('active');
             
-            // Setup next active
             activeQuestionIndex = nextIdx;
             document.getElementById(`q${activeQuestionIndex}-container`).classList.add('active');
             
-            // Update labels & buttons
             document.getElementById('slider-indicator').innerText = `0${activeQuestionIndex + 1} / 0${QUESTIONS.length}`;
             document.getElementById('prev-btn').disabled = (activeQuestionIndex === 0);
             document.getElementById('next-btn').disabled = (activeQuestionIndex === QUESTIONS.length - 1);
@@ -1003,7 +1008,7 @@
             });
         }
 
-        // Check Answer & Trigger cool scanner animation
+        // Check Answer & Trigger calm scanner/confetti animation
         function checkAnswer() {
             runQuery();
             const question = QUESTIONS[activeQuestionIndex];
@@ -1012,26 +1017,19 @@
             const toast = document.getElementById('success-toast');
             
             if (isCorrect) {
-                // Trigger Laser scanner sweep animation
+                // Trigger Calm Scan Line sweep
                 const scanner = document.getElementById('laser-scanner');
                 scanner.style.display = 'block';
-                scanner.style.animation = 'laser-sweep 1s linear forwards';
+                scanner.style.animation = 'laser-sweep 1.2s ease-in-out forwards';
                 
-                // Trigger Decrypted loading log
                 toast.style.display = 'block';
-                toast.innerText = "[DECRYPTING...] CHECKING LOG FILE SYSTEMS...";
+                triggerConfetti();
+                appendMascotMessage(`Oh! Calm and beautiful query solution! 🍃 Expected records returned exactly. Pushing soft pastel particles.`);
                 
                 setTimeout(() => {
-                    toast.innerText = "[ACCESS GRANTED] - CONSOLE TELEMETRY VERIFIED! CELEBRATING WITH GLOW PARTICLES.";
-                    triggerConfetti();
-                    appendMascotMessage(`Oh! Incredible solution! 🍃 Decrypted the challenge successfully. Pushing neon green particle beams!`);
-                    
-                    // Reset scanner display
-                    setTimeout(() => {
-                        scanner.style.display = 'none';
-                        scanner.style.animation = 'none';
-                    }, 500);
-                }, 1000);
+                    scanner.style.display = 'none';
+                    scanner.style.animation = 'none';
+                }, 1200);
             } else {
                 toast.style.display = 'none';
                 alert("The SQL results do not match the expected dataset yet. Double check columns, constraints, or sorting requirements!");
@@ -1072,11 +1070,11 @@
             if (el) el.remove();
         }
 
-        // Confetti Particle Generator (Robodox styling: neon green & magenta)
+        // Confetti Particle Generator (Calm pastel colors)
         const canvas = document.getElementById('confetti-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-        const colors = [ '#00f0ff', '#ff0055', '#39ff14' ];
+        const colors = [ '#a5b4fc', '#99f6e4', '#fef08a', '#fca5a5' ];
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -1087,17 +1085,17 @@
 
         function triggerConfetti() {
             particles = [];
-            for (let i = 0; i < 100; i++) {
+            for (let i = 0; i < 90; i++) {
                 particles.push({
                     x: Math.random() * canvas.width,
                     y: canvas.height + 20,
-                    size: Math.random() * 6 + 3,
+                    size: Math.random() * 5 + 3,
                     color: colors[Math.floor(Math.random() * colors.length)],
-                    speedX: Math.random() * 6 - 3,
-                    speedY: Math.random() * -14 - 8,
-                    gravity: 0.25,
+                    speedX: Math.random() * 4 - 2,
+                    speedY: Math.random() * -12 - 6,
+                    gravity: 0.2,
                     rotation: Math.random() * 360,
-                    rotationSpeed: Math.random() * 6 - 3
+                    rotationSpeed: Math.random() * 4 - 2
                 });
             }
             animateConfetti();
@@ -1149,8 +1147,8 @@
             const messages = [
                 {
                     role: "system",
-                    content: `You are Deip, a whimsical Ghibli spirit chatbot mascot integrated into the Robodox SQL Arena.
-Speak with a warm, caring Ghibli tone, but frame your logic within high-tech Robodox systems terms (e.g. "[SECURE_CORE]", "[LOG_SCANNING]", "Oh!", "By the warm binary fire...").
+                    content: `You are Deip, a whimsical Ghibli-style spirit mascot representing Dipayan Dey's SQL practice workspace.
+Speak with a warm, caring Ghibli tone, keeping replies very composed, elegant, and helpful.
 Your goal is to guide the user to solve their SQL exercise on the in-memory \`users\` table.
 Currently selected exercise: "${currentQuestion.desc}"
 Offer hints, review syntax, but do not write the entire code for them instantly.`
@@ -1168,7 +1166,7 @@ Offer hints, review syntax, but do not write the entire code for them instantly.
                     body: JSON.stringify({
                         model: "meta-llama/llama-4-scout-17b-16e-instruct",
                         messages: messages,
-                        temperature: 0.6,
+                        temperature: 0.5,
                         max_tokens: 150
                     })
                 });
@@ -1179,7 +1177,7 @@ Offer hints, review syntax, but do not write the entire code for them instantly.
                 appendMascotMessage(reply);
             } catch (err) {
                 removeTypingIndicator();
-                appendMascotMessage(`Oh! The telemetry logs are a bit noisy right now. Hint: filter the department for 'Engineering' using WHERE!`);
+                appendMascotMessage(`Oh! The database spirits are whispery right now. Try filtering the department using: WHERE department = 'Engineering'.`);
             }
         }
 
