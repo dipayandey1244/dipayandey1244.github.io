@@ -1,645 +1,1082 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Dipayan Dey | FinTech Developer & AI Systems Portfolio</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Dipayan Dey | Systems Engineer &amp; Quant AI Portfolio</title>
+    
+    <meta name="description" content="Dipayan Dey is a systems engineer and quantitative AI leader, currently serving as a Vice President of AI/ML within BNY's Risk &amp; Compliance division. Formerly at Goldman Sachs and Morgan Stanley. Graduate of IIT Kanpur (M.Sc. Statistics).">
+    <meta name="author" content="Dipayan Dey">
+    
+    <!-- Open Graph / OG -->
+    <meta property="og:title" content="Dipayan Dey | Systems Engineer &amp; Quant AI Portfolio">
+    <meta property="og:description" content="Dipayan Dey is a systems engineer and quantitative AI leader, currently serving as a Vice President of AI/ML within BNY's Risk &amp; Compliance division. Formerly at Goldman Sachs and Morgan Stanley.">
+    <meta property="og:locale" content="en_US">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&amp;family=Outfit:wght@300;400;600;700;800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
     
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* ==========================================================================
-           DESIGN SYSTEM & VARIABLES (Databricks + Anthropic Blended Theme)
-           ========================================================================== */
-        :root {
-            --bg-primary: #06070a;
-            --bg-card: rgba(13, 17, 27, 0.65);
-            --bg-card-hover: rgba(20, 26, 40, 0.85);
-            --border-color: rgba(255, 255, 255, 0.06);
-            
-            --text-primary: #f4f0ea;
-            --text-secondary: #b0a89f;
-            --text-muted: #7c756c;
-            
-            --color-info: #85b7eb;
-            --color-info-glow: rgba(133, 183, 235, 0.15);
-            --color-accent: #ff5630; /* Databricks Coral */
-            --color-accent-glow: rgba(255, 86, 48, 0.18);
-            --color-success: #10b981;
-            --color-success-glow: rgba(16, 185, 129, 0.15);
-            --color-warning: #f59e0b;
-            --color-warning-glow: rgba(245, 158, 11, 0.15);
-            --color-crawler: #d946ef;
-            --color-crawler-glow: rgba(217, 70, 239, 0.15);
-            
-            --font-sans: 'Outfit', -apple-system, sans-serif;
-            --font-serif: 'Lora', Georgia, serif;
-            --font-mono: 'JetBrains Mono', monospace;
-            --transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        /* ==========================================================================
-           GLOBAL BASE STYLES
-           ========================================================================== */
+        /* Global Reset */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-
+        
+        html {
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
         body {
-            font-family: var(--font-sans);
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
+            background-color: #000;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            position: relative;
         }
-
-        /* Ambient Glowing Blobs */
+        
+        /* Subtle organic grain overlay */
         body::before {
-            content: '';
+            content: "";
             position: fixed;
-            top: -20%;
-            left: -15%;
-            width: 700px;
-            height: 700px;
-            background: radial-gradient(circle, rgba(255, 86, 48, 0.08) 0%, rgba(255, 86, 48, 0) 70%);
-            z-index: -1;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            opacity: 0.015;
             pointer-events: none;
-            filter: blur(100px);
+            z-index: 9999;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
-
-        body::after {
-            content: '';
-            position: fixed;
-            bottom: -20%;
-            right: -15%;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.07) 0%, rgba(99, 102, 241, 0) 70%);
-            z-index: -1;
-            pointer-events: none;
-            filter: blur(100px);
-        }
-
-        /* ==========================================================================
-           HERO HEADER SECTION
-           ========================================================================== */
-        header {
-            text-align: center;
-            padding: 100px 20px 40px;
-            max-width: 800px;
-            z-index: 10;
-        }
-
-        .profile-photo-container {
-            margin-bottom: 24px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .profile-photo {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            border: 3px solid var(--border-color);
-            object-fit: cover;
-            box-shadow: 0 0 30px rgba(255, 86, 48, 0.15);
-            transition: var(--transition);
-        }
-
-        .profile-photo-container::after {
-            content: '';
-            position: absolute;
-            top: -5px;
-            left: -5px;
-            right: -5px;
-            bottom: -5px;
-            border-radius: 50%;
-            border: 1px dashed rgba(255, 86, 48, 0.25);
-            animation: rotate 60s linear infinite;
-        }
-
-        @keyframes rotate {
-            100% { transform: rotate(360deg); }
-        }
-
-        .profile-photo:hover {
-            transform: scale(1.04);
-            border-color: var(--color-accent);
-            box-shadow: 0 0 35px rgba(255, 86, 48, 0.35);
-        }
-
-        .profile-badge {
-            display: inline-flex;
+        
+        /* Navigation */
+        nav.main-nav {
+            padding: 24px 80px;
+            background: #000;
+            display: flex;
+            justify-content: flex-end;
             align-items: center;
-            gap: 6px;
-            background-color: var(--color-accent-glow);
-            border: 1px solid rgba(255, 86, 48, 0.3);
-            color: #ffaa95;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 11px;
+            gap: 16px;
+            position: relative;
+            z-index: 100;
+        }
+        
+        nav.main-nav a {
+            padding: 8px 14px;
+            color: #c9d3da;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        nav.main-nav a:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        nav.main-nav a.cta {
+            background: #ff5630;
+            color: #fff;
             font-weight: 700;
-            margin-bottom: 24px;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
+            border: 1px solid transparent;
         }
-
-        h1 {
-            font-family: var(--font-serif);
-            font-size: 3.8rem;
-            font-weight: 700;
-            letter-spacing: -1px;
-            line-height: 1.1;
-            background: linear-gradient(135deg, #ffffff 40%, #ffd0c5 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 18px;
+        
+        nav.main-nav a.cta:hover {
+            background: #e04b28;
+            box-shadow: 0 0 15px rgba(255, 86, 48, 0.4);
         }
-
-        .subtitle {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            font-weight: 400;
-            max-width: 620px;
-            margin: 0 auto 30px auto;
-            line-height: 1.6;
+        
+        @media only screen and (max-width: 900px) {
+            nav.main-nav {
+                padding: 20px;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .mobile-hidden {
+                display: none !important;
+            }
         }
-
-        /* Social links bar */
-        .social-links {
+        
+        /* Main Layout Grid */
+        .container {  
+            display: grid;
+            grid-template-columns: 70% 30%;
+            gap: 0;
+            background: #000;
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .text-container {
+            background: #000;
+            padding: 20px 80px 80px 80px;
+        }
+        
+        .image-container {
+            background: #000;
+            position: relative;
             display: flex;
             justify-content: center;
-            gap: 16px;
-            margin-bottom: 20px;
+            align-items: flex-start;
+            padding-top: 20px;
         }
-
-        .social-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            font-size: 18px;
-            text-decoration: none;
-            transition: var(--transition);
+        
+        .hero-image {
+            position: relative;
+            width: 90%;
+            max-width: 380px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
         }
-
-        .social-btn:hover {
-            color: var(--text-primary);
-            background-color: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-        }
-
-        /* ==========================================================================
-           PROJECTS GRID SECTION
-           ========================================================================== */
-        .projects-section {
+        
+        .hero-image img {
             width: 100%;
-            max-width: 1200px;
-            padding: 40px 24px;
-            z-index: 10;
+            height: auto;
+            display: block;
+            object-fit: cover;
         }
-
-        .projects-section h2 {
-            font-family: var(--font-serif);
+        
+        .hero-image::after {
+            display: block;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background-image: linear-gradient(180deg, rgba(0,0,0,0) 60%, #000 100%);
+            height: 120px;
+            width: 100%;
+            content: '';
         }
-
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 24px;
+        
+        @media only screen and (max-width: 1100px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .text-container {
+                padding: 40px 24px;
+            }
+            .image-container {
+                padding: 20px 24px 60px 24px;
+            }
+            .hero-image {
+                max-width: 320px;
+                margin: 0 auto;
+            }
         }
-
-        .card {
-            background: var(--bg-card);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 30px;
+        
+        /* Typography */
+        .author-container {
+            color: #fff;
+        }
+        
+        .author-container .author {
+            font-family: 'Inter', sans-serif;
+            font-size: 6rem;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -4.48px;
+            line-height: 1.02;
+            margin-bottom: 8px;
+        }
+        
+        .author-container .role {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+            opacity: 0.64;
+            letter-spacing: -0.51px;
+            margin-top: 4px;
+            margin-bottom: 24px;
+        }
+        
+        .image-text {
+            color: #fff;
+            opacity: 0.86;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-top: 16px;
+        }
+        
+        .image-text a {
+            color: #ff5630;
             text-decoration: none;
-            color: inherit;
+            border-bottom: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .image-text a:hover {
+            border-bottom-color: #ff5630;
+        }
+        
+        /* Systems Grid */
+        .books-container, .studies-container {
+            margin-top: 60px;
+            width: 100%;
+        }
+        
+        .books-container h3, .studies-container h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            opacity: 0.64;
+            letter-spacing: -0.5px;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+        
+        .books {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(238px, 1fr));
+            gap: 30px 24px;
+            justify-content: center;
+        }
+        
+        figure.thumb {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        figure.thumb .cover {
+            position: relative;
+            width: 238px;
+            height: 370px;
+        }
+        
+        /* CSS-Based Book/Report Covers */
+        .system-cover {
+            width: 238px;
+            height: 370px;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: var(--transition);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
-            position: relative;
-            overflow: hidden;
-            min-height: 230px;
+            padding: 24px;
+            box-sizing: border-box;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: pointer;
         }
-
-        /* Category accent hovers */
-        .card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(255, 86, 48, 0.25);
-            background: var(--bg-card-hover);
+        
+        .system-cover .spine {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 14px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.08) 0%, rgba(0,0,0,0.3) 100%);
+            border-right: 1px solid rgba(0,0,0,0.4);
+            z-index: 2;
         }
-
-        .card-ghibli:hover { box-shadow: 0 12px 35px rgba(133, 183, 235, 0.12); }
-        .card-risk:hover { box-shadow: 0 12px 35px rgba(255, 86, 48, 0.15); }
-        .card-finance:hover { box-shadow: 0 12px 35px rgba(99, 102, 241, 0.12); }
-        .card-markdown:hover { box-shadow: 0 12px 35px rgba(245, 158, 11, 0.12); }
-        .card-crawler:hover { box-shadow: 0 12px 35px rgba(217, 70, 239, 0.16); }
-
-        /* Icon headers */
-        .card-icon {
-            font-size: 28px;
+        
+        .system-cover .cover-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            z-index: 3;
+            padding-left: 10px;
+        }
+        
+        .system-cover .tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+        }
+        
+        .system-cover .icon {
+            font-size: 2.2rem;
+            margin-top: 40px;
             margin-bottom: 20px;
-            display: inline-block;
+            transition: transform 0.3s ease;
         }
-
-        .card-ghibli .card-icon { color: var(--color-info); }
-        .card-risk .card-icon { color: var(--color-accent); }
-        .card-finance .card-icon { color: var(--color-success); }
-        .card-markdown .card-icon { color: var(--color-warning); }
-        .card-crawler .card-icon { color: var(--color-crawler); }
-
-        .card-content h3 {
-            font-family: var(--font-serif);
-            font-size: 19px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            letter-spacing: -0.2px;
+        
+        .system-cover .cover-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            line-height: 1.25;
+            color: #fff;
+            margin-top: auto;
+            margin-bottom: auto;
+            letter-spacing: -0.5px;
+            text-align: left;
         }
-
-        .card-content p {
-            font-size: 13.5px;
-            color: var(--text-secondary);
-            line-height: 1.55;
-            margin-bottom: 24px;
-        }
-
-        .card-footer {
-            font-size: 11.5px;
-            font-weight: 600;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: gap 0.2s;
+        
+        .system-cover .metadata {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.5);
+            margin-top: auto;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
-        .card:hover .card-footer {
-            gap: 10px;
+        
+        /* Gradients for System Covers */
+        .system-cover.risk-engine {
+            background: linear-gradient(135deg, #1f110a 0%, #0a0503 100%);
+            border: 1px solid rgba(255, 86, 48, 0.15);
         }
-
-        .card-ghibli .card-footer { color: var(--color-info); }
-        .card-risk .card-footer { color: var(--color-accent); }
-        .card-finance .card-footer { color: var(--color-success); }
-        .card-markdown .card-footer { color: var(--color-warning); }
-        .card-crawler .card-footer { color: var(--color-crawler); }
-
-        /* Featured project badge */
-        .featured-badge {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            background-color: var(--color-accent-glow);
-            border: 1px solid rgba(255, 86, 48, 0.3);
-            color: #ffd0c5;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 9px;
+        .system-cover.modus-ai {
+            background: linear-gradient(135deg, #071f14 0%, #020a07 100%);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+        }
+        .system-cover.retail-intel {
+            background: linear-gradient(135deg, #0e122b 0%, #04050d 100%);
+            border: 1px solid rgba(99, 102, 241, 0.15);
+        }
+        .system-cover.finance-dna {
+            background: linear-gradient(135deg, #081d26 0%, #020a0e 100%);
+            border: 1px solid rgba(56, 189, 248, 0.15);
+        }
+        .system-cover.frugalgpt {
+            background: linear-gradient(135deg, #241a08 0%, #0a0802 100%);
+            border: 1px solid rgba(245, 158, 11, 0.15);
+        }
+        .system-cover.aethercrawl {
+            background: linear-gradient(135deg, #240a22 0%, #0a0209 100%);
+            border: 1px solid rgba(217, 70, 239, 0.15);
+        }
+        .system-cover.decision-ml {
+            background: linear-gradient(135deg, #042f2e 0%, #020f0f 100%);
+            border: 1px solid rgba(20, 184, 166, 0.15);
+        }
+        
+        /* Hover Outline and Glow Animations */
+        figure.thumb:hover .system-cover {
+            transform: translateY(-8px);
+        }
+        figure.thumb:hover .system-cover.risk-engine {
+            outline: 5px solid #ff5630;
+            box-shadow: 0 0 30px rgba(255, 86, 48, 0.35);
+        }
+        figure.thumb:hover .system-cover.modus-ai {
+            outline: 5px solid #10b981;
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.35);
+        }
+        figure.thumb:hover .system-cover.retail-intel {
+            outline: 5px solid #6366f1;
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.35);
+        }
+        figure.thumb:hover .system-cover.finance-dna {
+            outline: 5px solid #38bdf8;
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.35);
+        }
+        figure.thumb:hover .system-cover.frugalgpt {
+            outline: 5px solid #f59e0b;
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.35);
+        }
+        figure.thumb:hover .system-cover.aethercrawl {
+            outline: 5px solid #d946ef;
+            box-shadow: 0 0 30px rgba(217, 70, 239, 0.35);
+        }
+        figure.thumb:hover .system-cover.decision-ml {
+            outline: 5px solid #14b8a6;
+            box-shadow: 0 0 30px rgba(20, 184, 166, 0.35);
+        }
+        
+        figure.thumb:hover .system-cover .icon {
+            transform: scale(1.1) rotate(-5deg);
+        }
+        
+        figure.thumb h2 {
+            color: #fff;
+            opacity: 0.64;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 14px;
+            text-align: center;
+            transition: opacity 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        figure.thumb:hover h2 {
+            opacity: 1;
+        }
+        
+        /* Case Studies */
+        .studies {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+        
+        .study-card {
+            background: #0d0d0d;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 12px;
+            box-sizing: border-box;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            height: 120px;
+            text-decoration: none;
+        }
+        
+        .study-card i {
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+            color: rgba(255,255,255,0.6);
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+        
+        .study-card span {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.72rem;
             font-weight: 700;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
             letter-spacing: 0.8px;
+            text-align: center;
+        }
+        
+        .study-card:hover {
+            transform: translateY(-4px);
+            background: #121212;
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        .study-card:hover i {
+            color: #ff5630;
+            transform: scale(1.1);
+        }
+        
+        .study-card:hover span {
+            color: #fff;
+        }
+        
+        /* Featured Audits */
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            text-align: center;
+            margin-top: 80px;
+            margin-bottom: 40px;
+            letter-spacing: -0.5px;
             text-transform: uppercase;
         }
-
-        /* ==========================================================================
-           FOOTER SECTION
-           ========================================================================== */
-        footer {
-            text-align: center;
-            padding: 60px 20px 40px;
-            font-size: 13px;
-            color: var(--text-muted);
+        
+        .thoughts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            padding: 0 80px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        @media only screen and (max-width: 900px) {
+            .thoughts-grid {
+                padding: 0 24px;
+            }
+        }
+        
+        .thoughts-item-ai {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .audit-thumbnail {
             width: 100%;
-            border-top: 1px solid rgba(255, 255, 255, 0.03);
-            background-color: rgba(0, 0, 0, 0.2);
-            z-index: 10;
+            height: 200px;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0d0d0d 0%, #030303 100%);
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
         }
-
-        footer strong {
-            color: var(--text-primary);
-            font-weight: 600;
+        
+        /* Cyber/Grid pattern overlay */
+        .audit-thumbnail::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(rgba(255, 86, 48, 0.04) 1px, transparent 1px);
+            background-size: 16px 16px;
+            pointer-events: none;
+            z-index: 1;
         }
-
-        /* ==========================================================================
-           RESPONSIVE MOBILE STYLES
-           ========================================================================== */
-        @media (max-width: 768px) {
-            header {
-                padding: 60px 20px 20px;
+        
+        .audit-thumbnail .emblem {
+            font-size: 2.8rem;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 12px;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+        
+        .audit-thumbnail .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: rgba(255,255,255,0.3);
+            z-index: 2;
+            text-transform: uppercase;
+        }
+        
+        .thoughts-item-ai h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-top: 16px;
+            margin-bottom: 0;
+            line-height: 1.35;
+            color: #fff;
+            transition: color 0.2s ease;
+        }
+        
+        .thoughts-item-ai:hover .audit-thumbnail {
+            transform: translateY(-6px);
+            outline: 5px solid #ff5630;
+            box-shadow: 0 12px 28px rgba(255, 86, 48, 0.2);
+        }
+        
+        .thoughts-item-ai:hover .audit-thumbnail .emblem {
+            color: #ff5630;
+            transform: scale(1.1);
+        }
+        
+        .thoughts-item-ai:hover h3 {
+            color: #ff5630;
+        }
+        
+        /* Experience List */
+        .profile {
+            width: 100%;
+            max-width: 1000px;
+            margin: 80px auto 0 auto;
+            padding: 0 40px;
+        }
+        
+        @media only screen and (max-width: 768px) {
+            .profile {
+                padding: 0 24px;
+                margin-top: 60px;
             }
-            h1 {
-                font-size: 2.8rem;
+        }
+        
+        #wrapper {
+            padding: 0;
+        }
+        
+        ol.list-view {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .list-item {
+            display: flex;
+            margin-bottom: 50px;
+        }
+        
+        .list-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .list-header {
+            margin-right: 24px;
+            flex-shrink: 0;
+        }
+        
+        /* Timelines Bubbles */
+        ._bubble {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #0d0d0d;
+            border: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4rem;
+            color: rgba(255,255,255,0.5);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+            transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        .list-item:hover ._bubble {
+            background: #ff5630;
+            color: #fff;
+            border-color: #fff;
+            box-shadow: 0 0 20px rgba(255, 86, 48, 0.4);
+            transform: scale(1.05);
+        }
+        
+        .list-detail {
+            flex-grow: 1;
+        }
+        
+        .list-detail ._title-block {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 4px;
+        }
+        
+        .list-detail ._title-block h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 0;
+        }
+        
+        .list-detail ._summary {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #ff5630;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .list-detail p._desc {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.7);
+            margin: 0 0 12px 0;
+        }
+        
+        .list-detail ul {
+            margin: 0;
+            padding-left: 18px;
+            list-style: none;
+        }
+        
+        .list-detail ul li {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 8px;
+            position: relative;
+        }
+        
+        .list-detail ul li::before {
+            content: "—";
+            position: absolute;
+            left: -18px;
+            color: #ff5630;
+            font-weight: bold;
+        }
+        
+        @media only screen and (max-width: 500px) {
+            .list-item {
+                flex-direction: column;
             }
-            .subtitle {
-                font-size: 1.1rem;
+            .list-header {
+                margin-right: 0;
+                margin-bottom: 16px;
             }
-            .projects-section {
-                padding: 20px 16px;
+            ._bubble {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
             }
+        }
+        
+        /* Footer */
+        #footer {
+            margin-top: 100px;
+            background: #050505;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        #footer p.disclaimer {
+            max-width: 800px;
+            margin: 0 auto 16px auto;
+            color: rgba(255,255,255,0.4);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+        
+        #footer p.copyright {
+            color: rgba(255,255,255,0.6);
+            font-size: 13px;
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
 
-    <!-- ANIMATED MESH BACKDROP -->
-    <canvas id="canvas-particles" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:-2; pointer-events:none; opacity: 0.55;"></canvas>
-
-    <!-- Header section -->
-    <header>
-        <div class="profile-photo-container">
-            <img src="dipayan_avatar.png" alt="Dipayan Dey Avatar" class="profile-photo">
-        </div>
-        <br>
-        <span class="profile-badge">
-            <i class="fa-solid fa-code-branch"></i> Systems Engineer & FinTech
-        </span>
-        <h1>Dipayan Dey</h1>
-        <p class="subtitle">Designing high-fidelity, quantitative risk engines and beautiful financial technology platforms that blend theoretical rigor with elite usability.</p>
+    <!-- Main Navigation Bar -->
+    <nav class="main-nav">
+        <a class="mobile-hidden" href="https://github.com/dipayandey1244" target="_blank">GitHub</a>
+        <a class="mobile-hidden" href="https://linkedin.com/in/dipayandey12" target="_blank">LinkedIn</a>
+        <a href="mailto:dipayandresearchwork@gmail.com">Email</a>
+        <a class="mobile-hidden" href="./resume/">Resume</a>
+        <a class="cta" href="./risk-analytics-dashboard/">Launch Risk Engine</a>
+    </nav>
+    
+    <!-- Split Layout Grid Container -->
+    <div class="container">
         
-        <!-- Social links bar -->
-        <div class="social-links">
-            <a href="https://github.com/dipayandey1244" target="_blank" class="social-btn" title="GitHub Profile">
-                <i class="fa-brands fa-github"></i>
-            </a>
-            <a href="mailto:dipayandresearchwork@gmail.com" class="social-btn" title="Email Me">
-                <i class="fa-solid fa-envelope"></i>
-            </a>
-            <a href="./resume/" class="social-btn" title="View Resume">
-                <i class="fa-regular fa-file-lines"></i>
-            </a>
+        <!-- Left Column: Biography & System Blueprints -->
+        <div class="text-container">
+            
+            <div class="author-container">
+                <h1 class="author">Dipayan Dey</h1>
+                <div class="role">Systems Engineer &amp; Quantitative AI Leader</div>
+                
+                <div itemscope itemtype="https://schema.org/Person" class="image-text">
+                    <span itemprop="name">Dipayan Dey</span> is a <a itemprop="jobTitle" href="https://linkedin.com/in/dipayandey12">systems engineer and quantitative AI leader</a> 
+                    currently serving as a <strong>Vice President of AI/ML</strong> within BNY's Risk &amp; Compliance division. He leads the engineering of firmwide risk analytics and transaction surveillance models, shaping technical AI governance and architecting automated translation and validation processors in Azure. A graduate of the <strong>Indian Institute of Technology (IIT), Kanpur</strong> (M.Sc. in Statistics), he previously worked as an Associate at <strong>Goldman Sachs</strong> within Model Risk Management, where he spearheaded investigations on trade manipulation engines, established department-wide LLM observability pipelines, and created the multi-agent "LLM Council" calibration gateway. Before Goldman Sachs, he validated AML and transaction monitoring architectures as an Associate at <strong>Morgan Stanley</strong>. He is passionate about high-fidelity risk modeling, autonomous agentic systems, and observability. You can explore his open-source systems and detailed case files below.
+                </div>
+            </div>
+            
+            <!-- Flagship Systems Section -->
+            <div class="books-container">
+                <h3>Flagship Systems</h3>
+                <div class="books">
+                    
+                    <!-- 1. Risk Engine -->
+                    <figure class="thumb">
+                        <div class="cover">
+                            <a href="./risk-analytics-dashboard/">
+                                <div class="system-cover risk-engine">
+                                    <div class="spine"></div>
+                                    <div class="cover-content">
+                                        <div class="tag">System Blueprint</div>
+                                        <div class="icon"><i class="fa-solid fa-shield-halved" style="color: #ff5630;"></i></div>
+                                        <h2 class="cover-title">Institutional Risk Engine</h2>
+                                        <div class="metadata">Basel III &amp; IFRS 9</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <h2>Risk Engine</h2>
+                    </figure>
+                    
+                    <!-- 2. Modus AI -->
+                    <figure class="thumb">
+                        <div class="cover">
+                            <a href="./modus-ai/">
+                                <div class="system-cover modus-ai">
+                                    <div class="spine"></div>
+                                    <div class="cover-content">
+                                        <div class="tag">Observability</div>
+                                        <div class="icon"><i class="fa-solid fa-chart-line" style="color: #10b981;"></i></div>
+                                        <h2 class="cover-title">Modus AI Console</h2>
+                                        <div class="metadata">Telemetry &amp; RAG</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <h2>Modus AI Observatory</h2>
+                    </figure>
+                    
+                    <!-- 3. Retail Intel -->
+                    <figure class="thumb">
+                        <div class="cover">
+                            <a href="./retail-intelligence/">
+                                <div class="system-cover retail-intel">
+                                    <div class="spine"></div>
+                                    <div class="cover-content">
+                                        <div class="tag">Agentic Team</div>
+                                        <div class="icon"><i class="fa-solid fa-cubes" style="color: #6366f1;"></i></div>
+                                        <h2 class="cover-title">Agentic Retail Intelligence</h2>
+                                        <div class="metadata">ML Forecasting</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <h2>Retail Intelligence</h2>
+                    </figure>
+                    
+                    <!-- 4. Google Finance DnA -->
+                    <figure class="thumb">
+                        <div class="cover">
+                            <a href="./fde-simulator/?tab=finance">
+                                <div class="system-cover finance-dna">
+                                    <div class="spine"></div>
+                                    <div class="cover-content">
+                                        <div class="tag">Simulation Workspace</div>
+                                        <div class="icon"><i class="fa-solid fa-brain" style="color: #38bdf8;"></i></div>
+                                        <h2 class="cover-title">Finance DnA Console</h2>
+                                        <div class="metadata">Gemini Workflows</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <h2>Finance DnA Console</h2>
+                    </figure>
+                    
+                    <!-- 5. FrugalGPT Router -->
+                    <figure class="thumb">
+                        <div class="cover">
+                            <a href="./frugalgpt-router/">
+                                <div class="system-cover frugalgpt">
+                                    <div class="spine"></div>
+                                    <div class="cover-content">
+                                        <div class="tag">Paper Implementation</div>
+                                        <div class="icon"><i class="fa-solid fa-graduation-cap" style="color: #f59e0b;"></i></div>
+                                        <h2 class="cover-title">FrugalGPT LLM Router</h2>
+                                        <div class="metadata">Cascade &amp; Cache</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <h2>FrugalGPT Gateway</h2>
+                    </figure>
+                    
+                    <!-- 6. AetherCrawl -->
+                    <figure class="thumb">
+                        <div class="cover">
+                            <a href="./web-crawler/">
+                                <div class="system-cover aethercrawl">
+                                    <div class="spine"></div>
+                                    <div class="cover-content">
+                                        <div class="tag">Autonomous System</div>
+                                        <div class="icon"><i class="fa-solid fa-spider" style="color: #d946ef;"></i></div>
+                                        <h2 class="cover-title">AetherCrawl Engine</h2>
+                                        <div class="metadata">Graph &amp; Crawler</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <h2>AetherCrawl Engine</h2>
+                    </figure>
+                    
+                    <!-- 7. Decision ML -->
+                    <figure class="thumb">
+                        <div class="cover">
+                            <a href="./cases/">
+                                <div class="system-cover decision-ml">
+                                    <div class="spine"></div>
+                                    <div class="cover-content">
+                                        <div class="tag">Decision Intelligence</div>
+                                        <div class="icon"><i class="fa-solid fa-arrows-split-up-and-left" style="color: #14b8a6;"></i></div>
+                                        <h2 class="cover-title">Decision ML Engine</h2>
+                                        <div class="metadata">MDP &amp; Optimization</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <h2>Decision ML Engine</h2>
+                    </figure>
+                    
+                </div>
+            </div>
+            
+            <!-- Case Studies & Research Section -->
+            <div class="studies-container">
+                <h3>Research &amp; Case Studies</h3>
+                <div class="studies">
+                    
+                    <a href="./contributions/" class="study-card">
+                        <i class="fa-solid fa-code-pull-request"></i>
+                        <span>Open Source Registry</span>
+                    </a>
+                    
+                    <a href="./cases/" class="study-card">
+                        <i class="fa-solid fa-briefcase"></i>
+                        <span>Systemic Case Files</span>
+                    </a>
+                    
+                    <a href="https://github.com/dipayandey1244" target="_blank" class="study-card">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span>Ghibli CV Pipeline</span>
+                    </a>
+                    
+                    <a href="https://github.com/dipayandey1244" target="_blank" class="study-card">
+                        <i class="fa-solid fa-feather"></i>
+                        <span>Life in Markdown</span>
+                    </a>
+                    
+                </div>
+            </div>
+            
         </div>
-    </header>
-
-    <!-- Section 1: Quantitative Engineering & AI Platforms (Featured Showcase) -->
-    <section class="projects-section">
-        <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 24px; background: linear-gradient(135deg, #ffffff 40%, #ff5630 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;">
-            <i class="fa-solid fa-wallet" style="color: var(--color-accent);"></i> Quantitative Systems &amp; AI Platforms
-        </h2>
-        <div class="projects-grid">
-            <!-- Risk Engine -->
-            <a href="./risk-analytics-dashboard/" target="_blank" class="card card-risk">
-                <span class="featured-badge">Featured System</span>
-                <div class="card-icon"><i class="fa-solid fa-shield-halved"></i></div>
-                <div class="card-content">
-                    <h3>Institutional Risk Engine</h3>
-                    <p>Basel III &amp; IFRS 9 compliant risk dashboard. Includes Value at Risk, Expected Shortfall modeling, and dynamic stress scenario simulators.</p>
-                </div>
-                <div class="card-footer">
-                    <span>Launch Engine</span> <i class="fa-solid fa-arrow-right-long"></i>
-                </div>
-            </a>
-
-            <!-- Modus AI Observability Console -->
-            <a href="./modus-ai/" target="_blank" class="card card-risk">
-                <span class="featured-badge" style="background-color: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3); color: #6ee7b7;">Observability</span>
-                <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
-                <div class="card-content">
-                    <h3>Modus AI Observability</h3>
-                    <p>GenAI observability dashboard for RAG pipelines. Features multi-model LLM-as-a-Judge consensus evaluations, dense/sparse retrieval tracing, and live Groq API completions.</p>
-                </div>
-                <div class="card-footer">
-                    <span>Launch Observatory</span> <i class="fa-solid fa-arrow-right-long"></i>
-                </div>
-            </a>
-
-            <!-- Agentic Retail Intelligence System -->
-            <a href="./retail-intelligence/" target="_blank" class="card card-risk">
-                <span class="featured-badge" style="background-color: rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.3); color: #c7d2fe;">Agentic Team</span>
-                <div class="card-icon"><i class="fa-solid fa-cubes"></i></div>
-                <div class="card-content">
-                    <h3>Agentic Retail Intelligence</h3>
-                    <p>Multi-agent team managing demand forecasting and stockout risks. Integrates classical ML (XGBoost) predictors and Groq LLM uncertainty explanations.</p>
-                </div>
-                <div class="card-footer">
-                    <span>Launch System</span> <i class="fa-solid fa-arrow-right-long"></i>
-                </div>
-            </a>
+        
+        <!-- Right Column: Hero Portrait -->
+        <div class="image-container">
+            <div class="hero-image">
+                <img alt="Pictured: Dipayan Dey." src="dipayan_headshot.png">
+            </div>
         </div>
-    </section>
-
-    <!-- Section 2: Deep Engineering & Research Projects -->
-    <section class="projects-section" style="padding-top: 0; margin-top: -10px;">
-        <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 24px; background: linear-gradient(135deg, #ffffff 40%, #10b981 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;">
-            <i class="fa-solid fa-server" style="color: var(--color-success);"></i> Systems Engineering &amp; Research
-        </h2>
-        <div class="projects-grid">
-            <!-- Google Finance DnA Console -->
-            <a href="./fde-simulator/?tab=finance" target="_blank" class="card card-finance">
-                <span class="featured-badge" style="background-color: rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.3); color: #c7d2fe;">Agent Workspace</span>
-                <div class="card-icon"><i class="fa-solid fa-brain"></i></div>
-                <div class="card-content">
-                    <h3>Google Finance DnA Console</h3>
-                    <p>Multi-agent simulation of AI-native financial workflows. Integrates classical ML forecasting, Gemini audit reasoning logs, and human-in-the-loop data write-backs.</p>
-                </div>
-                <div class="card-footer">
-                    <span>Launch Workspace</span> <i class="fa-solid fa-arrow-right-long"></i>
-                </div>
-            </a>
-
-            <!-- Paper Implementation (FrugalGPT Router) -->
-            <a href="./frugalgpt-router/" target="_blank" class="card card-finance">
-                <span class="featured-badge" style="background-color: rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.3); color: #c7d2fe;">Paper Implementation</span>
-                <div class="card-icon"><i class="fa-solid fa-graduation-cap"></i></div>
-                <div class="card-content">
-                    <h3>FrugalGPT LLM Router</h3>
-                    <p>Production-grade implementation of the FrugalGPT cascade routing &amp; semantic cache gateway (ArXiv:2305.05176). Classifies prompt complexity to route queries, saving up to 70% in API costs.</p>
-                </div>
-                <div class="card-footer">
-                    <span>Launch Gateway</span> <i class="fa-solid fa-arrow-right-long"></i>
-                </div>
-            </a>
-
-            <!-- AetherCrawl -->
-            <a href="./web-crawler/" class="card card-crawler">
-                <span class="featured-badge" style="background-color: rgba(217, 70, 239, 0.15); border-color: rgba(217, 70, 239, 0.3); color: #f472b6;">Autonomous System</span>
-                <div class="card-icon"><i class="fa-solid fa-spider"></i></div>
-                <div class="card-content">
-                    <h3>AetherCrawl Engine</h3>
-                    <p>An autonomous, high-performance web crawler and metadata analyzer. Visualizes link-state graph trees, schedules thread tasks dynamically, and indexes crawl history to SQLite databases.</p>
-                </div>
-                <div class="card-footer">
-                    <span>Launch Analyzer</span> <i class="fa-solid fa-arrow-right-long"></i>
-                </div>
-            </a>
-
-            <!-- Open Source Contributions -->
-            <a href="./contributions/" target="_blank" class="card card-ghibli">
-                <div class="card-icon"><i class="fa-solid fa-code-pull-request"></i></div>
-                <div class="card-content">
-                    <h3>Open Source Contributions</h3>
-                    <p>Core patch registry and visual showcases for pull requests merged across LangGraph, LightGBM, FastAPI, and Pydantic.</p>
-                </div>
-                <div class="card-footer">
-                    <span>View Contributions</span> <i class="fa-solid fa-arrow-right-long"></i>
-                </div>
-            </a>
-        </div>
-    </section>
-
-    <!-- Section 3: Machine Learning & Minimal Tools -->
-    <section class="projects-section" style="padding-top: 0; margin-top: -10px;">
-        <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 24px; background: linear-gradient(135deg, #ffffff 40%, #85b7eb 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;">
-            <i class="fa-solid fa-microscope" style="color: var(--color-info);"></i> Research Cases &amp; Libraries
-        </h2>
-        <div class="projects-grid">
-            <!-- Ghibli Generator -->
-            <a href="https://github.com/dipayandey1244" target="_blank" class="card card-ghibli">
-                <div class="card-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
-                <div class="card-content">
-                    <h3>Ghibli Generator</h3>
-                    <p>A computer vision art pipeline that transforms static scenery photos into beautiful Ghibli-style digital paintings.</p>
-                </div>
-                <div class="card-footer">
-                    <span>View Repository</span> <i class="fa-solid fa-arrow-right-long"></i>
-                </div>
-            </a>
-
-            <!-- Systemic Business Cases -->
-            <a href="./cases/" target="_blank" class="card card-finance">
-                <div class="card-icon"><i class="fa-solid fa-briefcase"></i></div>
-                <div class="card-content">
-                    <h3>Systemic Case Studies</h3>
-                    <p>Quantitative audit reports detailing XGBoost alert staging filters, RAG validations, and LightGBM model debugging.</p>
-                </div>
-                <div class="card-footer">
-                    <span>Read Case Studies</span> <i class="fa-solid fa-arrow-right-long"></i>
-                </div>
-            </a>
-
-            <!-- Life in Markdown -->
-            <a href="https://github.com/dipayandey1244" target="_blank" class="card card-markdown">
-                <div class="card-icon"><i class="fa-solid fa-feather"></i></div>
-                <div class="card-content">
-                    <h3>Life in Markdown</h3>
-                    <p>A minimalist writing framework and journaling template optimized for markdown editing, speed, and privacy.</p>
-                </div>
-                <div class="card-footer">
-                    <span>Read More</span> <i class="fa-solid fa-arrow-right-long"></i>
-                </div>
-            </a>
-        </div>
-    </section>
-
+        
+    </div>
+    
+    <!-- Lower Section: Featured Work & Audits -->
+    <h2 class="section-title">Technical Highlights &amp; Deployments</h2>
+    <div class="thoughts-grid">
+        
+        <!-- 1. Surveillance -->
+        <a href="./cases/" class="thoughts-item-ai">
+            <div class="audit-thumbnail">
+                <div class="emblem"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+                <div class="label">Trade Surveillance</div>
+            </div>
+            <h3>Intra-Market Surveillance &amp; Trade Manipulation Audit</h3>
+        </a>
+        
+        <!-- 2. LLM Council -->
+        <a href="./fde-simulator/?tab=finance" class="thoughts-item-ai">
+            <div class="audit-thumbnail">
+                <div class="emblem"><i class="fa-solid fa-brain"></i></div>
+                <div class="label">Multi-Agent Systems</div>
+            </div>
+            <h3>The LLM Council: Multi-Agent Model Calibration Framework</h3>
+        </a>
+        
+        <!-- 3. Matryoshka -->
+        <a href="./cases/" class="thoughts-item-ai">
+            <div class="audit-thumbnail">
+                <div class="emblem"><i class="fa-solid fa-network-wired"></i></div>
+                <div class="label">Representation Learning</div>
+            </div>
+            <h3>Matryoshka Embedding Loss-Function Validation</h3>
+        </a>
+        
+        <!-- 4. XGBoost -->
+        <a href="./cases/" class="thoughts-item-ai">
+            <div class="audit-thumbnail">
+                <div class="emblem"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                <div class="label">Model Risk Compliance</div>
+            </div>
+            <h3>XGBoost Staging Alerts &amp; Precision Remediations</h3>
+        </a>
+        
+        <!-- 5. Decision ML -->
+        <a href="./cases/" class="thoughts-item-ai">
+            <div class="audit-thumbnail">
+                <div class="emblem"><i class="fa-solid fa-chess"></i></div>
+                <div class="label">Decision Intelligence</div>
+            </div>
+            <h3>Decision ML: MDP Policy Optimization &amp; Dynamic Constraint Validation</h3>
+        </a>
+        
+    </div>
+    
+    <!-- Lower Section: Detailed Experience timeline -->
+    <div class="profile">
+        <section id="wrapper">
+            <ol class="list-view">
+                
+                <!-- BNY -->
+                <li class="list-item">
+                    <div class="list-header">
+                        <div class="_bubble"><i class="fa-solid fa-building-columns"></i></div>
+                    </div>
+                    <div class="list-detail">
+                        <div class="_title-block">
+                            <h3>BNY</h3>
+                        </div>
+                        <div class="_summary">Vice President — AI/ML Risk &amp; Compliance (2026 – Present)</div>
+                        <p class="_desc">Leading AI/ML solutions in the Risk division; spearheaded Azure-based transcription and translation engines for KYC document processing; AI/ML council governance member.</p>
+                        <ul>
+                            <li>Leading development of firmwide AI/ML solutions within the Risk &amp; Compliance division; spearheading an Azure-based transcription and translation system for KYC document processing.</li>
+                            <li>Shaping governance, model risk evaluations, and execution paths for generative AI systems across risk and compliance lines of business.</li>
+                        </ul>
+                    </div>
+                </li>
+                
+                <!-- Goldman Sachs -->
+                <li class="list-item">
+                    <div class="list-header">
+                        <div class="_bubble"><i class="fa-solid fa-coins"></i></div>
+                    </div>
+                    <div class="list-detail">
+                        <div class="_title-block">
+                            <h3>Goldman Sachs</h3>
+                        </div>
+                        <div class="_summary">Associate — Model Risk &amp; Surveillance AI (2024 – 2026)</div>
+                        <p class="_desc">Spearheaded trade surveillance validations, engineered LLM observability consoles, and coordinated cross-model risk benchmarks.</p>
+                        <ul>
+                            <li>Led validation of Intra-Market Manipulation Models; benchmarked production implementations against 67 alternatives to deliver superior methodologies adopted into production.</li>
+                            <li>Remediated data leakage flaws in XGBoost-based Insider Trading models, creating reliable production input/output tracking.</li>
+                            <li>Built LangChain validation report writers and automated regression test agents, reducing reporting cycles by 25%.</li>
+                        </ul>
+                    </div>
+                </li>
+                
+                <!-- Morgan Stanley -->
+                <li class="list-item">
+                    <div class="list-header">
+                        <div class="_bubble"><i class="fa-solid fa-vault"></i></div>
+                    </div>
+                    <div class="list-detail">
+                        <div class="_title-block">
+                            <h3>Morgan Stanley</h3>
+                        </div>
+                        <div class="_summary">Associate — AML &amp; Compliance Validation (2022 – 2024)</div>
+                        <p class="_desc">Served as Primary Validator for high-stakes AML transaction monitoring and sanction/PEP classification models.</p>
+                        <ul>
+                            <li>Validated flagship compliance models including transaction screening and fuzzy matching vendor systems.</li>
+                            <li>Challenged transaction risk scores using LightGBM and distilBERT-based NLP benchmarking models to optimize precision.</li>
+                        </ul>
+                    </div>
+                </li>
+                
+                <!-- IIT Kanpur -->
+                <li class="list-item">
+                    <div class="list-header">
+                        <div class="_bubble"><i class="fa-solid fa-graduation-cap"></i></div>
+                    </div>
+                    <div class="list-detail">
+                        <div class="_title-block">
+                            <h3>IIT Kanpur</h3>
+                        </div>
+                        <div class="_summary">M.Sc. in Statistics (2019 – 2021)</div>
+                        <p class="_desc">Advanced statistical computing, quantitative probability modeling, and data structures at the Indian Institute of Technology, Kanpur.</p>
+                    </div>
+                </li>
+                
+            </ol>
+        </section>
+    </div>
+    
     <!-- Footer Section -->
-    <footer>
-        <p>Crafted with pride by <strong>Dipayan Dey</strong> • © 2026</p>
+    <footer id="footer">
+        <p class="disclaimer">
+            <strong>Disclaimer:</strong> The views and opinions expressed on this site are my own and do not necessarily reflect the views, positions, or strategies of BNY, Goldman Sachs, Morgan Stanley, or any of their affiliates.
+        </p>
+        <p class="copyright">© Copyright 2026 Dipayan Dey</p>
     </footer>
 
     <!-- PERSISTENT DEIP AI AGENT -->
     <script src="./js/deip-agent.js"></script>
 
-    <!-- INTERACTIVE BACKGROUND PARTICLE ENGINE -->
-    <script>
-        const canvas = document.getElementById('canvas-particles');
-        const ctx = canvas.getContext('2d');
-
-        let particles = [];
-        const particleCount = 75;
-        const connectionDistance = 100;
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.4;
-                this.vy = (Math.random() - 0.5) * 0.4;
-                this.radius = Math.random() * 2 + 1;
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-
-                if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
-                if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(255, 86, 48, 0.4)';
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Update & Draw
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-
-            // Draw Lines
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-
-                    if (dist < connectionDistance) {
-                        const alpha = (1 - dist / connectionDistance) * 0.15;
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.strokeStyle = `rgba(255, 86, 48, ${alpha})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.stroke();
-                    }
-                }
-            }
-
-            requestAnimationFrame(animate);
-        }
-
-        initParticles();
-        animate();
-    </script>
 </body>
 </html>

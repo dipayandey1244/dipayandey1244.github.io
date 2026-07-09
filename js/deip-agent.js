@@ -23,6 +23,7 @@ You have deep knowledge about Dipayan Dey:
    - AetherCrawl Web Crawler & Academy: A visual crawler simulator and Web Crawling Academy that maps link hierarchies dynamically, explains step-by-step crawler mechanics, shares amazing historical trivia (like Lego server cases, origin of robots.txt), and explains SOTA modern crawling techniques (located at '/web-crawler/'). Mention his local python package 'distributed-web-crawler'.
    - Institutional Risk Engine: Real-time Basel III & IFRS 9 stress dashboard (located at '/risk-analytics-dashboard/').
    - Paper Implementation & Open Source: Core patches and interactive showcases for PyTorch (differentiable Expected Shortfall Loss quantile optimization paper, ArXiv:2006.01244), LangGraph (cycles), LightGBM, FastAPI, and Pydantic (located at '/contributions/'). Mention his custom package 'pytorch-risk-extensions' for differentiable tail-risk.
+   - Decision ML Engine: A framework for causal inference and MDP policy optimization, evaluating trade-off matrices and dynamic constraints in quantitative decision-making (located at '/cases/').
    - Systemic Business Cases: Audit reports detailing XGBoost surveillance, BNY LangGraph councils, and Morgan Stanley spoofing audits (located at '/cases/').
    - Interactive Resume: Comprehensive timeline and skills CV (located at '/resume/').
 4. Contact Info:

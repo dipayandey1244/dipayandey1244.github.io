@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dipayan Dey | FinTech Developer & AI Systems Portfolio</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ==========================================================================
+           DESIGN SYSTEM & VARIABLES (Databricks + Anthropic Blended Theme)
+           ========================================================================== */
+        :root {
+            --bg-primary: #06070a;
+            --bg-card: rgba(13, 17, 27, 0.65);
+            --bg-card-hover: rgba(20, 26, 40, 0.85);
+            --border-color: rgba(255, 255, 255, 0.06);
+            
+            --text-primary: #f4f0ea;
+            --text-secondary: #b0a89f;
+            --text-muted: #7c756c;
+            
+            --color-info: #85b7eb;
+            --color-info-glow: rgba(133, 183, 235, 0.15);
+            --color-accent: #ff5630; /* Databricks Coral */
+            --color-accent-glow: rgba(255, 86, 48, 0.18);
+            --color-success: #10b981;
+            --color-success-glow: rgba(16, 185, 129, 0.15);
+            --color-warning: #f59e0b;
+            --color-warning-glow: rgba(245, 158, 11, 0.15);
+            --color-crawler: #d946ef;
+            --color-crawler-glow: rgba(217, 70, 239, 0.15);
+            
+            --font-sans: 'Outfit', -apple-system, sans-serif;
+            --font-serif: 'Lora', Georgia, serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* ==========================================================================
+           GLOBAL BASE STYLES
+           ========================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            position: relative;
+        }
+
+        /* Ambient Glowing Blobs */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -20%;
+            left: -15%;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(255, 86, 48, 0.08) 0%, rgba(255, 86, 48, 0) 70%);
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(100px);
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -20%;
+            right: -15%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.07) 0%, rgba(99, 102, 241, 0) 70%);
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(100px);
+        }
+
+        /* ==========================================================================
+           HERO HEADER SECTION
+           ========================================================================== */
+        header {
+            text-align: center;
+            padding: 100px 20px 40px;
+            max-width: 800px;
+            z-index: 10;
+        }
+
+        .profile-photo-container {
+            margin-bottom: 24px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .profile-photo {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 3px solid var(--border-color);
+            object-fit: cover;
+            box-shadow: 0 0 30px rgba(255, 86, 48, 0.15);
+            transition: var(--transition);
+        }
+
+        .profile-photo-container::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 50%;
+            border: 1px dashed rgba(255, 86, 48, 0.25);
+            animation: rotate 60s linear infinite;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        .profile-photo:hover {
+            transform: scale(1.04);
+            border-color: var(--color-accent);
+            box-shadow: 0 0 35px rgba(255, 86, 48, 0.35);
+        }
+
+        .profile-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: var(--color-accent-glow);
+            border: 1px solid rgba(255, 86, 48, 0.3);
+            color: #ffaa95;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-family: var(--font-serif);
+            font-size: 3.8rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #ffffff 40%, #ffd0c5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 18px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            max-width: 620px;
+            margin: 0 auto 30px auto;
+            line-height: 1.6;
+        }
+
+        /* Social links bar */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 18px;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-btn:hover {
+            color: var(--text-primary);
+            background-color: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ==========================================================================
+           PROJECTS GRID SECTION
+           ========================================================================== */
+        .projects-section {
+            width: 100%;
+            max-width: 1200px;
+            padding: 40px 24px;
+            z-index: 10;
+        }
+
+        .projects-section h2 {
+            font-family: var(--font-serif);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: var(--transition);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+            min-height: 230px;
+        }
+
+        /* Category accent hovers */
+        .card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(255, 86, 48, 0.25);
+            background: var(--bg-card-hover);
+        }
+
+        .card-ghibli:hover { box-shadow: 0 12px 35px rgba(133, 183, 235, 0.12); }
+        .card-risk:hover { box-shadow: 0 12px 35px rgba(255, 86, 48, 0.15); }
+        .card-finance:hover { box-shadow: 0 12px 35px rgba(99, 102, 241, 0.12); }
+        .card-markdown:hover { box-shadow: 0 12px 35px rgba(245, 158, 11, 0.12); }
+        .card-crawler:hover { box-shadow: 0 12px 35px rgba(217, 70, 239, 0.16); }
+
+        /* Icon headers */
+        .card-icon {
+            font-size: 28px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .card-ghibli .card-icon { color: var(--color-info); }
+        .card-risk .card-icon { color: var(--color-accent); }
+        .card-finance .card-icon { color: var(--color-success); }
+        .card-markdown .card-icon { color: var(--color-warning); }
+        .card-crawler .card-icon { color: var(--color-crawler); }
+
+        .card-content h3 {
+            font-family: var(--font-serif);
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: -0.2px;
+        }
+
+        .card-content p {
+            font-size: 13.5px;
+            color: var(--text-secondary);
+            line-height: 1.55;
+            margin-bottom: 24px;
+        }
+
+        .card-footer {
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: gap 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card:hover .card-footer {
+            gap: 10px;
+        }
+
+        .card-ghibli .card-footer { color: var(--color-info); }
+        .card-risk .card-footer { color: var(--color-accent); }
+        .card-finance .card-footer { color: var(--color-success); }
+        .card-markdown .card-footer { color: var(--color-warning); }
+        .card-crawler .card-footer { color: var(--color-crawler); }
+
+        /* Featured project badge */
+        .featured-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background-color: var(--color-accent-glow);
+            border: 1px solid rgba(255, 86, 48, 0.3);
+            color: #ffd0c5;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        /* ==========================================================================
+           FOOTER SECTION
+           ========================================================================== */
+        footer {
+            text-align: center;
+            padding: 60px 20px 40px;
+            font-size: 13px;
+            color: var(--text-muted);
+            width: 100%;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            background-color: rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        footer strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* ==========================================================================
+           RESPONSIVE MOBILE STYLES
+           ========================================================================== */
+        @media (max-width: 768px) {
+            header {
+                padding: 60px 20px 20px;
+            }
+            h1 {
+                font-size: 2.8rem;
+            }
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            .projects-section {
+                padding: 20px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ANIMATED MESH BACKDROP -->
+    <canvas id="canvas-particles" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:-2; pointer-events:none; opacity: 0.55;"></canvas>
+
+    <!-- Header section -->
+    <header>
+        <div class="profile-photo-container">
+            <img src="dipayan_avatar.png" alt="Dipayan Dey Avatar" class="profile-photo">
+        </div>
+        <br>
+        <span class="profile-badge">
+            <i class="fa-solid fa-code-branch"></i> Systems Engineer & FinTech
+        </span>
+        <h1>Dipayan Dey</h1>
+        <p class="subtitle">Designing high-fidelity, quantitative risk engines and beautiful financial technology platforms that blend theoretical rigor with elite usability.</p>
+        
+        <!-- Social links bar -->
+        <div class="social-links">
+            <a href="https://github.com/dipayandey1244" target="_blank" class="social-btn" title="GitHub Profile">
+                <i class="fa-brands fa-github"></i>
+            </a>
+            <a href="mailto:dipayandresearchwork@gmail.com" class="social-btn" title="Email Me">
+                <i class="fa-solid fa-envelope"></i>
+            </a>
+            <a href="./resume/" class="social-btn" title="View Resume">
+                <i class="fa-regular fa-file-lines"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- Section 1: Quantitative Engineering & AI Platforms (Featured Showcase) -->
+    <section class="projects-section">
+        <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 24px; background: linear-gradient(135deg, #ffffff 40%, #ff5630 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-wallet" style="color: var(--color-accent);"></i> Quantitative Systems &amp; AI Platforms
+        </h2>
+        <div class="projects-grid">
+            <!-- Risk Engine -->
+            <a href="./risk-analytics-dashboard/" target="_blank" class="card card-risk">
+                <span class="featured-badge">Featured System</span>
+                <div class="card-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="card-content">
+                    <h3>Institutional Risk Engine</h3>
+                    <p>Basel III &amp; IFRS 9 compliant risk dashboard. Includes Value at Risk, Expected Shortfall modeling, and dynamic stress scenario simulators.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Launch Engine</span> <i class="fa-solid fa-arrow-right-long"></i>
+                </div>
+            </a>
+
+            <!-- Modus AI Observability Console -->
+            <a href="./modus-ai/" target="_blank" class="card card-risk">
+                <span class="featured-badge" style="background-color: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3); color: #6ee7b7;">Observability</span>
+                <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
+                <div class="card-content">
+                    <h3>Modus AI Observability</h3>
+                    <p>GenAI observability dashboard for RAG pipelines. Features multi-model LLM-as-a-Judge consensus evaluations, dense/sparse retrieval tracing, and live Groq API completions.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Launch Observatory</span> <i class="fa-solid fa-arrow-right-long"></i>
+                </div>
+            </a>
+
+            <!-- Agentic Retail Intelligence System -->
+            <a href="./retail-intelligence/" target="_blank" class="card card-risk">
+                <span class="featured-badge" style="background-color: rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.3); color: #c7d2fe;">Agentic Team</span>
+                <div class="card-icon"><i class="fa-solid fa-cubes"></i></div>
+                <div class="card-content">
+                    <h3>Agentic Retail Intelligence</h3>
+                    <p>Multi-agent team managing demand forecasting and stockout risks. Integrates classical ML (XGBoost) predictors and Groq LLM uncertainty explanations.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Launch System</span> <i class="fa-solid fa-arrow-right-long"></i>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Section 2: Deep Engineering & Research Projects -->
+    <section class="projects-section" style="padding-top: 0; margin-top: -10px;">
+        <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 24px; background: linear-gradient(135deg, #ffffff 40%, #10b981 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-server" style="color: var(--color-success);"></i> Systems Engineering &amp; Research
+        </h2>
+        <div class="projects-grid">
+            <!-- Google Finance DnA Console -->
+            <a href="./fde-simulator/?tab=finance" target="_blank" class="card card-finance">
+                <span class="featured-badge" style="background-color: rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.3); color: #c7d2fe;">Agent Workspace</span>
+                <div class="card-icon"><i class="fa-solid fa-brain"></i></div>
+                <div class="card-content">
+                    <h3>Google Finance DnA Console</h3>
+                    <p>Multi-agent simulation of AI-native financial workflows. Integrates classical ML forecasting, Gemini audit reasoning logs, and human-in-the-loop data write-backs.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Launch Workspace</span> <i class="fa-solid fa-arrow-right-long"></i>
+                </div>
+            </a>
+
+            <!-- Paper Implementation (FrugalGPT Router) -->
+            <a href="./frugalgpt-router/" target="_blank" class="card card-finance">
+                <span class="featured-badge" style="background-color: rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.3); color: #c7d2fe;">Paper Implementation</span>
+                <div class="card-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                <div class="card-content">
+                    <h3>FrugalGPT LLM Router</h3>
+                    <p>Production-grade implementation of the FrugalGPT cascade routing &amp; semantic cache gateway (ArXiv:2305.05176). Classifies prompt complexity to route queries, saving up to 70% in API costs.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Launch Gateway</span> <i class="fa-solid fa-arrow-right-long"></i>
+                </div>
+            </a>
+
+            <!-- AetherCrawl -->
+            <a href="./web-crawler/" class="card card-crawler">
+                <span class="featured-badge" style="background-color: rgba(217, 70, 239, 0.15); border-color: rgba(217, 70, 239, 0.3); color: #f472b6;">Autonomous System</span>
+                <div class="card-icon"><i class="fa-solid fa-spider"></i></div>
+                <div class="card-content">
+                    <h3>AetherCrawl Engine</h3>
+                    <p>An autonomous, high-performance web crawler and metadata analyzer. Visualizes link-state graph trees, schedules thread tasks dynamically, and indexes crawl history to SQLite databases.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Launch Analyzer</span> <i class="fa-solid fa-arrow-right-long"></i>
+                </div>
+            </a>
+
+            <!-- Open Source Contributions -->
+            <a href="./contributions/" target="_blank" class="card card-ghibli">
+                <div class="card-icon"><i class="fa-solid fa-code-pull-request"></i></div>
+                <div class="card-content">
+                    <h3>Open Source Contributions</h3>
+                    <p>Core patch registry and visual showcases for pull requests merged across LangGraph, LightGBM, FastAPI, and Pydantic.</p>
+                </div>
+                <div class="card-footer">
+                    <span>View Contributions</span> <i class="fa-solid fa-arrow-right-long"></i>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Section 3: Machine Learning & Minimal Tools -->
+    <section class="projects-section" style="padding-top: 0; margin-top: -10px;">
+        <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 24px; background: linear-gradient(135deg, #ffffff 40%, #85b7eb 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-microscope" style="color: var(--color-info);"></i> Research Cases &amp; Libraries
+        </h2>
+        <div class="projects-grid">
+            <!-- Ghibli Generator -->
+            <a href="https://github.com/dipayandey1244" target="_blank" class="card card-ghibli">
+                <div class="card-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                <div class="card-content">
+                    <h3>Ghibli Generator</h3>
+                    <p>A computer vision art pipeline that transforms static scenery photos into beautiful Ghibli-style digital paintings.</p>
+                </div>
+                <div class="card-footer">
+                    <span>View Repository</span> <i class="fa-solid fa-arrow-right-long"></i>
+                </div>
+            </a>
+
+            <!-- Systemic Business Cases -->
+            <a href="./cases/" target="_blank" class="card card-finance">
+                <div class="card-icon"><i class="fa-solid fa-briefcase"></i></div>
+                <div class="card-content">
+                    <h3>Systemic Case Studies</h3>
+                    <p>Quantitative audit reports detailing XGBoost alert staging filters, RAG validations, and LightGBM model debugging.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Read Case Studies</span> <i class="fa-solid fa-arrow-right-long"></i>
+                </div>
+            </a>
+
+            <!-- Life in Markdown -->
+            <a href="https://github.com/dipayandey1244" target="_blank" class="card card-markdown">
+                <div class="card-icon"><i class="fa-solid fa-feather"></i></div>
+                <div class="card-content">
+                    <h3>Life in Markdown</h3>
+                    <p>A minimalist writing framework and journaling template optimized for markdown editing, speed, and privacy.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Read More</span> <i class="fa-solid fa-arrow-right-long"></i>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>Crafted with pride by <strong>Dipayan Dey</strong> • © 2026</p>
+    </footer>
+
+    <!-- PERSISTENT DEIP AI AGENT -->
+    <script src="./js/deip-agent.js"></script>
+
+    <!-- INTERACTIVE BACKGROUND PARTICLE ENGINE -->
+    <script>
+        const canvas = document.getElementById('canvas-particles');
+        const ctx = canvas.getContext('2d');
+
+        let particles = [];
+        const particleCount = 75;
+        const connectionDistance = 100;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+                this.radius = Math.random() * 2 + 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
+                if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 86, 48, 0.4)';
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Update & Draw
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            // Draw Lines
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < connectionDistance) {
+                        const alpha = (1 - dist / connectionDistance) * 0.15;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(255, 86, 48, ${alpha})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        initParticles();
+        animate();
+    </script>
+</body>
+</html>
