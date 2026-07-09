@@ -627,9 +627,143 @@
                 content: '' !important;
             }
         }
+
+        /* Ghibli Theme Variables Overrides */
+        body.theme-ghibli {
+            --bg-primary: #faf9f6;
+            --bg-secondary: #fbfaf8;
+            --bg-card: #ffffff;
+            --bg-card-hover: #fdfcf7;
+            --border-color: #57534e;
+            --border-light: rgba(87, 83, 78, 0.15);
+            --text-primary: #1c1917;
+            --text-secondary: #44403c;
+            --text-muted: #78716c;
+            --color-info: #d97706;
+            --color-info-glow: rgba(217, 119, 6, 0.08);
+            --color-accent: #b45309;
+            --color-accent-glow: rgba(180, 83, 9, 0.12);
+            --font-sans: Georgia, serif;
+            background-color: #faf9f6 !important;
+            color: #1c1917 !important;
+        }
+        body.theme-ghibli .resume-container {
+            border: 2px solid #57534e !important;
+            border-radius: 12px 24px 18px 24px !important;
+            box-shadow: 10px 10px 0px #e7e3d4 !important;
+            background: #fdfcf7 !important;
+        }
+        body.theme-ghibli .timeline-item {
+            border-left: 2px dashed #878580 !important;
+        }
+        body.theme-ghibli .timeline-node {
+            background-color: #faf9f6 !important;
+            border-color: #d97706 !important;
+        }
+
+        /* OASIS Theme Variables Overrides */
+        body.theme-oasis {
+            --bg-primary: #05021a;
+            --bg-secondary: #08051e;
+            --bg-card: #040212;
+            --bg-card-hover: #0c082d;
+            --border-color: #00f0ff;
+            --border-light: rgba(0, 240, 255, 0.15);
+            --text-primary: #00f0ff;
+            --text-secondary: #c9d3da;
+            --text-muted: #888888;
+            --color-info: #ffff00;
+            --color-info-glow: rgba(255, 255, 0, 0.15);
+            --color-accent: #ff007f;
+            --color-accent-glow: rgba(255, 0, 127, 0.2);
+            --font-sans: 'JetBrains Mono', monospace;
+            background-color: #05021a !important;
+            background-image: linear-gradient(rgba(18, 10, 36, 1) 50%, rgba(0, 0, 0, 0.4) 50%) !important;
+            background-size: 100% 4px !important;
+            color: #00f0ff !important;
+        }
+        body.theme-oasis::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            z-index: 99999;
+            background-size: 100% 3px;
+            pointer-events: none;
+        }
+        body.theme-oasis .resume-container {
+            border: 3px double #00f0ff !important;
+            border-radius: 0 !important;
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.2), inset 0 0 25px rgba(0, 240, 255, 0.1) !important;
+            background: #040212 !important;
+        }
+        body.theme-oasis .timeline-node {
+            background-color: #05021a !important;
+            border-color: #ff007f !important;
+            border-radius: 0 !important;
+        }
+        body.theme-oasis .timeline-item {
+            border-left: 2px solid #00f0ff !important;
+        }
+
+        /* Forrest Theme Variables Overrides */
+        body.theme-forrest {
+            --bg-primary: #fdf8e6;
+            --bg-secondary: #fbf3d3;
+            --bg-card: #ffffff;
+            --bg-card-hover: #faf4db;
+            --border-color: #4e3629;
+            --border-light: rgba(78, 54, 41, 0.15);
+            --text-primary: #4e3629;
+            --text-secondary: #5c4335;
+            --text-muted: #66554b;
+            --color-info: #2e4f24;
+            --color-info-glow: rgba(46, 79, 36, 0.08);
+            --color-accent: #5c4335;
+            --color-accent-glow: rgba(92, 67, 53, 0.12);
+            --font-sans: 'Times New Roman', Times, serif;
+            background-color: #fdf8e6 !important;
+            color: #4e3629 !important;
+        }
+        body.theme-forrest .resume-container {
+            border: 4px double #4e3629 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            background: #fdf8e6 !important;
+        }
+        body.theme-forrest .resume-container::before {
+            content: "THE GREENBOW CHRONICLE\\A--- Curriculum Vitae & Service Log ---";
+            display: block;
+            text-align: center;
+            font-family: Georgia, serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #4e3629;
+            border-bottom: 4px double #4e3629;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            white-space: pre-wrap;
+        }
+        body.theme-forrest .timeline-node {
+            background-color: #fdf8e6 !important;
+            border-color: #2e4f24 !important;
+            border-radius: 0 !important;
+        }
+        body.theme-forrest .timeline-item {
+            border-left: 2px solid #4e3629 !important;
+        }
     </style>
 </head>
 <body>
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('site-theme') || 'cyber';
+            if (savedTheme !== 'cyber') {
+                document.body.classList.add('theme-' + savedTheme);
+            }
+        })();
+    </script>
 
     <!-- Controls panel -->
     <div class="controls-panel">

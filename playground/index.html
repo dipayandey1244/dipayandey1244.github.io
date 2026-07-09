@@ -686,9 +686,184 @@
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        }
+
+        /* Cyber Theme Variables Overrides for SQL Playground */
+        body.theme-cyber {
+            --bg-primary: #070a13;
+            --bg-secondary: #0e1320;
+            --bg-panel: rgba(18, 25, 47, 0.55);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-light: rgba(255, 255, 255, 0.04);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #8e9cb2;
+            --color-indigo: #6366f1;
+            --color-teal: #10b981;
+            --color-amber: #f59e0b;
+        }
+        body.theme-cyber {
+            background-color: #070a13 !important;
+            color: #f8fafc !important;
+        }
+        body.theme-cyber .controls-panel,
+        body.theme-cyber .workspace-panel,
+        body.theme-cyber .result-panel,
+        body.theme-cyber .schema-sidebar,
+        body.theme-cyber .sql-editor-container {
+            background-color: rgba(18, 25, 47, 0.55) !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+            color: #f8fafc !important;
+        }
+        body.theme-cyber .table-header,
+        body.theme-cyber th {
+            background-color: #0e1320 !important;
+            color: #f8fafc !important;
+            border-bottom-color: rgba(255, 255, 255, 0.12) !important;
+        }
+        body.theme-cyber td {
+            border-bottom-color: rgba(255, 255, 255, 0.06) !important;
+            color: #94a3b8 !important;
+        }
+        body.theme-cyber .btn-secondary {
+            background-color: transparent !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            color: #94a3b8 !important;
+        }
+        body.theme-cyber .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.04) !important;
+            color: #f8fafc !important;
+        }
+        body.theme-cyber #sql-code-editor {
+            background-color: #04060c !important;
+            color: #a5f3fc !important;
+        }
+
+        /* OASIS Theme Overrides for SQL Playground */
+        body.theme-oasis {
+            --bg-primary: #05021a;
+            --bg-secondary: #08051e;
+            --bg-panel: #040212;
+            --border-color: #00f0ff;
+            --border-light: rgba(0, 240, 255, 0.15);
+            --text-primary: #00f0ff;
+            --text-secondary: #c9d3da;
+            --text-muted: #888888;
+            --color-indigo: #ff007f;
+            --color-teal: #ffff00;
+            --font-sans: 'JetBrains Mono', monospace;
+            --font-display: 'JetBrains Mono', monospace;
+            --font-mono: 'JetBrains Mono', monospace;
+            background-color: #05021a !important;
+            background-image: linear-gradient(rgba(18, 10, 36, 1) 50%, rgba(0, 0, 0, 0.4) 50%) !important;
+            background-size: 100% 4px !important;
+            color: #00f0ff !important;
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        body.theme-oasis::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            z-index: 99999;
+            background-size: 100% 3px;
+            pointer-events: none;
+        }
+        body.theme-oasis .controls-panel,
+        body.theme-oasis .workspace-panel,
+        body.theme-oasis .result-panel,
+        body.theme-oasis .schema-sidebar,
+        body.theme-oasis .sql-editor-container {
+            background-color: #040212 !important;
+            border: 2px solid #00f0ff !important;
+            border-radius: 0 !important;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.15) !important;
+            color: #00f0ff !important;
+        }
+        body.theme-oasis th, 
+        body.theme-oasis td {
+            border-color: #00f0ff !important;
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        body.theme-oasis th {
+            background-color: #08051e !important;
+            color: #ffff00 !important;
+        }
+        body.theme-oasis td {
+            color: #00f0ff !important;
+        }
+        body.theme-oasis #sql-code-editor {
+            background-color: #02010a !important;
+            color: #ffff00 !important;
+            border-color: #ff007f !important;
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        body.theme-oasis .btn {
+            border-radius: 0 !important;
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        body.theme-oasis .btn-primary {
+            background-color: #ff007f !important;
+            border: 1px solid #00f0ff !important;
+            box-shadow: 0 0 8px #ff007f !important;
+        }
+
+        /* Forrest Theme Overrides for SQL Playground */
+        body.theme-forrest {
+            --bg-primary: #fdf8e6;
+            --bg-secondary: #fbf3d3;
+            --bg-panel: #ffffff;
+            --border-color: #4e3629;
+            --border-light: rgba(78, 54, 41, 0.15);
+            --text-primary: #4e3629;
+            --text-secondary: #5c4335;
+            --text-muted: #66554b;
+            --color-indigo: #2e4f24;
+            --color-teal: #2e4f24;
+            --font-sans: 'Times New Roman', Times, serif;
+            --font-display: Georgia, serif;
+            background-color: #fdf8e6 !important;
+            color: #4e3629 !important;
+            font-family: 'Times New Roman', Times, serif !important;
+        }
+        body.theme-forrest .controls-panel,
+        body.theme-forrest .workspace-panel,
+        body.theme-forrest .result-panel,
+        body.theme-forrest .schema-sidebar,
+        body.theme-forrest .sql-editor-container {
+            background-color: #ffffff !important;
+            border: 3px double #4e3629 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            color: #4e3629 !important;
+        }
+        body.theme-forrest th {
+            background-color: #fbf3d3 !important;
+            color: #4e3629 !important;
+            border-bottom: 2px solid #4e3629 !important;
+        }
+        body.theme-forrest td {
+            border-bottom: 1px solid #4e3629 !important;
+        }
+        body.theme-forrest #sql-code-editor {
+            background-color: #fdfcf7 !important;
+            color: #2e4f24 !important;
+            border: 1px solid #4e3629 !important;
+        }
+        body.theme-forrest .btn-primary {
+            background-color: #2e4f24 !important;
+            border: 1px solid #4e3629 !important;
+        }
     </style>
 </head>
 <body>
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('site-theme') || 'cyber';
+            document.body.classList.add('theme-' + savedTheme);
+        })();
+    </script>
 
     <!-- Confetti Particle Canvas -->
     <canvas id="confetti-canvas"></canvas>
