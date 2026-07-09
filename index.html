@@ -326,6 +326,47 @@
             color: #dfb15b;
         }
         
+        body.theme-ghibli .system-cover {
+            border-radius: 8px 16px 16px 8px;
+            border: 2px solid #57534e;
+            box-shadow: 6px 12px 24px rgba(0,0,0,0.15);
+            background: #fdfaf2;
+        }
+        
+        body.theme-ghibli .system-cover .cover-content {
+            border: 1px dashed rgba(87, 83, 78, 0.3);
+            border-radius: 6px 12px 12px 6px;
+            height: calc(100% - 10px);
+            margin: 5px;
+            padding: 15px;
+        }
+        
+        body.theme-ghibli .system-cover .cover-title {
+            font-family: 'Outfit', sans-serif;
+            color: #57534e !important;
+            font-size: 1.05rem;
+            line-height: 1.3;
+        }
+        
+        body.theme-ghibli .system-cover .metadata {
+            color: #878580 !important;
+            font-family: 'Outfit', sans-serif;
+        }
+        
+        body.theme-ghibli .system-cover .tag {
+            background: rgba(223, 177, 91, 0.12);
+            color: #d97706 !important;
+            border-color: rgba(223, 177, 91, 0.25);
+        }
+        
+        body.theme-ghibli .system-cover.risk-engine { background: #fbf6eb; }
+        body.theme-ghibli .system-cover.modus-ai { background: #f5fbf8; }
+        body.theme-ghibli .system-cover.retail-intel { background: #f6f5fb; }
+        body.theme-ghibli .system-cover.finance-dna { background: #f5fbfe; }
+        body.theme-ghibli .system-cover.frugalgpt { background: #fbfbf4; }
+        body.theme-ghibli .system-cover.aethercrawl { background: #fdf5fc; }
+        body.theme-ghibli .system-cover.decision-ml { background: #f5fcfb; }
+        
         body.theme-ghibli .studies-container h3,
         body.theme-ghibli .section-title {
             color: #1c1917;
@@ -1481,9 +1522,9 @@
             
             <div class="author-container">
                 <h1 class="author">Dipayan Dey</h1>
-                <div class="role">Decision Scientist &amp; Quantitative AI Leader</div>
+                <div class="role" id="site-role">Decision Scientist &amp; Quantitative AI Leader</div>
                 
-                <div itemscope itemtype="https://schema.org/Person" class="image-text">
+                <div itemscope itemtype="https://schema.org/Person" class="image-text" id="site-bio">
                     <span itemprop="name">Dipayan Dey</span> is a <a itemprop="jobTitle" href="https://linkedin.com/in/dipayandey12">decision scientist and quantitative AI leader</a> 
                     currently serving as a <strong>Vice President of AI/ML</strong> within BNY's Risk &amp; Compliance division. Bridging statistical theory, causal inference, and decision intelligence, he leads the engineering of prescriptive modeling frameworks, dynamic risk threshold optimizations (MDPs), and technical AI governance under uncertainty. A graduate of the <strong>Indian Institute of Technology (IIT), Kanpur</strong> (M.Sc. in Statistics), he previously validated high-stakes algorithmic choices as an Associate at <strong>Goldman Sachs</strong> within Model Risk Management—spearheading causal validations for trade surveillance engines, designing the multi-agent "LLM Council" calibration gateway, and auditing Matryoshka embedding dynamics. Prior to Goldman, he engineered benchmarking frameworks for fuzzy matching and transaction monitoring models as an Associate at <strong>Morgan Stanley</strong>. He is passionate about probability theory, experiment design, and optimizing constraint-bound business decisions under uncertainty. You can explore his open-source decision engines and detailed case files below.
                 </div>
@@ -1502,14 +1543,14 @@
                                     <div class="spine"></div>
                                     <div class="cover-content">
                                         <div class="tag">System Blueprint</div>
-                                        <div class="icon"><i class="fa-solid fa-shield-halved" style="color: #ff5630;"></i></div>
-                                        <h2 class="cover-title">Institutional Risk Engine</h2>
-                                        <div class="metadata">Basel III &amp; IFRS 9</div>
+                                        <div class="icon"><i class="fa-solid fa-shield-halved" id="card1-icon" style="color: #ff5630;"></i></div>
+                                        <h2 class="cover-title" id="card1-title">Institutional Risk Engine</h2>
+                                        <div class="metadata" id="card1-meta">Basel III &amp; IFRS 9</div>
                                     </div>
                                 </div>
                             </a>
                         </div>
-                        <h2>Risk Engine</h2>
+                        <h2 id="card1-label">Risk Engine</h2>
                     </figure>
                     
                     <!-- 2. Modus AI -->
@@ -1520,14 +1561,14 @@
                                     <div class="spine"></div>
                                     <div class="cover-content">
                                         <div class="tag">Observability</div>
-                                        <div class="icon"><i class="fa-solid fa-chart-line" style="color: #10b981;"></i></div>
-                                        <h2 class="cover-title">Modus AI Console</h2>
-                                        <div class="metadata">Telemetry &amp; RAG</div>
+                                        <div class="icon"><i class="fa-solid fa-chart-line" id="card2-icon" style="color: #10b981;"></i></div>
+                                        <h2 class="cover-title" id="card2-title">Modus AI Console</h2>
+                                        <div class="metadata" id="card2-meta">Telemetry &amp; RAG</div>
                                     </div>
                                 </div>
                             </a>
                         </div>
-                        <h2>Modus AI Observatory</h2>
+                        <h2 id="card2-label">Modus AI Observatory</h2>
                     </figure>
                     
                     <!-- 3. Retail Intel -->
@@ -1538,14 +1579,14 @@
                                     <div class="spine"></div>
                                     <div class="cover-content">
                                         <div class="tag">Agentic Team</div>
-                                        <div class="icon"><i class="fa-solid fa-cubes" style="color: #6366f1;"></i></div>
-                                        <h2 class="cover-title">Agentic Retail Intelligence</h2>
-                                        <div class="metadata">ML Forecasting</div>
+                                        <div class="icon"><i class="fa-solid fa-cubes" id="card3-icon" style="color: #6366f1;"></i></div>
+                                        <h2 class="cover-title" id="card3-title">Agentic Retail Intelligence</h2>
+                                        <div class="metadata" id="card3-meta">ML Forecasting</div>
                                     </div>
                                 </div>
                             </a>
                         </div>
-                        <h2>Retail Intelligence</h2>
+                        <h2 id="card3-label">Retail Intelligence</h2>
                     </figure>
                     
                     <!-- 4. Google Finance DnA -->
@@ -1556,14 +1597,14 @@
                                     <div class="spine"></div>
                                     <div class="cover-content">
                                         <div class="tag">Simulation Workspace</div>
-                                        <div class="icon"><i class="fa-solid fa-brain" style="color: #38bdf8;"></i></div>
-                                        <h2 class="cover-title">Finance DnA Console</h2>
-                                        <div class="metadata">Gemini Workflows</div>
+                                        <div class="icon"><i class="fa-solid fa-brain" id="card4-icon" style="color: #38bdf8;"></i></div>
+                                        <h2 class="cover-title" id="card4-title">Finance DnA Console</h2>
+                                        <div class="metadata" id="card4-meta">Gemini Workflows</div>
                                     </div>
                                 </div>
                             </a>
                         </div>
-                        <h2>Finance DnA Console</h2>
+                        <h2 id="card4-label">Finance DnA Console</h2>
                     </figure>
                     
                     <!-- 5. FrugalGPT Router -->
@@ -1574,14 +1615,14 @@
                                     <div class="spine"></div>
                                     <div class="cover-content">
                                         <div class="tag">Paper Implementation</div>
-                                        <div class="icon"><i class="fa-solid fa-graduation-cap" style="color: #f59e0b;"></i></div>
-                                        <h2 class="cover-title">FrugalGPT LLM Router</h2>
-                                        <div class="metadata">Cascade &amp; Cache</div>
+                                        <div class="icon"><i class="fa-solid fa-graduation-cap" id="card5-icon" style="color: #f59e0b;"></i></div>
+                                        <h2 class="cover-title" id="card5-title">FrugalGPT LLM Router</h2>
+                                        <div class="metadata" id="card5-meta">Cascade &amp; Cache</div>
                                     </div>
                                 </div>
                             </a>
                         </div>
-                        <h2>FrugalGPT Gateway</h2>
+                        <h2 id="card5-label">FrugalGPT Gateway</h2>
                     </figure>
                     
                     <!-- 6. AetherCrawl -->
@@ -1592,14 +1633,14 @@
                                     <div class="spine"></div>
                                     <div class="cover-content">
                                         <div class="tag">Autonomous System</div>
-                                        <div class="icon"><i class="fa-solid fa-spider" style="color: #d946ef;"></i></div>
-                                        <h2 class="cover-title">AetherCrawl Engine</h2>
-                                        <div class="metadata">Graph &amp; Crawler</div>
+                                        <div class="icon"><i class="fa-solid fa-spider" id="card6-icon" style="color: #d946ef;"></i></div>
+                                        <h2 class="cover-title" id="card6-title">AetherCrawl Engine</h2>
+                                        <div class="metadata" id="card6-meta">Graph &amp; Crawler</div>
                                     </div>
                                 </div>
                             </a>
                         </div>
-                        <h2>AetherCrawl Engine</h2>
+                        <h2 id="card6-label">AetherCrawl Engine</h2>
                     </figure>
                     
                     <!-- 7. Decision ML -->
@@ -1610,14 +1651,14 @@
                                     <div class="spine"></div>
                                     <div class="cover-content">
                                         <div class="tag">Decision Intelligence</div>
-                                        <div class="icon"><i class="fa-solid fa-arrows-split-up-and-left" style="color: #14b8a6;"></i></div>
-                                        <h2 class="cover-title">Decision ML Engine</h2>
-                                        <div class="metadata">MDP &amp; Optimization</div>
+                                        <div class="icon"><i class="fa-solid fa-arrows-split-up-and-left" id="card7-icon" style="color: #14b8a6;"></i></div>
+                                        <h2 class="cover-title" id="card7-title">Decision ML Engine</h2>
+                                        <div class="metadata" id="card7-meta">MDP &amp; Optimization</div>
                                     </div>
                                 </div>
                             </a>
                         </div>
-                        <h2>Decision ML Engine</h2>
+                        <h2 id="card7-label">Decision ML Engine</h2>
                     </figure>
                     
                 </div>
@@ -1670,7 +1711,7 @@
     </div>
     
     <!-- Lower Section: Featured Work & Audits -->
-    <h2 class="section-title">Technical Highlights &amp; Deployments</h2>
+    <h2 class="section-title" id="site-section-title">Technical Highlights &amp; Deployments</h2>
     <div class="thoughts-grid">
         
         <!-- 1. Surveillance -->
@@ -1800,7 +1841,7 @@
     
     <!-- Footer Section -->
     <footer id="footer">
-        <p class="disclaimer">
+        <p class="disclaimer" id="site-disclaimer">
             <strong>Disclaimer:</strong> The views and opinions expressed on this site are my own and do not necessarily reflect the views, positions, or strategies of BNY, Goldman Sachs, Morgan Stanley, or any of their affiliates.
         </p>
         <p class="copyright">© Copyright 2026 Dipayan Dey</p>
@@ -1810,6 +1851,70 @@
     <script src="./js/deip-agent.js"></script>
 
     <script>
+        const themeContent = {
+            cyber: {
+                role: "Decision Scientist & Quantitative AI Leader",
+                bio: '<span itemprop="name">Dipayan Dey</span> is a <a itemprop="jobTitle" href="https://linkedin.com/in/dipayandey12">decision scientist and quantitative AI leader</a> currently serving as a <strong>Vice President of AI/ML</strong> within BNY\'s Risk & Compliance division. Bridging statistical theory, causal inference, and decision intelligence, he leads the engineering of prescriptive modeling frameworks, dynamic risk threshold optimizations (MDPs), and technical AI governance under uncertainty. A graduate of the <strong>Indian Institute of Technology (IIT), Kanpur</strong> (M.Sc. in Statistics), he previously validated high-stakes algorithmic choices as an Associate at <strong>Goldman Sachs</strong> within Model Risk Management—spearheading causal validations for trade surveillance engines, designing the multi-agent "LLM Council" calibration gateway, and auditing Matryoshka embedding dynamics. Prior to Goldman, he engineered benchmarking frameworks for fuzzy matching and transaction monitoring models as an Associate at <strong>Morgan Stanley</strong>. He is passionate about probability theory, experiment design, and optimizing constraint-bound business decisions under uncertainty. You can explore his open-source decision engines and detailed case files below.',
+                sectionTitle: "Technical Highlights & Deployments",
+                card1Title: "Institutional Risk Engine", card1Meta: "Basel III & IFRS 9", card1Icon: "fa-shield-halved", card1Label: "Risk Engine", card1IconColor: "#ff5630",
+                card2Title: "Modus AI Console", card2Meta: "Telemetry & RAG", card2Icon: "fa-chart-line", card2Label: "Modus AI Observatory", card2IconColor: "#10b981",
+                card3Title: "Agentic Retail Intelligence", card3Meta: "ML Forecasting", card3Icon: "fa-cubes", card3Label: "Retail Intelligence", card3IconColor: "#6366f1",
+                card4Title: "Finance DnA Console", card4Meta: "Gemini Workflows", card4Icon: "fa-brain", card4Label: "Finance DnA Console", card4IconColor: "#38bdf8",
+                card5Title: "FrugalGPT LLM Router", card5Meta: "Cascade & Cache", card5Icon: "fa-graduation-cap", card5Label: "FrugalGPT Gateway", card5IconColor: "#f59e0b",
+                card6Title: "AetherCrawl Engine", card6Meta: "Graph & Crawler", card6Icon: "fa-spider", card6Label: "AetherCrawl Engine", card6IconColor: "#d946ef",
+                card7Title: "Decision ML Engine", card7Meta: "MDP & Optimization", card7Icon: "fa-arrows-split-up-and-left", card7Label: "Decision ML Engine", card7IconColor: "#14b8a6",
+                disclaimer: "<strong>Disclaimer:</strong> The views and opinions expressed on this site are my own and do not necessarily reflect the views, positions, or strategies of BNY, Goldman Sachs, Morgan Stanley, or any of their affiliates."
+            },
+            ghibli: {
+                role: "Causal Explorer & Quantitative Alchemist",
+                bio: '<span>Dipayan Dey</span> is a <a>causal explorer and alchemist</a> currently weaving statistical spells and balancing the scales of probability. Bridging empirical physics, causal loops, and decision intelligence under giant camphor trees, he leads the crafting of prescriptive modeling grids, risk-shield warding, and magical algorithmic calibration. A graduate of the <strong>Indian Institute of Technology (IIT), Kanpur</strong> (M.Sc. in Statistics), his journey has led him through BNY, Goldman Sachs, and Morgan Stanley—drawing probability maps, building causal telescopes, and guiding structural networks. He is passionate about probability theory, structural experiment design, and charting paths of policy choice under uncertainty. You can explore his magical blueprints and alchemical logs below.',
+                sectionTitle: "Alchemy Notebooks & Magical Blueprints",
+                card1Title: "Probability Shield & Risk Ward", card1Meta: "Guarding Against Structural Storms", card1Icon: "fa-compass", card1Label: "Probability Shield", card1IconColor: "#dfb15b",
+                card2Title: "Modus Telescope & RAG Archive", card2Meta: "Observing Telemetry Forests", card2Icon: "fa-eye", card2Label: "Modus Telescope", card2IconColor: "#0d9488",
+                card3Title: "Merchant Ravens & Forecast Scroll", card3Meta: "Predicting Currents of Trade", card3Icon: "fa-feather", card3Label: "Merchant Ravens", card3IconColor: "#dfb15b",
+                card4Title: "Finance DnA Altar", card4Meta: "Alchemical Gemini Scripts", card4Icon: "fa-sun", card4Label: "Finance Altar", card4IconColor: "#dfb15b",
+                card5Title: "Frugal Owl Router", card5Meta: "Directing Flight Routes of Light", card5Icon: "fa-crow", card5Label: "Frugal Owl Router", card5IconColor: "#dfb15b",
+                card6Title: "Aether Spider Crawler", card6Meta: "Spinning Web Graphs & Links", card6Icon: "fa-spider", card6Label: "Aether Spider", card6IconColor: "#dfb15b",
+                card7Title: "Decision Compass & MDP Navigator", card7Meta: "Steering Dynamic Policy Paths", card7Icon: "fa-seedling", card7Label: "Decision Compass", card7IconColor: "#dfb15b",
+                disclaimer: "<strong>Disclaimer:</strong> These mathematical tales and alchemical recipes belong solely to my private journal, inspired by winds of chance and stars of statistics."
+            }
+        };
+
+        function updateThemeTexts(theme) {
+            const data = (theme === 'ghibli') ? themeContent.ghibli : themeContent.cyber;
+            
+            // Elements to update
+            document.getElementById('site-role').innerHTML = data.role;
+            document.getElementById('site-bio').innerHTML = data.bio;
+            document.getElementById('site-section-title').innerHTML = data.sectionTitle;
+            document.getElementById('site-disclaimer').innerHTML = data.disclaimer;
+            
+            // Cards update
+            for(let i=1; i<=7; i++) {
+                const titleEl = document.getElementById(`card${i}-title`);
+                const metaEl = document.getElementById(`card${i}-meta`);
+                const iconEl = document.getElementById(`card${i}-icon`);
+                const labelEl = document.getElementById(`card${i}-label`);
+                
+                if (titleEl) titleEl.innerHTML = data[`card${i}Title`];
+                if (metaEl) metaEl.innerHTML = data[`card${i}Meta`];
+                if (labelEl) labelEl.innerHTML = data[`card${i}Label`];
+                
+                if (iconEl) {
+                    iconEl.className = `fa-solid ${data[`card${i}Icon`]}`;
+                    if (theme === 'ghibli') {
+                        iconEl.style.color = '#dfb15b';
+                    } else if (theme === 'attio') {
+                        iconEl.style.color = '#ffffff';
+                    } else if (theme === 'huly') {
+                        iconEl.style.color = '#ff6e30';
+                    } else {
+                        iconEl.style.color = themeContent.cyber[`card${i}IconColor`];
+                    }
+                }
+            }
+        }
+
         function setSiteTheme(theme) {
             const body = document.body;
             const img = document.querySelector('.hero-image img');
@@ -1820,6 +1925,9 @@
             
             // Remove all custom theme classes
             body.classList.remove('theme-ghibli', 'theme-attio', 'theme-huly');
+            
+            // Trigger dynamic text morphing
+            updateThemeTexts(theme);
             
             if (theme === 'cyber') {
                 img.src = 'dipayan_cyber.png';
