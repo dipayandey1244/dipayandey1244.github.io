@@ -31,6 +31,7 @@
         <button class="nav-tab active" data-tab="overview">Overview &amp; Theory</button>
         <button class="nav-tab" data-tab="fisher">Fisher Exact Lab</button>
         <button class="nav-tab" data-tab="neyman">Neyman ATE Lab</button>
+        <button class="nav-tab" data-tab="stories">Narrative Guide</button>
       </nav>
     </div>
   </header>
@@ -598,6 +599,49 @@
           Crucially, it also checked the "test attempt rate" on assessment days to rule out selection bias, confirming that 
           the incentive did not prompt weaker students to stay home or teachers to drop them on test days.
         </p>
+      </div>
+
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- TAB 4: STORIES NARRATIVE GUIDE -->
+    <!-- ================================================================= -->
+    <div id="stories" class="tab-content">
+      
+      <div class="hero-card">
+        <span class="hero-badge">Causal Chronicles</span>
+        <h2>Guided Storybook: The Narrative of RCTs</h2>
+        <p>
+          Step through the chapters below to understand the intuition, historical context, and methodological choices 
+          behind Fisher's sharp null and Neyman's average treatment effect.
+        </p>
+      </div>
+
+      <div class="story-layout">
+        <!-- Chapters Sidebar -->
+        <div class="story-sidebar">
+          <button class="story-chapter-card active" data-chapter="1">
+            <div class="story-chapter-num">Chapter I</div>
+            <div class="story-chapter-title">The Parallel Timelines (RCT Genesis)</div>
+          </button>
+          <button class="story-chapter-card" data-chapter="2">
+            <div class="story-chapter-num">Chapter II</div>
+            <div class="story-chapter-title">The Lady &amp; Honey (Fisher's Quest)</div>
+          </button>
+          <button class="story-chapter-card" data-chapter="3">
+            <div class="story-chapter-num">Chapter III</div>
+            <div class="story-chapter-title">The Average &amp; Covariance (Neyman's World)</div>
+          </button>
+          <button class="story-chapter-card" data-chapter="4">
+            <div class="story-chapter-num">Chapter IV</div>
+            <div class="story-chapter-title">The Absenteeism Chronicle (Seva Mandir)</div>
+          </button>
+        </div>
+
+        <!-- Narrative Display Area -->
+        <div class="story-content-area" id="story-display-content">
+          <!-- Injected via app.js -->
+        </div>
       </div>
 
     </div>

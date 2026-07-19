@@ -750,3 +750,109 @@ table.arcade-table td {
   border-top: 1px solid var(--border-color);
   padding-top: 20px;
 }
+
+/* ================================================================= */
+/* STORY NARRATIVE LAYOUT */
+/* ================================================================= */
+.story-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 30px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .story-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.story-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.story-chapter-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+  text-align: left;
+}
+
+.story-chapter-card:hover {
+  background: var(--bg-sidebar);
+  border-color: #d1cdc0;
+}
+
+.story-chapter-card.active {
+  border-color: var(--accent-primary);
+  background: var(--accent-primary-tint);
+}
+
+.story-chapter-num {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-primary);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.story-chapter-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.story-content-area {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 35px;
+  box-shadow: var(--shadow-sm);
+  min-height: 400px;
+}
+
+.story-text-page {
+  animation: fadeIn 0.25s ease-out;
+}
+
+.story-text-page h3 {
+  font-size: 1.5rem;
+  color: var(--accent-primary);
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.story-text-page p {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 18px;
+}
+
+.story-text-page blockquote {
+  border-left: 4px solid var(--accent-primary);
+  background: var(--bg-sidebar);
+  padding: 15px 20px;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin: 20px 0;
+  border-radius: 0 6px 6px 0;
+}
+
+.story-text-page ul {
+  margin-left: 24px;
+  margin-bottom: 18px;
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+}
+
+.story-text-page li {
+  margin-bottom: 8px;
+}

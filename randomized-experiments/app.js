@@ -1207,6 +1207,164 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =================================================================
+  // NARRATIVE GUIDE CHAPTERS DATA
+  // =================================================================
+  const storyChapters = {
+    "1": `
+      <div class="story-text-page">
+        <h3>Chapter I: The Parallel Timelines &amp; RCT Genesis</h3>
+        <p>
+          Imagine you are holding a jar of buckwheat honey. You are looking at a child who has been coughing continuously 
+          all night. You face a simple but profound question: <em>Will a spoonful of honey help this child sleep tonight?</em>
+        </p>
+        <p>
+          To answer this with absolute certainty, you would need to observe two parallel timelines simultaneously:
+        </p>
+        <ul>
+          <li><strong>Timeline A:</strong> You give the child honey and measure their cough post-treatment severity.</li>
+          <li><strong>Timeline B:</strong> You withhold honey and measure their cough severity at the exact same time.</li>
+        </ul>
+        <p>
+          The difference between these two potential outcomes is the true causal effect of honey for that child. 
+          But here lies the <strong>Fundamental Problem of Causal Inference</strong>: you can never observe both timelines. 
+          Once you choose a path, the other timeline is lost to history. It becomes a counterfactual.
+        </p>
+        <blockquote>
+          "Causal inference is a missing data problem. We observe Y_i(1) or Y_i(0), but never both."
+        </blockquote>
+        <p>
+          For decades, researchers tried comparing children who took honey to children who didn't. But this leads to 
+          <strong>selection bias</strong>: parents of children with severe coughs are more likely to seek out treatments. 
+          If you simply compare the two groups, honey might look like it makes coughs worse!
+        </p>
+        <p>
+          The genesis of the <strong>Randomized Controlled Trial (RCT)</strong> solved this. By flipping a fair coin to allocate 
+          treatments, we break the link between a child's cough history and their treatment status. 
+          Because the coin knows nothing of cough severity, the treatment and control groups become identical on average. 
+          The observed control group becomes a valid proxy for the treatment group's unobserved timeline.
+        </p>
+      </div>
+    `,
+    "2": `
+      <div class="story-text-page">
+        <h3>Chapter II: The Lady, Honey &amp; The Sharp Null</h3>
+        <p>
+          In the 1920s, a lady at an afternoon tea in Cambridge claimed she could tell whether milk or tea was poured 
+          first into her cup. Ronald Fisher, visiting the party, proposed a scientific test. He prepared eight cups of tea—four 
+          milk-first, four tea-first—and presented them in random order.
+        </p>
+        <p>
+          Fisher's genius was to define a baseline of zero knowledge, which he called the <strong>Sharp Null Hypothesis (H₀)</strong>:
+        </p>
+        <blockquote>
+          H₀: The treatment has absolutely zero effect on any unit's outcome.
+        </blockquote>
+        <p>
+          If the lady has no ability to taste the difference, her guesses are purely random. Likewise, in our <strong>Honey Study</strong>, 
+          the sharp null claims that honey has zero medical effect. Under this strict assumption, a child's cough score would be 
+          exactly the same regardless of which group they were assigned to.
+        </p>
+        <p>
+          This assumption solves the missing data problem! If honey has zero effect, then for Child 1 (who was treated and got a score of 3), 
+          their control outcome is also 3. We can fill in the entire potential outcomes table.
+        </p>
+        <p>
+          Once the table is filled, we can shuffle the assignment labels across all 20 possible combinations. 
+          By calculating the difference in means for each shuffle, we construct the <strong>Permutation Distribution</strong>. 
+          We then ask: <em>How likely is our observed trial difference of 1.00 to occur if the null is true?</em> 
+          Because 1.00 or larger occurs in 80% of the shuffles, we conclude the result could easily be luck. The null stands.
+        </p>
+      </div>
+    `,
+    "3": `
+      <div class="story-text-page">
+        <h3>Chapter III: Neyman's Heterogeneous World &amp; Variance</h3>
+        <p>
+          Jerzy Neyman disagreed with Fisher's sharp null. He argued that the world is too complex for a treatment to have 
+          an identical zero effect on everyone. In reality, treatments are heterogeneous: honey might soothe Child A, 
+          do nothing for Child B, and cause an allergic reaction in Child C.
+        </p>
+        <p>
+          Neyman shifted the focus from individual effects to the population average, introducing the 
+          <strong>Average Treatment Effect (ATE)</strong>:
+        </p>
+        <blockquote>
+          τ = E[Y_i(1) - Y_i(0)]
+        </blockquote>
+        <p>
+          Under Neyman's framework, we test whether the <em>average</em> effect is zero. Neyman proved that the difference 
+          in sample means is an unbiased estimator of the ATE.
+        </p>
+        <p>
+          However, estimating the uncertainty of this estimate poses a challenge. When we calculate the variance of the 
+          difference in means, the formula includes the covariance between a unit's potential outcomes under treatment 
+          and control. Since we never observe both outcomes for any individual, this covariance is unobservable.
+        </p>
+        <p>
+          Neyman solved this by proving that if we assume the covariance term is negative or zero, we get an upper bound 
+          on the variance. He proposed the <strong>conservative variance estimator</strong>:
+        </p>
+        <ul>
+          <li>This estimator ignores the unobserved covariance, ensuring our standard error is conservative.</li>
+          <li>It guarantees that our confidence intervals are slightly wider than necessary, preventing false positives and keeping causal conclusions reliable.</li>
+        </ul>
+      </div>
+    `,
+    "4": `
+      <div class="story-text-page">
+        <h3>Chapter IV: The Absenteeism Chronicle (Seva Mandir)</h3>
+        <p>
+          Let us look at a real-world econometric puzzle. In rural Rajasthan, India, NGO-run schools faced an 
+          absenteeism crisis: teachers were absent 44% of the time, leaving children with empty classrooms and locked doors.
+        </p>
+        <p>
+          To solve this, researchers (<em>Duflo, Hanna, Ryan, 2012</em>) conducted an RCT in 113 schools. 
+          Teachers in the treatment group were given cameras. They had to take a photo of themselves with their students 
+          at the start and end of the day to receive their salary, which was structured with a base wage and a daily attendance bonus.
+        </p>
+        <p>
+          Teacher presence jumped from 58% in the control group to 80% in the treatment group—a massive, statistically 
+          significant increase of 22 percentage points.
+        </p>
+        <p>
+          But a critical question arose: <strong>Did this program introduce selection bias?</strong>
+        </p>
+        <p>
+          If teachers in camera schools only showed up on test days, or selectively encouraged high-performing students to attend 
+          while keeping weaker students home, the test scores would look inflated, introducing selection bias.
+        </p>
+        <p>
+          To test this, researchers analyzed the <strong>Written Test Attempt Rate</strong>. Because student test attendance was 
+          virtually identical between treatment (45%) and control (40%) and not statistically significant (p = 0.198), 
+          they proved there was no selective student attendance. This check validated that the subsequent learning gains 
+          measured in the students were unbiased and genuine.
+        </p>
+      </div>
+    `
+  };
+
+  const storyDisplay = document.getElementById('story-display-content');
+  const storyButtons = document.querySelectorAll('.story-chapter-card');
+
+  function initStoriesTab() {
+    if (storyDisplay) {
+      storyDisplay.innerHTML = storyChapters["1"];
+    }
+
+    storyButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        storyButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        const chapId = btn.getAttribute('data-chapter');
+        storyDisplay.innerHTML = storyChapters[chapId];
+        
+        playCoinSound();
+      });
+    });
+  }
+
+  // =================================================================
   // INITIALIZATION
   // =================================================================
   renderFisherTable();
@@ -1214,5 +1372,8 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Set default preset for Teacher Presence AATE
   applyNeymanPreset(56, 58, 16, 57, 80, 14, '0.05');
+
+  // Initialize storybook
+  initStoriesTab();
 
 });
