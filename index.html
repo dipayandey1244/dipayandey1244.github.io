@@ -444,6 +444,7 @@
         body.theme-ghibli .system-cover.frugalgpt { background: #fbfbf4; }
         body.theme-ghibli .system-cover.aethercrawl { background: #fdf5fc; }
         body.theme-ghibli .system-cover.decision-ml { background: #f5fcfb; }
+        body.theme-ghibli .system-cover.randomized-experiments { background: #fbf2ee; }
         
         body.theme-ghibli figure.thumb:hover .system-cover {
             outline: 5px solid #dfb15b;
@@ -830,7 +831,8 @@
         body.theme-oasis .system-cover.finance-dna,
         body.theme-oasis .system-cover.frugalgpt,
         body.theme-oasis .system-cover.aethercrawl,
-        body.theme-oasis .system-cover.decision-ml {
+        body.theme-oasis .system-cover.decision-ml,
+        body.theme-oasis .system-cover.randomized-experiments {
             background: #08051e;
             border-color: #00f0ff;
         }
@@ -1224,7 +1226,8 @@
         body.theme-forrest .system-cover.finance-dna,
         body.theme-forrest .system-cover.frugalgpt,
         body.theme-forrest .system-cover.aethercrawl,
-        body.theme-forrest .system-cover.decision-ml {
+        body.theme-forrest .system-cover.decision-ml,
+        body.theme-forrest .system-cover.randomized-experiments {
             background: #fbf3d3;
             border-color: #5c4335;
         }
@@ -1634,6 +1637,10 @@
             background: linear-gradient(135deg, #042f2e 0%, #020f0f 100%);
             border: 1px solid rgba(20, 184, 166, 0.15);
         }
+        .system-cover.randomized-experiments {
+            background: linear-gradient(135deg, #241108 0%, #0a0402 100%);
+            border: 1px solid rgba(204, 90, 55, 0.15);
+        }
         
         /* Hover Outline and Glow Animations */
         figure.thumb:hover .system-cover {
@@ -1666,6 +1673,10 @@
         figure.thumb:hover .system-cover.decision-ml {
             outline: 5px solid #14b8a6;
             box-shadow: 0 0 30px rgba(20, 184, 166, 0.35);
+        }
+        figure.thumb:hover .system-cover.randomized-experiments {
+            outline: 5px solid #cc5a37;
+            box-shadow: 0 0 30px rgba(204, 90, 55, 0.35);
         }
         
         figure.thumb:hover .system-cover .icon {
@@ -2638,6 +2649,24 @@
                         <h2 id="card7-label">Decision ML Engine</h2>
                     </figure>
                     
+                    <!-- 8. Randomized Experiments -->
+                    <figure class="thumb">
+                        <div class="cover">
+                            <a href="./randomized-experiments/">
+                                <div class="system-cover randomized-experiments">
+                                    <div class="spine"></div>
+                                    <div class="cover-content">
+                                        <div class="tag">Causal Experimentation</div>
+                                        <div class="icon"><i class="fa-solid fa-scale-balanced" id="card8-icon" style="color: #cc5a37;"></i></div>
+                                        <h2 class="cover-title" id="card8-title">Causal Inference Arena</h2>
+                                        <div class="metadata" id="card8-meta">Fisher vs Neyman</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <h2 id="card8-label">Causal Lab</h2>
+                    </figure>
+                    
                 </div>
             </div>
             
@@ -2840,6 +2869,7 @@
                 card5Title: "FrugalGPT LLM Router", card5Meta: "Cascade & Cache", card5Icon: "fa-graduation-cap", card5Label: "FrugalGPT Gateway", card5IconColor: "#f59e0b",
                 card6Title: "AetherCrawl Engine", card6Meta: "Graph & Crawler", card6Icon: "fa-spider", card6Label: "AetherCrawl Engine", card6IconColor: "#d946ef",
                 card7Title: "Decision ML Engine", card7Meta: "MDP & Optimization", card7Icon: "fa-arrows-split-up-and-left", card7Label: "Decision ML Engine", card7IconColor: "#14b8a6",
+                card8Title: "Causal Inference Arena", card8Meta: "Fisher vs Neyman Frameworks", card8Icon: "fa-scale-balanced", card8Label: "Causal Lab", card8IconColor: "#cc5a37",
                 disclaimer: "<strong>Disclaimer:</strong> The views and opinions expressed on this site are my own and do not necessarily reflect the views, positions, or strategies of BNY, Goldman Sachs, Morgan Stanley, or any of their affiliates."
             },
             ghibli: {
@@ -2853,6 +2883,7 @@
                 card5Title: "Frugal Owl Router", card5Meta: "Directing Flight Routes of Light", card5Icon: "fa-crow", card5Label: "Frugal Owl Router", card5IconColor: "#dfb15b",
                 card6Title: "Aether Spider Crawler", card6Meta: "Spinning Web Graphs & Links", card6Icon: "fa-spider", card6Label: "Aether Spider", card6IconColor: "#dfb15b",
                 card7Title: "Decision Compass & MDP Navigator", card7Meta: "Steering Dynamic Policy Paths", card7Icon: "fa-seedling", card7Label: "Decision Compass", card7IconColor: "#dfb15b",
+                card8Title: "Causal Balance & Scale Lab", card8Meta: "Weighing Empirical Statistics", card8Icon: "fa-scale-balanced", card8Label: "Causal Scales", card8IconColor: "#dfb15b",
                 disclaimer: "<strong>Disclaimer:</strong> These mathematical tales and alchemical recipes belong solely to my private journal, inspired by winds of chance and stars of statistics."
             },
             oasis: {
@@ -2866,6 +2897,7 @@
                 card5Title: "Frugal Owl LLM Router", card5Meta: "Low-Ping Cost Gateway", card5Icon: "fa-graduation-cap", card5Label: "Frugal Owl Router", card5IconColor: "#00f0ff",
                 card6Title: "Aether Spider Crawler", card6Meta: "Spinning Web Net Maps", card6Icon: "fa-spider", card6Label: "Aether Spider", card6IconColor: "#ff007f",
                 card7Title: "Decision Compass & MDP Navigator", card7Meta: "Easter Egg Search Algorithms", card7Icon: "fa-arrows-split-up-and-left", card7Label: "Decision Compass", card7IconColor: "#ffff00",
+                card8Title: "Causal Arena & Coin Sandbox", card8Meta: "Shuffle Testing Mainframe", card8Icon: "fa-scale-balanced", card8Label: "Causal Arena", card8IconColor: "#00f0ff",
                 disclaimer: "<strong>Disclaimer:</strong> The high scores and algorithms posted here are my own speedruns and do not represent BNY, Goldman Sachs, or Morgan Stanley gameplay guidelines."
             },
             forrest: {
@@ -2879,6 +2911,7 @@
                 card5Title: "Frugal Owl Router", card5Meta: "Thrifty Routing Postbox", card5Icon: "fa-graduation-cap", card5Label: "Frugal Owl Router", card5IconColor: "#2e4f24",
                 card6Title: "Aether Spider Crawler", card6Meta: "Spinning Web Nets & Threads", card6Icon: "fa-spider", card6Label: "Aether Spider", card6IconColor: "#2e4f24",
                 card7Title: "Decision Compass & Bench Navigator", card7Meta: "Causal Path Exploration Logs", card7Icon: "fa-arrows-split-up-and-left", card7Label: "Decision Compass", card7IconColor: "#2e4f24",
+                card8Title: "Coin Flipping Causal Notebook", card8Meta: "Shuffled Group Outcomes", card8Icon: "fa-scale-balanced", card8Label: "Causal Notebook", card8IconColor: "#2e4f24",
                 disclaimer: "<strong>Disclaimer:</strong> My mama always said the opinions on this bench are my own and don\'t belong to BNY, Goldman Sachs, or Morgan Stanley."
             }
         };
@@ -2893,7 +2926,7 @@
             document.getElementById('site-disclaimer').innerHTML = data.disclaimer;
             
             // Cards update
-            for(let i=1; i<=7; i++) {
+            for(let i=1; i<=8; i++) {
                 const titleEl = document.getElementById(`card${i}-title`);
                 const metaEl = document.getElementById(`card${i}-meta`);
                 const iconEl = document.getElementById(`card${i}-icon`);

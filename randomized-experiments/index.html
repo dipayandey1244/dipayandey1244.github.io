@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Causal Inference Arena | Randomized Experiments Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Claude Style Minimal Header -->
+  <header>
+    <div class="brand">
+      <div class="brand-icon">τ</div>
+      <div class="brand-title">
+        <h1>Causal Inference Lab</h1>
+        <div class="brand-subtitle">RANDOMIZED EXPERIMENTS HANDBOOK</div>
+      </div>
+    </div>
+    
+    <div style="display: flex; align-items: center;">
+      <!-- Sound Settings Toggle -->
+      <div class="audio-toggle-container">
+        <span>AUDIO:</span>
+        <button class="audio-toggle active" id="audio-toggle-btn">
+          🔊 ON
+        </button>
+      </div>
+
+      <nav>
+        <button class="nav-tab active" data-tab="overview">Overview &amp; Theory</button>
+        <button class="nav-tab" data-tab="fisher">Fisher Exact Lab</button>
+        <button class="nav-tab" data-tab="neyman">Neyman ATE Lab</button>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    
+    <!-- ================================================================= -->
+    <!-- TAB 1: OVERVIEW & THEORY -->
+    <!-- ================================================================= -->
+    <div id="overview" class="tab-content active">
+      
+      <div class="hero-card">
+        <div class="hero-card-content">
+          <span class="hero-badge">Causal Methodology</span>
+          <h2>Analyzing Randomized Experiments: Fisher vs. Neyman</h2>
+          <p>
+            Randomized Controlled Trials (RCTs) are the foundation of causal analysis. By randomly partitioning a sample 
+            into a <strong>Treatment Group</strong> ($W_i = 1$) and a <strong>Control Group</strong> ($W_i = 0$), we isolate the causal impact 
+            of an intervention. Historically, two statisticians proposed fundamentally different ways to analyze this data.
+          </p>
+          <div class="author-info">
+            <span>Core Concepts of Permutation Distributions (Fisher) and Conservative Variance Estimation (Neyman)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="theory-grid">
+        <!-- Fisher Card -->
+        <div class="card fisher">
+          <div class="card-header">
+            <h3 class="card-title" style="color: var(--accent-primary);">Fisher's Sharp Null Hypothesis</h3>
+          </div>
+          <p>
+            Ronald Fisher was interested in testing what he called the <strong>Sharp Null Hypothesis</strong>:
+          </p>
+          <div class="formula-display">
+            H₀: Yᵢ(1) = Yᵢ(0)  for all individuals i
+          </div>
+          <p>
+            <strong>The Conceptual Difference:</strong> Fisher's null claims the treatment has **absolutely zero effect on anyone whatsoever**. 
+            This represents a pure placebo. Because we assume the treatment does nothing, we solve the missing data problem: the counterfactual 
+            potential outcome for each individual under the alternative assignment is identical to their observed outcome.
+          </p>
+          <p>
+            <strong>The Test Procedure:</strong> Once we know all potential outcomes, we can simulate what our test statistic 
+            (such as the difference in means) would look like under every single possible treatment assignment combination (permutations). 
+            We calculate an exact p-value by finding the proportion of these shuffles that yield differences as large or larger than observed.
+          </p>
+        </div>
+
+        <!-- Neyman Card -->
+        <div class="card neyman">
+          <div class="card-header">
+            <h3 class="card-title" style="color: var(--accent-secondary);">Neyman's Average Treatment Effect</h3>
+          </div>
+          <p>
+            Jerzy Neyman rejected the sharp null, arguing that treatment effects are likely heterogeneous: some individuals benefit, while others may be harmed. 
+            He focused on the **Average Treatment Effect (ATE)**:
+          </p>
+          <div class="formula-display">
+            τ = E[Yᵢ(1) - Yᵢ(0)]
+          </div>
+          <p>
+            <strong>The Conceptual Difference:</strong> Neyman's null is $H_0: \text{ATE} = 0$, meaning the treatment has zero effect **on average**, even if it affects individuals differently.
+          </p>
+          <p>
+            <strong>The Estimation Procedure:</strong> Neyman proved that the simple difference in sample averages is an unbiased estimator for ATE. 
+            However, because we sample without replacement, the exact variance contains an unobservable term (the variance of individual-level treatment effects). 
+            Neyman proposed ignoring this negative term, providing a **conservative standard error** (variance upper bound):
+          </p>
+          <div class="formula-display" style="font-size: 0.9rem;">
+            SE = √[ (s_Treatment² / N_Treatment) + (s_Control² / N_Control) ]
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- TAB 2: FISHER PERMUTATION LAB (HONEY STUDY) -->
+    <!-- ================================================================= -->
+    <div id="fisher" class="tab-content">
+      
+      <!-- Theory & Reference Table Box -->
+      <div class="card" style="margin-bottom: 25px;">
+        <h3 style="color: var(--accent-primary); margin-bottom: 10px;">Primary Example: The Honey Study</h3>
+        <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 15px;">
+          This example uses a subset of six children from a randomized study analyzing honey as a cough treatment. 
+          Cough severity is measured on a scale from 0 (no cough) to 6 (severe cough). Under the sharp null ($H_0$), 
+          cough severity would be unchanged whether the child received honey ($W_i=1$) or control ($W_i=0$).
+        </p>
+        
+        <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 8px; font-family: var(--font-hud);">
+          Reference Table: Observations Under Sharp Null
+        </h4>
+        <div class="interactive-table-container" style="max-width: 1000px; margin-bottom: 0;">
+          <table class="arcade-table">
+            <thead>
+              <tr>
+                <th>Child (i)</th>
+                <th>Treatment Assignment ($W_i$)</th>
+                <th>Observed Outcome ($Y_i^{obs}$)</th>
+                <th>Potential Outcome $Y_i(0)$ under $H_0$</th>
+                <th>Potential Outcome $Y_i(1)$ under $H_0$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background: var(--accent-primary-tint);">
+                <td>Child 1</td>
+                <td>1 (Treated)</td>
+                <td>3</td>
+                <td>3 <span style="color: var(--text-muted); font-size: 0.8rem;">(Filled counterfactual)</span></td>
+                <td>3 <span style="color: var(--text-muted); font-size: 0.8rem;">(Observed)</span></td>
+              </tr>
+              <tr style="background: var(--accent-primary-tint);">
+                <td>Child 2</td>
+                <td>1 (Treated)</td>
+                <td>5</td>
+                <td>5 <span style="color: var(--text-muted); font-size: 0.8rem;">(Filled counterfactual)</span></td>
+                <td>5 <span style="color: var(--text-muted); font-size: 0.8rem;">(Observed)</span></td>
+              </tr>
+              <tr style="background: var(--accent-primary-tint);">
+                <td>Child 3</td>
+                <td>1 (Treated)</td>
+                <td>0</td>
+                <td>0 <span style="color: var(--text-muted); font-size: 0.8rem;">(Filled counterfactual)</span></td>
+                <td>0 <span style="color: var(--text-muted); font-size: 0.8rem;">(Observed)</span></td>
+              </tr>
+              <tr style="background: var(--bg-main);">
+                <td>Child 4</td>
+                <td>0 (Control)</td>
+                <td>4</td>
+                <td>4 <span style="color: var(--text-muted); font-size: 0.8rem;">(Observed)</span></td>
+                <td>4 <span style="color: var(--text-muted); font-size: 0.8rem;">(Filled counterfactual)</span></td>
+              </tr>
+              <tr style="background: var(--bg-main);">
+                <td>Child 5</td>
+                <td>0 (Control)</td>
+                <td>0</td>
+                <td>0 <span style="color: var(--text-muted); font-size: 0.8rem;">(Observed)</span></td>
+                <td>0 <span style="color: var(--text-muted); font-size: 0.8rem;">(Filled counterfactual)</span></td>
+              </tr>
+              <tr style="background: var(--bg-main);">
+                <td>Child 6</td>
+                <td>0 (Control)</td>
+                <td>1</td>
+                <td>1 <span style="color: var(--text-muted); font-size: 0.8rem;">(Observed)</span></td>
+                <td>1 <span style="color: var(--text-muted); font-size: 0.8rem;">(Filled counterfactual)</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="lab-grid">
+        
+        <!-- Sidebar Controls -->
+        <div class="control-panel">
+          <div class="card">
+            <h3 style="margin-top: 0; margin-bottom: 10px; font-size: 1rem;">1. Adjust Outcomes</h3>
+            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 12px;">
+              Modify cough scores to see how changes affect the observed ATE and permutation p-value.
+            </p>
+            
+            <div class="interactive-table-container">
+              <table class="arcade-table" id="fisher-table">
+                <thead>
+                  <tr>
+                    <th>Child</th>
+                    <th>Group</th>
+                    <th>Cough Score</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Injected via app.js -->
+                </tbody>
+              </table>
+            </div>
+            
+            <div class="form-group" style="margin-top: 10px;">
+              <div class="form-group-label">
+                <span>SIMULATION SHUFFLE SPEED</span>
+                <span class="value-display" id="sim-speed-val">150ms</span>
+              </div>
+              <input type="range" id="sim-speed-slider" class="gamified-slider" min="50" max="600" step="50" value="150">
+            </div>
+
+            <div style="display: flex; gap: 8px; margin-top: 15px;">
+              <button class="play-btn" id="btn-play-sim" style="flex: 1;">
+                ▶️ Play Sim
+              </button>
+              <button class="play-btn sec" id="btn-stop-sim" style="display: none; flex: 1; border-color: var(--color-error); color: var(--color-error);">
+                ⏹️ Stop
+              </button>
+              <button class="play-btn sec" id="btn-instant-fisher" style="padding: 8px 12px;">
+                ⚡ Fast
+              </button>
+            </div>
+            
+            <button class="play-btn sec" id="btn-reset-fisher" style="width: 100%; margin-top: 8px;">
+              🔄 Reset Table
+            </button>
+          </div>
+        </div>
+
+        <!-- Visualizers & Results -->
+        <div>
+          <!-- Permutation Live Display -->
+          <div class="visualizer-card" style="padding: 20px;">
+            <h3 style="margin-top: 0; margin-bottom: 12px; font-size: 0.95rem; color: var(--accent-primary);">
+              Active Random Shuffler
+            </h3>
+            <div class="animation-dock" id="animation-dock">
+              <div class="arcade-coin" id="coin-element">?</div>
+              <div class="shuffle-card-container" id="shuffle-card-container">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+
+            <div class="arcade-hud">
+              <div class="hud-box primary">
+                <div class="hud-label">Observed Diff</div>
+                <div class="hud-value glow-purple" id="fisher-val-obs">1.00</div>
+              </div>
+              <div class="hud-box secondary">
+                <div class="hud-label">Active Deck Diff</div>
+                <div class="hud-value glow-cyan" id="fisher-val-active">0.00</div>
+              </div>
+              <div class="hud-box">
+                <div class="hud-label">Shuffles Run</div>
+                <div class="hud-value" id="fisher-val-runs">0</div>
+              </div>
+              <div class="hud-box success" id="fisher-pval-hud-box">
+                <div class="hud-label">Exact p-value</div>
+                <div class="hud-value" id="fisher-val-pval">0.8000</div>
+              </div>
+            </div>
+
+            <div class="hud-alert info" id="fisher-result-alert">
+              Click <strong>▶️ Play Sim</strong> to watch the random assignment machine shuffle the children and construct the permutation distribution.
+            </div>
+          </div>
+
+          <!-- Permutation Distribution Chart -->
+          <div class="visualizer-card">
+            <h3 style="margin-top: 0; margin-bottom: 12px; font-size: 0.95rem;">Permutation Distribution of Mean Differences</h3>
+            <div class="viz-box">
+              <svg class="viz-svg" id="fisher-svg" viewBox="0 0 650 280">
+                <!-- Rendered dynamically -->
+              </svg>
+            </div>
+            <div class="chart-legend" style="justify-content: center; margin-top: 15px;">
+              <div class="legend-item">
+                <div class="legend-color" style="background: var(--accent-primary-tint); border: 1px solid var(--accent-primary);"></div>
+                <span>Permutation Mean Differences</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color" style="background: var(--accent-secondary-tint); border: 2px solid var(--accent-secondary);"></div>
+                <span>Observed Difference</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- TAB 3: NEYMAN ATE LAB (TEACHER INCENTIVES) -->
+    <!-- ================================================================= -->
+    <div id="neyman" class="tab-content">
+      
+      <!-- Theory & Reference Table Box -->
+      <div class="card" style="margin-bottom: 25px;">
+        <h3 style="color: var(--accent-secondary); margin-bottom: 10px;">Complicated Real-World Case: Teacher Incentives in India</h3>
+        <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 15px;">
+          To evaluate Neyman's framework, we analyze a real-world incentive study (Duflo, Hanna, Ryan 2012) addressing high teacher absenteeism. 
+          113 rural schools were randomized:
+        </p>
+        <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 15px;">
+          * **Treatment Group (57 schools):** Teachers were monitored with cameras and paid based on presence (floor salary plus a daily presence bonus).<br>
+          * **Control Group (56 schools):** Standard monthly salary without camera monitoring.
+        </p>
+        
+        <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 8px; font-family: var(--font-hud);">
+          Reference Table: Experiment Outcomes &amp; Confidence Intervals
+        </h4>
+        <div class="interactive-table-container" style="max-width: 1000px; margin-bottom: 0;">
+          <table class="arcade-table">
+            <thead>
+              <tr>
+                <th>Outcome Metric</th>
+                <th>Control Mean ($\bar{Y}_C$)</th>
+                <th>Treatment Mean ($\bar{Y}_T$)</th>
+                <th>ATE Point Est. ($\hat{\tau}$)</th>
+                <th>Neyman Std Error</th>
+                <th>95% Confidence Interval</th>
+                <th>Statistical Significance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background: var(--color-success-tint);">
+                <td><strong>Teacher Presence Rate</strong></td>
+                <td>58%</td>
+                <td>80%</td>
+                <td>+22.0 percentage pts</td>
+                <td>0.0284</td>
+                <td>[+16.4%, +27.6%]</td>
+                <td style="color: var(--color-success); font-weight: 600;">Significant ($p < 0.0001$)</td>
+              </tr>
+              <tr style="background: var(--bg-main);">
+                <td><strong>Written Test Attempt Rate</strong></td>
+                <td>40%</td>
+                <td>45%</td>
+                <td>+5.0 percentage pts</td>
+                <td>0.0389</td>
+                <td>[-2.6%, +12.6%]</td>
+                <td style="color: var(--text-muted);">Not Significant ($p = 0.198$)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 10px; font-style: italic;">
+          Note: An insignificant difference in "Written Test Attempt Rate" is crucial. It confirms that the incentive program did not affect student attendance during test days, ruling out selection (attrition) bias in subsequent student learning assessments.
+        </p>
+      </div>
+
+      <div class="lab-grid">
+        
+        <!-- Parameters Sliders -->
+        <div class="control-panel">
+          
+          <div class="card" style="padding: 15px;">
+            <h3 style="margin-top: 0; margin-bottom: 8px; font-size: 0.85rem; text-transform: uppercase; color: var(--text-secondary);">Select Case Outcome</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+              <button class="play-btn sec" id="preset-attendance" style="padding: 8px; font-size: 0.75rem;">
+                📢 Teacher Presence
+              </button>
+              <button class="play-btn sec" id="preset-test-attempt" style="padding: 8px; font-size: 0.75rem;">
+                📝 Test Attempt Rate
+              </button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 style="margin-top: 0; margin-bottom: 15px; font-size: 1rem;">Experiment Controls</h3>
+            
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+              
+              <!-- Control Size -->
+              <div class="form-group">
+                <div class="form-group-label">
+                  <span>Control Size (N_C)</span>
+                  <span class="value-display" id="val-nc">56</span>
+                </div>
+                <input type="range" id="slider-nc" class="gamified-slider" min="10" max="300" value="56">
+              </div>
+
+              <!-- Control Mean -->
+              <div class="form-group">
+                <div class="form-group-label">
+                  <span id="label-meanc">Control Attendance Rate</span>
+                  <span class="value-display" id="val-meanc">58%</span>
+                </div>
+                <input type="range" id="slider-meanc" class="gamified-slider" min="10" max="100" value="58">
+              </div>
+
+              <!-- Control SD -->
+              <div class="form-group">
+                <div class="form-group-label">
+                  <span>Control StdDev (s_C)</span>
+                  <span class="value-display" id="val-sdc">0.16</span>
+                </div>
+                <input type="range" id="slider-sdc" class="gamified-slider" min="2" max="40" value="16">
+              </div>
+
+              <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 5px 0;">
+
+              <!-- Treatment Size -->
+              <div class="form-group">
+                <div class="form-group-label">
+                  <span>Treatment Size (N_T)</span>
+                  <span class="value-display" id="val-nt">57</span>
+                </div>
+                <input type="range" id="slider-nt" class="gamified-slider" min="10" max="300" value="57">
+              </div>
+
+              <!-- Treatment Mean -->
+              <div class="form-group">
+                <div class="form-group-label">
+                  <span id="label-meant">Treatment Attendance Rate</span>
+                  <span class="value-display" id="val-meant">80%</span>
+                </div>
+                <input type="range" id="slider-meant" class="gamified-slider" min="10" max="100" value="80">
+              </div>
+
+              <!-- Treatment SD -->
+              <div class="form-group">
+                <div class="form-group-label">
+                  <span>Treatment StdDev (s_T)</span>
+                  <span class="value-display" id="val-sdt">0.14</span>
+                </div>
+                <input type="range" id="slider-sdt" class="gamified-slider" min="2" max="40" value="14">
+              </div>
+
+              <!-- Alpha -->
+              <div class="form-group">
+                <label style="font-family: var(--font-body); font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">Confidence Level</label>
+                <select id="slider-alpha" class="arcade-select" style="width: 100%; margin-top: 4px;">
+                  <option value="0.05">95% Confidence (α = 0.05)</option>
+                  <option value="0.10">90% Confidence (α = 0.10)</option>
+                  <option value="0.01">99% Confidence (α = 0.01)</option>
+                </select>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Neyman Visualizations & HUD -->
+        <div>
+          <!-- Visual Classrooms -->
+          <div class="visualizer-card">
+            <h3 style="margin-top: 0; margin-bottom: 12px; font-size: 0.95rem; color: var(--accent-primary);" id="classroom-grid-title">
+              Visual Grid: Teacher Attendance
+            </h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+              <div>
+                <div class="classroom-box-title">
+                  <span>Control Cohort</span>
+                  <span id="control-grid-pct">58% Present</span>
+                </div>
+                <div class="classroom-grid" id="control-teacher-grid">
+                  <!-- Injected via app.js -->
+                </div>
+              </div>
+              <div>
+                <div class="classroom-box-title">
+                  <span id="treatment-grid-header">Treatment Cohort (Incentive Pay)</span>
+                  <span id="treatment-grid-pct">80% Present</span>
+                </div>
+                <div class="classroom-grid" id="treatment-teacher-grid">
+                  <!-- Injected via app.js -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats HUD -->
+          <div class="visualizer-card" style="padding: 20px;">
+            <div class="arcade-hud" style="margin-bottom: 15px;">
+              <div class="hud-box primary">
+                <div class="hud-label">Estimated ATE (τ̂)</div>
+                <div class="hud-value glow-purple" id="neyman-val-ate">0.220</div>
+              </div>
+              <div class="hud-box secondary">
+                <div class="hud-label">Standard Error (SE)</div>
+                <div class="hud-value glow-cyan" id="neyman-val-se">0.028</div>
+              </div>
+              <div class="hud-box">
+                <div class="hud-label">t-statistic</div>
+                <div class="hud-value" id="neyman-val-t">7.76</div>
+              </div>
+              <div class="hud-box success" id="neyman-pval-hud-box">
+                <div class="hud-label">p-value</div>
+                <div class="hud-value" id="neyman-val-pval">&lt; 0.0001</div>
+              </div>
+            </div>
+
+            <div class="hud-alert success" id="neyman-result-alert">
+              The ATE is significant.
+            </div>
+          </div>
+
+          <!-- Normal Distribution & CI charts -->
+          <div class="visualizer-card">
+            <h3 style="margin-top: 0; margin-bottom: 12px; font-size: 0.95rem;">Probability Density Overlap Curve</h3>
+            <div class="viz-box">
+              <svg class="viz-svg" id="neyman-curves-svg" viewBox="0 0 650 250" style="height: 250px;">
+                <!-- Rendered dynamically -->
+              </svg>
+            </div>
+          </div>
+
+          <div class="visualizer-card">
+            <h3 style="margin-top: 0; margin-bottom: 12px; font-size: 0.95rem;">Point Estimate of ATE &amp; Confidence Interval</h3>
+            <div class="viz-box">
+              <svg class="viz-svg" id="neyman-ci-svg" viewBox="0 0 650 120" style="height: 120px;">
+                <!-- Rendered dynamically -->
+              </svg>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="source-credits">
+      <p>RCT Interactive Arena built for statistical research and experimental education.</p>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
