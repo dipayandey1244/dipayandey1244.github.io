@@ -48,7 +48,7 @@
           <h2>Analyzing Randomized Experiments: Fisher vs. Neyman</h2>
           <p>
             Randomized Controlled Trials (RCTs) are the foundation of causal analysis. By randomly partitioning a sample 
-            into a <strong>Treatment Group</strong> ($W_i = 1$) and a <strong>Control Group</strong> ($W_i = 0$), we isolate the causal impact 
+            into a <strong>Treatment Group</strong> (W_i = 1) and a <strong>Control Group</strong> (W_i = 0), we isolate the causal impact 
             of an intervention. Historically, two statisticians proposed fundamentally different ways to analyze this data.
           </p>
           <div class="author-info">
@@ -94,7 +94,7 @@
             τ = E[Yᵢ(1) - Yᵢ(0)]
           </div>
           <p>
-            <strong>The Conceptual Difference:</strong> Neyman's null is $H_0: \text{ATE} = 0$, meaning the treatment has zero effect **on average**, even if it affects individuals differently.
+            <strong>The Conceptual Difference:</strong> Neyman's null is H₀: ATE = 0, meaning the treatment has zero effect **on average**, even if it affects individuals differently.
           </p>
           <p>
             <strong>The Estimation Procedure:</strong> Neyman proved that the simple difference in sample averages is an unbiased estimator for ATE. 
@@ -119,8 +119,8 @@
         <h3 style="color: var(--accent-primary); margin-bottom: 10px;">Primary Example: The Honey Study</h3>
         <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 15px;">
           This example uses a subset of six children from a randomized study analyzing honey as a cough treatment. 
-          Cough severity is measured on a scale from 0 (no cough) to 6 (severe cough). Under the sharp null ($H_0$), 
-          cough severity would be unchanged whether the child received honey ($W_i=1$) or control ($W_i=0$).
+          Cough severity is measured on a scale from 0 (no cough) to 6 (severe cough). Under the sharp null (H₀), 
+          cough severity would be unchanged whether the child received honey (W_i = 1) or control (W_i = 0).
         </p>
         
         <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 8px; font-family: var(--font-hud);">
@@ -131,10 +131,10 @@
             <thead>
               <tr>
                 <th>Child (i)</th>
-                <th>Treatment Assignment ($W_i$)</th>
-                <th>Observed Outcome ($Y_i^{obs}$)</th>
-                <th>Potential Outcome $Y_i(0)$ under $H_0$</th>
-                <th>Potential Outcome $Y_i(1)$ under $H_0$</th>
+                <th>Treatment Assignment (W_i)</th>
+                <th>Observed Outcome (Y_i)</th>
+                <th>Potential Outcome Y_i(0) under H₀</th>
+                <th>Potential Outcome Y_i(1) under H₀</th>
               </tr>
             </thead>
             <tbody>
@@ -195,7 +195,7 @@
           <!-- Injected via app.js based on current step -->
           <strong id="fisher-step-title" style="color: var(--accent-primary); font-size: 0.95rem;">Step 1: State the Sharp Null Hypothesis</strong>
           <p id="fisher-step-desc" style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 6px;">
-            We assume the treatment (honey) has absolutely zero effect on any child. This means $Y_i(1) = Y_i(0)$ for all children.
+            We assume the treatment (honey) has absolutely zero effect on any child. This means Y_i(1) = Y_i(0) for all children.
           </p>
         </div>
         <div style="display: flex; gap: 8px; align-items: center;">
@@ -360,9 +360,9 @@
             <thead>
               <tr>
                 <th>Outcome Metric</th>
-                <th>Control Mean ($\bar{Y}_C$)</th>
-                <th>Treatment Mean ($\bar{Y}_T$)</th>
-                <th>ATE Point Est. ($\hat{\tau}$)</th>
+                <th>Control Mean (Ȳ_C)</th>
+                <th>Treatment Mean (Ȳ_T)</th>
+                <th>ATE Point Est. (τ̂)</th>
                 <th>Neyman Std Error</th>
                 <th>95% Confidence Interval</th>
                 <th>Statistical Significance</th>
@@ -376,7 +376,7 @@
                 <td>+22.0 percentage pts</td>
                 <td>0.0284</td>
                 <td>[+16.4%, +27.6%]</td>
-                <td style="color: var(--color-success); font-weight: 600;">Significant ($p < 0.0001$)</td>
+                <td style="color: var(--color-success); font-weight: 600;">Significant (p &lt; 0.0001)</td>
               </tr>
               <tr style="background: var(--bg-main);">
                 <td><strong>Written Test Attempt Rate</strong></td>
@@ -385,7 +385,7 @@
                 <td>+5.0 percentage pts</td>
                 <td>0.0389</td>
                 <td>[-2.6%, +12.6%]</td>
-                <td style="color: var(--text-muted);">Not Significant ($p = 0.198$)</td>
+                <td style="color: var(--text-muted);">Not Significant (p = 0.198)</td>
               </tr>
             </tbody>
           </table>
@@ -404,7 +404,7 @@
         <div id="neyman-step-container" style="background: var(--bg-main); border: 1px solid var(--border-color); padding: 16px; border-radius: 6px; min-height: 80px; margin-bottom: 15px;">
           <strong id="neyman-step-title" style="color: var(--accent-secondary); font-size: 0.95rem;">Step 1: Calculate Sample Means</strong>
           <p id="neyman-step-desc" style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 6px;">
-            Calculate the average outcomes for the control group ($\bar{Y}_C$) and the treatment group ($\bar{Y}_T$).
+            Calculate the average outcomes for the control group (Ȳ_C) and the treatment group (Ȳ_T).
           </p>
         </div>
         <div style="display: flex; gap: 8px; align-items: center;">

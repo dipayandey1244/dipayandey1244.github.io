@@ -1015,7 +1015,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const fisherStepsData = [
     {
       title: "Step 1: State the Sharp Null Hypothesis",
-      desc: "Assume the treatment (honey) has absolutely zero effect on any child: $Y_i(1) = Y_i(0)$ for all $i$. Under this assumption, we can fill in all missing potential outcomes! Look at the Reference Table: the counterfactual outcomes are identical to the observed ones.",
+      desc: "Assume the treatment (honey) has absolutely zero effect on any child: Y_i(1) = Y_i(0) for all i. Under this assumption, we can fill in all missing potential outcomes! Look at the Reference Table: the counterfactual outcomes are identical to the observed ones.",
       action: () => {
         highlightReferenceRow(null); // Reset highlights
         playCoinSound();
@@ -1036,7 +1036,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       title: "Step 3: Calculate the Trial Statistic (ATE)",
-      desc: "Calculate the difference in mean cough scores between the simulated groups: $\\hat{\\tau}^* = \\bar{Y}_T^* - \\bar{Y}_C^*$. We measure how far this is from our observed difference of 1.00.",
+      desc: "Calculate the difference in mean cough scores between the simulated groups: ATE* = Mean(Treated*) - Mean(Control*). We measure how far this is from our observed difference of 1.00.",
       action: () => {
         playBlip(600, 0.1);
         const treatment = currentFisherData.map(d => d.group);
@@ -1129,7 +1129,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const neymanStepsData = [
     {
       title: "Step 1: Calculate Sample Means",
-      desc: "First, compute the average outcomes for the control group (\\bar{Y}_C) and the treatment group (\\bar{Y}_T). In our active teacher presence preset, these are 58% and 80% respectively.",
+      desc: "First, compute the average outcomes for the control group (Ȳ_C) and the treatment group (Ȳ_T). In our active teacher presence preset, these are 58% and 80% respectively.",
       action: () => {
         playCoinSound();
         const classroomHUD = document.getElementById('classroom-grid-title');
@@ -1139,7 +1139,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       title: "Step 2: Calculate the Point Estimate (ATE)",
-      desc: "Compute the difference between the sample averages: \\hat{\\tau} = \\bar{Y}_T - \\bar{Y}_C. Under the Seva Mandir preset, camera incentives increased presence by 22.0 percentage points.",
+      desc: "Compute the difference between the sample averages: ATE = Ȳ_T - Ȳ_C. Under the Seva Mandir preset, camera incentives increased presence by 22.0 percentage points.",
       action: () => {
         playBlip(550, 0.1);
         const ateHUD = document.getElementById('neyman-val-ate').parentElement;
@@ -1149,7 +1149,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       title: "Step 3: Estimate Neyman's Conservative Variance",
-      desc: "Compute Neyman's standard error: SE = \\sqrt{ (s_T^2 / N_T) + (s_C^2 / N_C) }. This variance is conservative (an overestimate) because the individual treatment covariance is unobservable.",
+      desc: "Compute Neyman's standard error: SE = √[ (s_T² / N_T) + (s_C² / N_C) ]. This variance is conservative (an overestimate) because the individual treatment covariance is unobservable.",
       action: () => {
         playBlip(600, 0.1);
         const seHUD = document.getElementById('neyman-val-se').parentElement;
@@ -1159,7 +1159,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       title: "Step 4: Compute t-statistic & p-value",
-      desc: "Find the t-statistic: t = \\hat{\\tau} / SE = 7.76. With a t-statistic of 7.76, the probability that this difference occurred by random chance (p-value) is virtually zero (< 0.0001).",
+      desc: "Find the t-statistic: t = ATE / SE = 7.76. With a t-statistic of 7.76, the probability that this difference occurred by random chance (p-value) is virtually zero (< 0.0001).",
       action: () => {
         playCoinSound();
         const pvalHUD = document.getElementById('neyman-val-pval').parentElement;
@@ -1169,7 +1169,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     {
       title: "Step 5: Construct Confidence Interval",
-      desc: "Using critical value z = 1.96 (for 95% confidence), construct the bounds: CI = [\\hat{\\tau} - 1.96 \\cdot SE, \\hat{\\tau} + 1.96 \\cdot SE]. Because the interval [+16.4%, +27.6%] does not cross zero, we reject the null hypothesis!",
+      desc: "Using critical value z = 1.96 (for 95% confidence), construct the bounds: CI = [ATE - 1.96 × SE, ATE + 1.96 × SE]. Because the interval [+16.4%, +27.6%] does not cross zero, we reject the null hypothesis!",
       action: () => {
         playSuccessFanfare();
         const ciChart = document.getElementById('neyman-ci-svg');
