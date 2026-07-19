@@ -138,42 +138,42 @@
               </tr>
             </thead>
             <tbody>
-              <tr style="background: var(--accent-primary-tint);">
+              <tr style="background: var(--accent-primary-tint);" id="ref-row-1">
                 <td>Child 1</td>
                 <td>1 (Treated)</td>
                 <td>3</td>
                 <td>3 <span style="color: var(--text-muted); font-size: 0.8rem;">(Filled counterfactual)</span></td>
                 <td>3 <span style="color: var(--text-muted); font-size: 0.8rem;">(Observed)</span></td>
               </tr>
-              <tr style="background: var(--accent-primary-tint);">
+              <tr style="background: var(--accent-primary-tint);" id="ref-row-2">
                 <td>Child 2</td>
                 <td>1 (Treated)</td>
                 <td>5</td>
                 <td>5 <span style="color: var(--text-muted); font-size: 0.8rem;">(Filled counterfactual)</span></td>
                 <td>5 <span style="color: var(--text-muted); font-size: 0.8rem;">(Observed)</span></td>
               </tr>
-              <tr style="background: var(--accent-primary-tint);">
+              <tr style="background: var(--accent-primary-tint);" id="ref-row-3">
                 <td>Child 3</td>
                 <td>1 (Treated)</td>
                 <td>0</td>
                 <td>0 <span style="color: var(--text-muted); font-size: 0.8rem;">(Filled counterfactual)</span></td>
                 <td>0 <span style="color: var(--text-muted); font-size: 0.8rem;">(Observed)</span></td>
               </tr>
-              <tr style="background: var(--bg-main);">
+              <tr style="background: var(--bg-main);" id="ref-row-4">
                 <td>Child 4</td>
                 <td>0 (Control)</td>
                 <td>4</td>
                 <td>4 <span style="color: var(--text-muted); font-size: 0.8rem;">(Observed)</span></td>
                 <td>4 <span style="color: var(--text-muted); font-size: 0.8rem;">(Filled counterfactual)</span></td>
               </tr>
-              <tr style="background: var(--bg-main);">
+              <tr style="background: var(--bg-main);" id="ref-row-5">
                 <td>Child 5</td>
                 <td>0 (Control)</td>
                 <td>0</td>
                 <td>0 <span style="color: var(--text-muted); font-size: 0.8rem;">(Observed)</span></td>
                 <td>0 <span style="color: var(--text-muted); font-size: 0.8rem;">(Filled counterfactual)</span></td>
               </tr>
-              <tr style="background: var(--bg-main);">
+              <tr style="background: var(--bg-main);" id="ref-row-6">
                 <td>Child 6</td>
                 <td>0 (Control)</td>
                 <td>1</td>
@@ -182,6 +182,26 @@
               </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+
+      <!-- Step-by-Step Guided Stepper Card (Fisher) -->
+      <div class="card" style="margin-bottom: 25px; border-left: 5px solid var(--accent-primary);">
+        <h3 style="color: var(--accent-primary); margin-bottom: 8px;">🎓 Step-by-Step Permutation Guide</h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px;">
+          Use the stepping controls below to watch how Fisher shuffles unit assignments to test the Sharp Null hypothesis.
+        </p>
+        <div id="fisher-step-container" style="background: var(--bg-main); border: 1px solid var(--border-color); padding: 16px; border-radius: 6px; min-height: 80px; margin-bottom: 15px;">
+          <!-- Injected via app.js based on current step -->
+          <strong id="fisher-step-title" style="color: var(--accent-primary); font-size: 0.95rem;">Step 1: State the Sharp Null Hypothesis</strong>
+          <p id="fisher-step-desc" style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 6px;">
+            We assume the treatment (honey) has absolutely zero effect on any child. This means $Y_i(1) = Y_i(0)$ for all children.
+          </p>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button class="play-btn sec" id="btn-fisher-step-prev" style="padding: 6px 12px; font-size: 0.8rem;" disabled>◀ Prev Step</button>
+          <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-secondary);" id="fisher-step-indicator">Step 1 of 5</span>
+          <button class="play-btn sec" id="btn-fisher-step-next" style="padding: 6px 12px; font-size: 0.8rem;">Next Step ▶</button>
         </div>
       </div>
 
@@ -220,7 +240,7 @@
 
             <div style="display: flex; gap: 8px; margin-top: 15px;">
               <button class="play-btn" id="btn-play-sim" style="flex: 1;">
-                ▶️ Play Sim
+                ▶&nbsp;Play Sim
               </button>
               <button class="play-btn sec" id="btn-stop-sim" style="display: none; flex: 1; border-color: var(--color-error); color: var(--color-error);">
                 ⏹️ Stop
@@ -298,6 +318,21 @@
 
       </div>
 
+      <!-- Original Paper Case Study Details Box (Fisher) -->
+      <div class="card" style="margin-top: 25px;">
+        <h3 style="color: var(--accent-primary); margin-bottom: 10px;">Original Case Study: Honey Clinical Trial</h3>
+        <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6;">
+          In the original clinical trial (<em>Paul et al., 2007</em>), researchers tested the effect of buckwheat honey, 
+          dextromethorphan (DM), and no treatment (placebo) on nocturnal cough severity in 105 children. 
+          The outcomes showed that honey scored significantly better than no treatment in reducing cough frequency and severity.
+        </p>
+        <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; margin-top: 10px;">
+          For educational simplicity, modern econometrics texts (such as <strong>Rubin &amp; Imbens, 2015</strong>) select a miniature subset of 6 children 
+          to teach Fisher's exact permutation. This illustrates how small-sample clinical outcomes can be analyzed under the strict 
+          assumption of a sharp null hypothesis.
+        </p>
+      </div>
+
     </div>
 
     <!-- ================================================================= -->
@@ -358,6 +393,25 @@
         <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 10px; font-style: italic;">
           Note: An insignificant difference in "Written Test Attempt Rate" is crucial. It confirms that the incentive program did not affect student attendance during test days, ruling out selection (attrition) bias in subsequent student learning assessments.
         </p>
+      </div>
+
+      <!-- Step-by-Step Guided Stepper Card (Neyman) -->
+      <div class="card" style="margin-bottom: 25px; border-left: 5px solid var(--accent-secondary);">
+        <h3 style="color: var(--accent-secondary); margin-bottom: 8px;">🎓 Step-by-Step Neyman Guide</h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px;">
+          Use the stepping controls below to understand Neyman's causal framework computations.
+        </p>
+        <div id="neyman-step-container" style="background: var(--bg-main); border: 1px solid var(--border-color); padding: 16px; border-radius: 6px; min-height: 80px; margin-bottom: 15px;">
+          <strong id="neyman-step-title" style="color: var(--accent-secondary); font-size: 0.95rem;">Step 1: Calculate Sample Means</strong>
+          <p id="neyman-step-desc" style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 6px;">
+            Calculate the average outcomes for the control group ($\bar{Y}_C$) and the treatment group ($\bar{Y}_T$).
+          </p>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button class="play-btn sec" id="btn-neyman-step-prev" style="padding: 6px 12px; font-size: 0.8rem;" disabled>◀ Prev Step</button>
+          <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-secondary);" id="neyman-step-indicator">Step 1 of 5</span>
+          <button class="play-btn sec" id="btn-neyman-step-next" style="padding: 6px 12px; font-size: 0.8rem;">Next Step ▶</button>
+        </div>
       </div>
 
       <div class="lab-grid">
@@ -529,6 +583,21 @@
 
         </div>
 
+      </div>
+
+      <!-- Original Paper Case Study Details Box (Neyman) -->
+      <div class="card" style="margin-top: 25px;">
+        <h3 style="color: var(--accent-secondary); margin-bottom: 10px;">Original Case Study: Seva Mandir Teacher Incentive Program</h3>
+        <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6;">
+          In the Seva Mandir study in Rajasthan, India (<em>Duflo, Hanna, Ryan, 2012</em>), schools faced an absenteeism crisis, 
+          with teachers absent over 44% of the time. The authors introduced camera monitoring where teachers took photos with students 
+          at the start and end of the school day to prove attendance. High attendance led to bonus payouts.
+        </p>
+        <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; margin-top: 10px;">
+          The study demonstrated that camera monitoring cut absenteeism in half, increasing teacher presence from 58% to 80%. 
+          Crucially, it also checked the "test attempt rate" on assessment days to rule out selection bias, confirming that 
+          the incentive did not prompt weaker students to stay home or teachers to drop them on test days.
+        </p>
       </div>
 
     </div>

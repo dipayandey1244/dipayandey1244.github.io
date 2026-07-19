@@ -506,7 +506,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =================================================================
-  // PART B: NEYMAN ATE LAB (TEACHER INCENTIVES)
+  // NEYMAN CAUSAL LAB (TEACHER INCENTIVES)
   // =================================================================
 
   const sliderNc = document.getElementById('slider-nc');
@@ -995,6 +995,214 @@ document.addEventListener('DOMContentLoaded', () => {
       label.textContent = `${Math.round(val * 100)}%`;
       svg.appendChild(label);
     }
+  }
+
+
+  // =================================================================
+  // STEP-BY-STEP GUIDED INTERACTIVE STEPPERS
+  // =================================================================
+
+  // 1. Fisher Stepper
+  let currentFisherStep = 1;
+  const fisherStepMax = 5;
+
+  const btnFisherStepPrev = document.getElementById('btn-fisher-step-prev');
+  const btnFisherStepNext = document.getElementById('btn-fisher-step-next');
+  const fisherStepIndicator = document.getElementById('fisher-step-indicator');
+  const fisherStepTitle = document.getElementById('fisher-step-title');
+  const fisherStepDesc = document.getElementById('fisher-step-desc');
+
+  const fisherStepsData = [
+    {
+      title: "Step 1: State the Sharp Null Hypothesis",
+      desc: "Assume the treatment (honey) has absolutely zero effect on any child: $Y_i(1) = Y_i(0)$ for all $i$. Under this assumption, we can fill in all missing potential outcomes! Look at the Reference Table: the counterfactual outcomes are identical to the observed ones.",
+      action: () => {
+        highlightReferenceRow(null); // Reset highlights
+        playCoinSound();
+      }
+    },
+    {
+      title: "Step 2: Choose a Random Treatment Assignment",
+      desc: "Shuffle the group labels! In the shuffler box below, cards are randomly assigned to Treatment (T) or Control (C). Click 'Next Step' to see a single random shuffle.",
+      action: () => {
+        playShuffleSound();
+        // Trigger one shuffle step
+        const treatment = currentFisherData.map(d => d.group);
+        const shuffled = [...treatment].sort(() => Math.random() - 0.5);
+        renderDeck(shuffled);
+        coinElement.classList.add('flipping');
+        setTimeout(() => coinElement.classList.remove('flipping'), 400);
+      }
+    },
+    {
+      title: "Step 3: Calculate the Trial Statistic (ATE)",
+      desc: "Calculate the difference in mean cough scores between the simulated groups: $\\hat{\\tau}^* = \\bar{Y}_T^* - \\bar{Y}_C^*$. We measure how far this is from our observed difference of 1.00.",
+      action: () => {
+        playBlip(600, 0.1);
+        const treatment = currentFisherData.map(d => d.group);
+        const outcomes = currentFisherData.map(d => d.outcome);
+        const shuffledW = [...treatment].sort(() => Math.random() - 0.5);
+        const stepATE = getATE(shuffledW, outcomes);
+        document.getElementById('fisher-val-active').textContent = stepATE.toFixed(2);
+        
+        // Highlight active deck HUD
+        const activeHUD = document.getElementById('fisher-val-active').parentElement;
+        activeHUD.style.borderColor = 'var(--accent-secondary)';
+        setTimeout(() => activeHUD.style.borderColor = 'var(--border-color)', 800);
+      }
+    },
+    {
+      title: "Step 4: Repeat for All Permutations",
+      desc: "Repeat this shuffle for all 20 possible combinations to compile the full probability distribution. Click the 'Fast' or 'Play Sim' buttons to run this automatically.",
+      action: () => {
+        playCoinSound();
+        // Show distribution bars flashing
+        const svg = document.getElementById('fisher-svg');
+        svg.style.opacity = '0.5';
+        setTimeout(() => svg.style.opacity = '1', 400);
+      }
+    },
+    {
+      title: "Step 5: Calculate p-value & Reject/Accept H₀",
+      desc: "Find the proportion of shuffles where the absolute difference is as large or larger than our observed difference (1.00). Here, 16 out of 20 shuffles are at least as extreme, giving a p-value of 0.8000. We fail to reject the null!",
+      action: () => {
+        playSuccessFanfare();
+        const pvalHUD = document.getElementById('fisher-pval-hud-box');
+        pvalHUD.style.transform = 'scale(1.05)';
+        setTimeout(() => pvalHUD.style.transform = 'none', 600);
+      }
+    }
+  ];
+
+  btnFisherStepNext.addEventListener('click', () => {
+    if (currentFisherStep < fisherStepMax) {
+      currentFisherStep++;
+      updateFisherStepUI();
+    }
+  });
+
+  btnFisherStepPrev.addEventListener('click', () => {
+    if (currentFisherStep > 1) {
+      currentFisherStep--;
+      updateFisherStepUI();
+    }
+  });
+
+  function updateFisherStepUI() {
+    const step = fisherStepsData[currentFisherStep - 1];
+    fisherStepTitle.textContent = step.title;
+    fisherStepDesc.textContent = step.desc;
+    fisherStepIndicator.textContent = `Step ${currentFisherStep} of ${fisherStepMax}`;
+
+    btnFisherStepPrev.disabled = currentFisherStep === 1;
+    btnFisherStepNext.disabled = currentFisherStep === fisherStepMax;
+
+    step.action();
+  }
+
+  function highlightReferenceRow(rowId) {
+    for (let i = 1; i <= 6; i++) {
+      const row = document.getElementById(`ref-row-${i}`);
+      if (row) {
+        if (rowId === null) {
+          row.style.outline = 'none';
+        } else if (i === rowId) {
+          row.style.outline = '2px solid var(--accent-primary)';
+        } else {
+          row.style.outline = 'none';
+        }
+      }
+    }
+  }
+
+
+  // 2. Neyman Stepper
+  let currentNeymanStep = 1;
+  const neymanStepMax = 5;
+
+  const btnNeymanStepPrev = document.getElementById('btn-neyman-step-prev');
+  const btnNeymanStepNext = document.getElementById('btn-neyman-step-next');
+  const neymanStepIndicator = document.getElementById('neyman-step-indicator');
+  const neymanStepTitle = document.getElementById('neyman-step-title');
+  const neymanStepDesc = document.getElementById('neyman-step-desc');
+
+  const neymanStepsData = [
+    {
+      title: "Step 1: Calculate Sample Means",
+      desc: "First, compute the average outcomes for the control group (\\bar{Y}_C) and the treatment group (\\bar{Y}_T). In our active teacher presence preset, these are 58% and 80% respectively.",
+      action: () => {
+        playCoinSound();
+        const classroomHUD = document.getElementById('classroom-grid-title');
+        classroomHUD.style.color = 'var(--accent-secondary)';
+        setTimeout(() => classroomHUD.style.color = 'var(--accent-primary)', 800);
+      }
+    },
+    {
+      title: "Step 2: Calculate the Point Estimate (ATE)",
+      desc: "Compute the difference between the sample averages: \\hat{\\tau} = \\bar{Y}_T - \\bar{Y}_C. Under the Seva Mandir preset, camera incentives increased presence by 22.0 percentage points.",
+      action: () => {
+        playBlip(550, 0.1);
+        const ateHUD = document.getElementById('neyman-val-ate').parentElement;
+        ateHUD.style.borderColor = 'var(--accent-primary)';
+        setTimeout(() => ateHUD.style.borderColor = 'var(--border-color)', 800);
+      }
+    },
+    {
+      title: "Step 3: Estimate Neyman's Conservative Variance",
+      desc: "Compute Neyman's standard error: SE = \\sqrt{ (s_T^2 / N_T) + (s_C^2 / N_C) }. This variance is conservative (an overestimate) because the individual treatment covariance is unobservable.",
+      action: () => {
+        playBlip(600, 0.1);
+        const seHUD = document.getElementById('neyman-val-se').parentElement;
+        seHUD.style.borderColor = 'var(--accent-secondary)';
+        setTimeout(() => seHUD.style.borderColor = 'var(--border-color)', 800);
+      }
+    },
+    {
+      title: "Step 4: Compute t-statistic & p-value",
+      desc: "Find the t-statistic: t = \\hat{\\tau} / SE = 7.76. With a t-statistic of 7.76, the probability that this difference occurred by random chance (p-value) is virtually zero (< 0.0001).",
+      action: () => {
+        playCoinSound();
+        const pvalHUD = document.getElementById('neyman-val-pval').parentElement;
+        pvalHUD.style.borderColor = 'var(--color-success)';
+        setTimeout(() => pvalHUD.style.borderColor = 'var(--border-color)', 800);
+      }
+    },
+    {
+      title: "Step 5: Construct Confidence Interval",
+      desc: "Using critical value z = 1.96 (for 95% confidence), construct the bounds: CI = [\\hat{\\tau} - 1.96 \\cdot SE, \\hat{\\tau} + 1.96 \\cdot SE]. Because the interval [+16.4%, +27.6%] does not cross zero, we reject the null hypothesis!",
+      action: () => {
+        playSuccessFanfare();
+        const ciChart = document.getElementById('neyman-ci-svg');
+        ciChart.style.opacity = '0.5';
+        setTimeout(() => ciChart.style.opacity = '1', 400);
+      }
+    }
+  ];
+
+  btnNeymanStepNext.addEventListener('click', () => {
+    if (currentNeymanStep < neymanStepMax) {
+      currentNeymanStep++;
+      updateNeymanStepUI();
+    }
+  });
+
+  btnNeymanStepPrev.addEventListener('click', () => {
+    if (currentNeymanStep > 1) {
+      currentNeymanStep--;
+      updateNeymanStepUI();
+    }
+  });
+
+  function updateNeymanStepUI() {
+    const step = neymanStepsData[currentNeymanStep - 1];
+    neymanStepTitle.textContent = step.title;
+    neymanStepDesc.textContent = step.desc;
+    neymanStepIndicator.textContent = `Step ${currentNeymanStep} of ${neymanStepMax}`;
+
+    btnNeymanStepPrev.disabled = currentNeymanStep === 1;
+    btnNeymanStepNext.disabled = currentNeymanStep === neymanStepMax;
+
+    step.action();
   }
 
 
