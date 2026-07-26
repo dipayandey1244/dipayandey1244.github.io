@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizing Variance Decomposition (ANOVA) | Interactive Guide</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="An interactive, highly animated visual guide to understanding Variance Decomposition in ANOVA, including Total SS, Treatment SS, Error SS, and Degrees of Freedom.">
+    <meta name="keywords" content="ANOVA, Variance Decomposition, Sum of Squares, Total SS, Treatment SS, Error SS, Degrees of Freedom, Statistics, Interactive, Visual Guide">
+    
+    <!-- Google Fonts: Space Grotesk (Tech headers) & Inter (Clean body copy) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- KaTeX for beautiful math equations -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+    <!-- Project Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Background glow elements for premium ambient styling -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="ambient-glow glow-3"></div>
+
+    <header class="app-header">
+        <div class="logo">
+            <span class="logo-accent">σ²</span> Decomposition
+        </div>
+        <nav class="nav-links">
+            <a href="#intro" class="nav-link active">Introduction</a>
+            <a href="#playground" class="nav-link">Interactive Playground</a>
+            <a href="#decomposition-section" class="nav-link">The Decomposition</a>
+            <a href="#df-section" class="nav-link">Degrees of Freedom</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- Hero Section -->
+        <section id="intro" class="hero-section">
+            <h1 class="gradient-text">Variance Decomposition</h1>
+            <p class="hero-subtitle">
+                Unlock the geometric intuition behind Analysis of Variance (ANOVA). Understand how we separate random noise from true effects by dissecting the sum of squared differences.
+            </p>
+            <div class="equation-showcase glass-panel">
+                <span class="eq-label">The Fundamental Identity of ANOVA:</span>
+                <div class="main-equation">
+                    $$SS_{\text{Total}} = SS_{\text{Treatment}} + SS_{\text{Error}}$$
+                </div>
+                <div class="eq-explanation">
+                    The total variation in your data ($SS_{\text{Total}}$) is decomposed into variation due to treatment differences ($SS_{\text{Treatment}}$) and variation due to random error/within-group noise ($SS_{\text{Error}}$).
+                </div>
+            </div>
+        </section>
+
+        <!-- Module 1: The Interactive Variance Playground -->
+        <section id="playground" class="playground-section">
+            <div class="section-header">
+                <h2>1. Interactive Variance Playground</h2>
+                <p>Drag the individual data points up and down, or drag the group centers to change group separation. Watch how the sums of squares recalculate instantly.</p>
+            </div>
+
+            <div class="playground-grid">
+                <!-- Visual Workspace -->
+                <div class="workspace glass-panel">
+                    <div class="workspace-header">
+                        <div class="tabs">
+                            <button class="tab-btn active" data-view="none">Standard Plot</button>
+                            <button class="tab-btn btn-total" data-view="total">Total Deviation ($SS_{\text{Total}}$)</button>
+                            <button class="tab-btn btn-treatment" data-view="treatment">Treatment Deviation ($SS_{\text{Treatment}}$)</button>
+                            <button class="tab-btn btn-error" data-view="error">Error Deviation ($SS_{\text{Error}}$)</button>
+                        </div>
+                        <button id="btn-reset" class="secondary-btn">Reset Data</button>
+                    </div>
+
+                    <!-- Interactive SVG Area -->
+                    <div class="svg-container">
+                        <svg id="playground-svg" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid meet">
+                            <!-- Definitions for filters, clip paths, etc. -->
+                            <defs>
+                                <linearGradient id="total-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="var(--color-total-glow)" stop-opacity="0.15"/>
+                                    <stop offset="100%" stop-color="var(--color-total)" stop-opacity="0.05"/>
+                                </linearGradient>
+                                <linearGradient id="treatment-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="var(--color-treatment-glow)" stop-opacity="0.15"/>
+                                    <stop offset="100%" stop-color="var(--color-treatment)" stop-opacity="0.05"/>
+                                </linearGradient>
+                                <linearGradient id="error-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="var(--color-error-glow)" stop-opacity="0.15"/>
+                                    <stop offset="100%" stop-color="var(--color-error)" stop-opacity="0.05"/>
+                                </linearGradient>
+                                <filter id="glow-effect" x="-20%" y="-20%" width="140%" height="140%">
+                                    <feGaussianBlur stdDeviation="6" result="blur" />
+                                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                </filter>
+                            </defs>
+                            
+                            <!-- Grid Lines -->
+                            <g class="grid-lines"></g>
+
+                            <!-- Deviations & Squares Layer -->
+                            <g class="squares-layer"></g>
+                            <g class="deviations-layer"></g>
+
+                            <!-- Mean Reference Lines -->
+                            <g class="mean-lines">
+                                <line id="line-grand-mean" x1="50" y1="225" x2="750" y2="225" stroke="var(--color-grand-mean)" stroke-width="2.5" stroke-dasharray="8,6" filter="url(#glow-effect)" />
+                                <text id="label-grand-mean" x="755" y="229" fill="var(--color-grand-mean)" font-size="12" font-weight="600">Grand Mean (y̅)</text>
+                            </g>
+
+                            <!-- Data Points Group Layer -->
+                            <g class="points-layer"></g>
+                            
+                            <!-- Group Means Indicators Layer -->
+                            <g class="group-means-layer"></g>
+
+                            <!-- SVG Tooltip -->
+                            <g id="svg-tooltip" class="hidden">
+                                <rect rx="6" ry="6" fill="#1e293b" stroke="#475569" stroke-width="1" width="120" height="50" opacity="0.95"></rect>
+                                <text class="tooltip-title" x="10" y="20" fill="#f8fafc" font-size="11" font-weight="600"></text>
+                                <text class="tooltip-val" x="10" y="38" fill="#94a3b8" font-size="11"></text>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Math & Stats Dashboard -->
+                <div class="dashboard glass-panel">
+                    <h3>Decomposition Metrics</h3>
+                    
+                    <div class="metric-card total" id="card-total">
+                        <div class="metric-header">
+                            <span class="metric-title">Total Sum of Squares ($SS_{\text{Total}}$)</span>
+                            <span class="metric-badge">Total Variance</span>
+                        </div>
+                        <div class="metric-value" id="val-ss-total">0.00</div>
+                        <div class="metric-formula">$$SS_{\text{Total}} = \sum (y_{ij} - \bar{y})^2$$</div>
+                        <p class="metric-desc">The total squared distance from every data point to the global grand mean line.</p>
+                    </div>
+
+                    <div class="metric-card treatment" id="card-treatment">
+                        <div class="metric-header">
+                            <span class="metric-title">Treatment Sum of Squares ($SS_{\text{Treatment}}$)</span>
+                            <span class="metric-badge">Between-Group</span>
+                        </div>
+                        <div class="metric-value" id="val-ss-treatment">0.00</div>
+                        <div class="metric-formula">$$SS_{\text{Treatment}} = \sum n_j (\bar{y}_j - \bar{y})^2$$</div>
+                        <p class="metric-desc">Variation due to differences <em>between</em> the group averages and the grand mean (Signal).</p>
+                    </div>
+
+                    <div class="metric-card error" id="card-error">
+                        <div class="metric-header">
+                            <span class="metric-title">Error Sum of Squares ($SS_{\text{Error}}$)</span>
+                            <span class="metric-badge">Within-Group</span>
+                        </div>
+                        <div class="metric-value" id="val-ss-error">0.00</div>
+                        <div class="metric-formula">$$SS_{\text{Error}} = \sum (y_{ij} - \bar{y}_j)^2$$</div>
+                        <p class="metric-desc">Variation <em>within</em> each group. Unexplained differences around their own group means (Noise).</p>
+                    </div>
+
+                    <!-- Live Equivalence Bar -->
+                    <div class="equivalence-bar-container">
+                        <div class="equivalence-header">
+                            <span>Decomposition Balance</span>
+                            <span id="equivalence-status" class="status-valid">SS_Total = SS_Treat + SS_Err</span>
+                        </div>
+                        <div class="equivalence-bar">
+                            <div id="bar-treatment" class="bar-segment treatment-seg" style="width: 50%;"></div>
+                            <div id="bar-error" class="bar-segment error-seg" style="width: 50%;"></div>
+                        </div>
+                        <div class="equivalence-labels">
+                            <span class="label-treat-percent">Treat: 50%</span>
+                            <span class="label-err-percent">Error: 50%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Module 2: The Decomposition Animation -->
+        <section id="decomposition-section" class="decomposition-section">
+            <div class="section-header">
+                <h2>2. Visualizing Conservation of Area</h2>
+                <p>Click "Decompose" to watch the squares representing squared distances slide down and stack into their respective components. This demonstrates visually that the total square area remains perfectly conserved.</p>
+            </div>
+
+            <div class="decomp-workspace glass-panel">
+                <div class="decomp-controls">
+                    <button id="btn-decompose" class="primary-btn pulse-glow">Decompose Variance!</button>
+                    <button id="btn-reset-decomp" class="secondary-btn">Reset Layout</button>
+                </div>
+                
+                <div class="decomp-flex-container">
+                    <!-- Left: Source Plot (Static View of deviations) -->
+                    <div class="decomp-panel-source">
+                        <h4>Active Deviations</h4>
+                        <div class="mini-svg-container">
+                            <svg id="decomp-source-svg" viewBox="0 0 380 280">
+                                <!-- Will be cloned and populated dynamically -->
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Right: Stacking Bar Chart -->
+                    <div class="decomp-panel-stack">
+                        <h4>Decomposed SS Accumulator</h4>
+                        <div class="stack-containers">
+                            <!-- Total SS Column -->
+                            <div class="stack-col col-total">
+                                <div class="stack-box-outer">
+                                    <div class="stack-box-inner" id="box-total-ss">
+                                        <!-- Stacked squares will animate into here -->
+                                        <div class="empty-state-label">Total SS</div>
+                                    </div>
+                                </div>
+                                <span class="col-lbl">Total SS</span>
+                                <span class="col-val" id="lbl-total-sum">0.0</span>
+                            </div>
+
+                            <div class="stack-operator">=</div>
+
+                            <!-- Treatment SS Column -->
+                            <div class="stack-col col-treatment">
+                                <div class="stack-box-outer">
+                                    <div class="stack-box-inner" id="box-treatment-ss">
+                                        <!-- Stacked squares will animate into here -->
+                                        <div class="empty-state-label">Treatment SS</div>
+                                    </div>
+                                </div>
+                                <span class="col-lbl">Treatment SS</span>
+                                <span class="col-val" id="lbl-treatment-sum">0.0</span>
+                            </div>
+
+                            <div class="stack-operator">+</div>
+
+                            <!-- Error SS Column -->
+                            <div class="stack-col col-error">
+                                <div class="stack-box-outer">
+                                    <div class="stack-box-inner" id="box-error-ss">
+                                        <!-- Stacked squares will animate into here -->
+                                        <div class="empty-state-label">Error SS</div>
+                                    </div>
+                                </div>
+                                <span class="col-lbl">Error SS</span>
+                                <span class="col-val" id="lbl-error-sum">0.0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Module 3: Degrees of Freedom Simulator -->
+        <section id="df-section" class="df-section">
+            <div class="section-header">
+                <h2>3. Interactive Degrees of Freedom ($df$)</h2>
+                <p>Degrees of freedom represent the number of values in a calculation that are "free to vary". In ANOVA, we partition these degrees of freedom just like we partition the sums of squares.</p>
+            </div>
+
+            <div class="df-grid">
+                <!-- Sandbox Card -->
+                <div class="df-sandbox glass-panel">
+                    <div class="df-sandbox-header">
+                        <h4>Interactive "Free to Vary" Sandbox</h4>
+                        <div class="badge-container">
+                            <span class="badge df-badge">Fixed Mean = 200</span>
+                        </div>
+                    </div>
+                    
+                    <p class="df-instruction">
+                        We have $N = 4$ data points. Their average is fixed at the center line (200). 
+                        <strong>Drag the glowing colored points (Points 1, 2, and 3).</strong> 
+                        Watch the white point (Point 4) move on its own to keep the mean constant!
+                    </p>
+
+                    <div class="df-svg-container">
+                        <svg id="df-svg" viewBox="0 0 600 300">
+                            <!-- Fixed Mean Line -->
+                            <line x1="50" y1="150" x2="550" y2="150" stroke="var(--color-grand-mean)" stroke-width="2.5" stroke-dasharray="6,4"></line>
+                            <text x="50" y="140" fill="var(--color-grand-mean)" font-size="11" font-weight="600">Fixed Mean Anchor</text>
+                            
+                            <!-- Connecting horizontal guidelines -->
+                            <g class="df-guidelines"></g>
+                            
+                            <!-- Dynamic Dots -->
+                            <!-- Three colored dots (draggable) and one white dot (read-only) -->
+                            <g class="df-dots"></g>
+                        </svg>
+                    </div>
+
+                    <div class="df-math-readout">
+                        <div class="df-status-box">
+                            <span class="status-lbl">Draggable Points (Free):</span>
+                            <span class="status-val text-accent-cyan">3 Points (df = 3)</span>
+                        </div>
+                        <div class="df-status-box">
+                            <span class="status-lbl">Constrained Point (Locked):</span>
+                            <span class="status-val text-accent-rose">1 Point</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Explanation / Theory Card -->
+                <div class="df-theory glass-panel">
+                    <h3>How $df$ Partitions in ANOVA</h3>
+                    
+                    <div class="df-card">
+                        <div class="df-card-header">
+                            <span class="df-title">Total Degrees of Freedom ($df_{\text{Total}}$)</span>
+                            <span class="df-formula-badge">N - 1</span>
+                        </div>
+                        <p>With $N$ total data points, if we fix the grand mean, only $N - 1$ points are free to vary. The last point's value is locked to satisfy the grand mean constraint.</p>
+                    </div>
+
+                    <div class="df-card">
+                        <div class="df-card-header">
+                            <span class="df-title">Treatment Degrees of Freedom ($df_{\text{Treatment}}$)</span>
+                            <span class="df-formula-badge">k - 1</span>
+                        </div>
+                        <p>For $k$ groups, we calculate the variation of the group means around the grand mean. If the grand mean is fixed, only $k - 1$ group means are free to vary.</p>
+                    </div>
+
+                    <div class="df-card">
+                        <div class="df-card-header">
+                            <span class="df-title">Error Degrees of Freedom ($df_{\text{Error}}$)</span>
+                            <span class="df-formula-badge">N - k</span>
+                        </div>
+                        <p>Within each group $j$ of size $n_j$, the point values vary around their own group mean. For group $j$, this gives $n_j - 1$ degrees of freedom. Summing across all $k$ groups: $\sum (n_j - 1) = N - k$.</p>
+                    </div>
+
+                    <div class="df-identity-box">
+                        <span class="identity-label">Degrees of Freedom Identity:</span>
+                        <div class="df-identity-formula">
+                            $$df_{\text{Total}} = df_{\text{Treatment}} + df_{\text{Error}}$$
+                        </div>
+                        <div class="df-identity-numbers" id="df-numbers-readout">
+                            $$\text{e.g., } 11 = 2 + 9$$
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <p>&copy; 2026 Interactive Variance Decomposition Guide. Created for statistics learners.</p>
+    </footer>
+
+    <!-- Project Script -->
+    <script src="app.js"></script>
+</body>
+</html>
