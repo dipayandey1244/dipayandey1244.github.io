@@ -445,6 +445,7 @@
         body.theme-ghibli .system-cover.aethercrawl { background: #fdf5fc; }
         body.theme-ghibli .system-cover.decision-ml { background: #f5fcfb; }
         body.theme-ghibli .system-cover.variance-decomp { background: #f5fbf8; }
+        body.theme-ghibli .system-cover.one-way-anova { background: #f6f5fb; }
         
         body.theme-ghibli figure.thumb:hover .system-cover {
             outline: 5px solid #dfb15b;
@@ -832,7 +833,8 @@
         body.theme-oasis .system-cover.frugalgpt,
         body.theme-oasis .system-cover.aethercrawl,
         body.theme-oasis .system-cover.decision-ml,
-        body.theme-oasis .system-cover.variance-decomp {
+        body.theme-oasis .system-cover.variance-decomp,
+        body.theme-oasis .system-cover.one-way-anova {
             background: #08051e;
             border-color: #00f0ff;
         }
@@ -1227,7 +1229,8 @@
         body.theme-forrest .system-cover.frugalgpt,
         body.theme-forrest .system-cover.aethercrawl,
         body.theme-forrest .system-cover.decision-ml,
-        body.theme-forrest .system-cover.variance-decomp {
+        body.theme-forrest .system-cover.variance-decomp,
+        body.theme-forrest .system-cover.one-way-anova {
             background: #fbf3d3;
             border-color: #5c4335;
         }
@@ -1641,6 +1644,10 @@
             background: linear-gradient(135deg, #082f1d 0%, #020f0a 100%);
             border: 1px solid rgba(16, 185, 129, 0.15);
         }
+        .system-cover.one-way-anova {
+            background: linear-gradient(135deg, #1e1b4b 0%, #0a092c 100%);
+            border: 1px solid rgba(99, 102, 241, 0.15);
+        }
         
         /* Hover Outline and Glow Animations */
         figure.thumb:hover .system-cover {
@@ -1677,6 +1684,10 @@
         figure.thumb:hover .system-cover.variance-decomp {
             outline: 5px solid #10b981;
             box-shadow: 0 0 30px rgba(16, 185, 129, 0.35);
+        }
+        figure.thumb:hover .system-cover.one-way-anova {
+            outline: 5px solid #6366f1;
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.35);
         }
         
         figure.thumb:hover .system-cover .icon {
@@ -2666,7 +2677,24 @@
                         </div>
                         <h2 id="card8-label">Variance Decomposition</h2>
                     </figure>
-                    
+
+                    <!-- 9. One-Way ANOVA -->
+                    <figure class="thumb">
+                        <div class="cover">
+                            <a href="./one-way-anova/">
+                                <div class="system-cover one-way-anova">
+                                    <div class="spine"></div>
+                                    <div class="cover-content">
+                                        <div class="tag">Interactive Visualizer</div>
+                                        <div class="icon"><i class="fa-solid fa-chart-line" id="card9-icon" style="color: #6366f1;"></i></div>
+                                        <h2 class="cover-title" id="card9-title">One-Way ANOVA</h2>
+                                        <div class="metadata" id="card9-meta">F-Test &amp; Assumptions</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <h2 id="card9-label">One-Way ANOVA</h2>
+                    </figure>
                 </div>
             </div>
             

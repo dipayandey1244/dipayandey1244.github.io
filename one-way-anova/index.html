@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One-Way ANOVA (Module 9) | Interactive Guide</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="An interactive visual guide to understanding One-Way ANOVA, including the Linear Model, Assumptions, F-statistic, and hypothesis testing.">
+    <meta name="keywords" content="ANOVA, One-Way ANOVA, Hypothesis Testing, F-statistic, Assumptions, Linear Model, Statistics, Visual Guide">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Ambient backgrounds -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="ambient-glow glow-3"></div>
+
+    <header class="app-header">
+        <div class="logo">
+            <span class="logo-accent">F</span>-Testing
+        </div>
+        <nav class="nav-links">
+            <a href="#intro" class="nav-link active">Linear Model</a>
+            <a href="#playground" class="nav-link">Interactive Test</a>
+            <a href="#assumptions" class="nav-link">Assumptions</a>
+            <a href="#inflation" class="nav-link">t-Test Inflation</a>
+            <a href="#interview" class="nav-link">Interview Prep</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- Hero & Linear Model -->
+        <section id="intro" class="hero-section">
+            <div class="module-badge">Module 9: Design of Experiments</div>
+            <h1 class="gradient-text">One-Way ANOVA</h1>
+            <p class="hero-subtitle">
+                Move from dividing variance to testing hypotheses. Learn how the F-statistic compares experimental group signals against within-group noise to prove true effects.
+            </p>
+            
+            <div class="linear-model-showcase glass-panel">
+                <span class="showcase-title">The ANOVA Linear Model:</span>
+                <div class="equation-container">
+                    <span class="eq-term" data-term="y">$$Y_{ij}$$</span>
+                    <span class="eq-operator">=</span>
+                    <span class="eq-term" data-term="mu">$$\mu$$</span>
+                    <span class="eq-operator">+</span>
+                    <span class="eq-term" data-term="tau">$$\tau_j$$</span>
+                    <span class="eq-operator">+</span>
+                    <span class="eq-term" data-term="epsilon">$$\varepsilon_{ij}$$</span>
+                </div>
+                <div class="equation-labels">
+                    <div class="label-item" id="lbl-y">
+                        <span class="term-sym">$Y_{ij}$</span>
+                        <span class="term-text">Observation $i$ in group $j$</span>
+                    </div>
+                    <div class="label-item" id="lbl-mu">
+                        <span class="term-sym">$\mu$</span>
+                        <span class="term-text">Grand Mean (baseline overall)</span>
+                    </div>
+                    <div class="label-item" id="lbl-tau">
+                        <span class="term-sym">$\tau_j$</span>
+                        <span class="term-text">Treatment Effect ($\bar{y}_j - \mu$)</span>
+                    </div>
+                    <div class="label-item" id="lbl-epsilon">
+                        <span class="term-sym">$\varepsilon_{ij}$</span>
+                        <span class="term-text">Random Error / Residual ($y_{ij} - \bar{y}_j$)</span>
+                    </div>
+                </div>
+                <p class="hover-tip"><i class="fa-solid fa-lightbulb"></i> Hover over any equation term above to highlight its physical representation in the plot below.</p>
+            </div>
+        </section>
+
+        <!-- Interactive Playground & F-Test -->
+        <section id="playground" class="playground-section">
+            <div class="section-header">
+                <h2>1. Interactive Hypothesis Test</h2>
+                <p>Drag data points or group mean handles. Watch how the F-statistic moves along the F-distribution curve and crosses into the rejection region ($p < 0.05$).</p>
+            </div>
+
+            <div class="playground-grid">
+                <!-- Left: SVG Plot -->
+                <div class="workspace glass-panel">
+                    <div class="workspace-header">
+                        <span class="workspace-title"><i class="fa-solid fa-flask"></i> Data Playground</span>
+                        <div class="controls-row">
+                            <button id="btn-reset" class="secondary-btn">Reset Data</button>
+                        </div>
+                    </div>
+                    
+                    <div class="svg-container">
+                        <svg id="anova-svg" viewBox="0 0 800 420" preserveAspectRatio="xMidYMid meet">
+                            <!-- Filters -->
+                            <defs>
+                                <filter id="glow-effect" x="-20%" y="-20%" width="140%" height="140%">
+                                    <feGaussianBlur stdDeviation="5" result="blur" />
+                                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                </filter>
+                            </defs>
+                            
+                            <!-- Grid lines -->
+                            <g class="grid-lines"></g>
+                            
+                            <!-- Grand Mean (mu) -->
+                            <line id="line-grand-mean" x1="50" y1="210" x2="750" y2="210" stroke="var(--color-grand-mean)" stroke-dasharray="6,4" stroke-width="2" filter="url(#glow-effect)"></line>
+                            
+                            <!-- Connecting lines (treatment effects & residuals) -->
+                            <g class="treatment-effects-lines"></g>
+                            <g class="residuals-lines"></g>
+
+                            <!-- Group Means -->
+                            <g class="group-means-lines"></g>
+
+                            <!-- Data Points -->
+                            <g class="points-group"></g>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Right: F-Distribution Curve & p-Value -->
+                <div class="dashboard glass-panel">
+                    <div class="dashboard-header">
+                        <h3><i class="fa-solid fa-chart-line"></i> The F-Distribution</h3>
+                        <span class="df-badge" id="lbl-df">df = (2, 9)</span>
+                    </div>
+
+                    <!-- F-Distribution Canvas -->
+                    <div class="canvas-container">
+                        <canvas id="f-distribution-canvas" width="400" height="200"></canvas>
+                    </div>
+
+                    <!-- Live Test Metrics -->
+                    <div class="metrics-row">
+                        <div class="mini-metric">
+                            <span class="mini-lbl">F-Statistic</span>
+                            <span class="mini-val" id="lbl-f-val">0.00</span>
+                        </div>
+                        <div class="mini-metric">
+                            <span class="mini-lbl">Critical F (α=0.05)</span>
+                            <span class="mini-val text-error" id="lbl-f-crit">4.26</span>
+                        </div>
+                        <div class="mini-metric">
+                            <span class="mini-lbl">p-Value</span>
+                            <span class="mini-val" id="lbl-p-val">0.000</span>
+                        </div>
+                    </div>
+
+                    <!-- Hypothesis Decision Banner -->
+                    <div class="decision-banner" id="banner-decision">
+                        <div class="decision-icon"><i id="decision-icon-fa" class="fa-solid fa-triangle-exclamation"></i></div>
+                        <div class="decision-text">
+                            <h4 id="decision-title">Fail to Reject H₀</h4>
+                            <p id="decision-desc">The group means are not statistically different (p ≥ 0.05). Any differences are likely due to random error.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Assumptions Dashboard -->
+        <section id="assumptions" class="assumptions-section">
+            <div class="section-header">
+                <h2>2. Assumptions Diagnostics</h2>
+                <p>ANOVA relies on mathematical assumptions about the data. Drag points to skew distributions or unbalance variances and watch the live checkers respond.</p>
+            </div>
+
+            <div class="assumptions-grid">
+                <!-- Normality of Residuals -->
+                <div class="assumptions-card glass-panel" id="card-normality">
+                    <div class="assumptions-card-header">
+                        <div class="check-title">
+                            <h4>Normality of Residuals</h4>
+                            <span class="check-formula">$$\varepsilon_{ij} \sim N(0, \sigma^2)$$</span>
+                        </div>
+                        <div class="check-status status-pass" id="status-normality">Passed</div>
+                    </div>
+                    <p class="check-desc">Residuals (errors around group means) should be normally distributed. Below is the live residual distribution vs. standard Normal fit:</p>
+                    
+                    <div class="diagnostics-chart-container">
+                        <canvas id="residual-normality-canvas" width="360" height="150"></canvas>
+                    </div>
+                    <div class="diagnostic-readout" id="lbl-skewness">Skewness: 0.00 (Normal)</div>
+                </div>
+
+                <!-- Homoscedasticity (Equal Variances) -->
+                <div class="assumptions-card glass-panel" id="card-variance">
+                    <div class="assumptions-card-header">
+                        <div class="check-title">
+                            <h4>Homoscedasticity</h4>
+                            <span class="check-formula">$$\sigma_1^2 = \sigma_2^2 = \sigma_3^2$$</span>
+                        </div>
+                        <div class="check-status status-pass" id="status-variance">Passed</div>
+                    </div>
+                    <p class="check-desc">Variances within all groups should be equal. ANOVA is sensitive to unequal variances if group sizes differ.</p>
+                    
+                    <div class="variance-bars-container">
+                        <div class="variance-bar-row">
+                            <span class="group-lbl" style="color: var(--color-group-1)">Group 1</span>
+                            <div class="variance-track">
+                                <div id="var-bar-1" class="variance-fill bg-group-1" style="width: 30%;"></div>
+                            </div>
+                            <span class="group-val" id="lbl-var-1">0.00</span>
+                        </div>
+                        <div class="variance-bar-row">
+                            <span class="group-lbl" style="color: var(--color-group-2)">Group 2</span>
+                            <div class="variance-track">
+                                <div id="var-bar-2" class="variance-fill bg-group-2" style="width: 30%;"></div>
+                            </div>
+                            <span class="group-val" id="lbl-var-2">0.00</span>
+                        </div>
+                        <div class="variance-bar-row">
+                            <span class="group-lbl" style="color: var(--color-group-3)">Group 3</span>
+                            <div class="variance-track">
+                                <div id="var-bar-3" class="variance-fill bg-group-3" style="width: 30%;"></div>
+                            </div>
+                            <span class="group-val" id="lbl-var-3">0.00</span>
+                        </div>
+                    </div>
+                    <div class="diagnostic-readout" id="lbl-variance-ratio">Ratio Max/Min Var: 1.00 (Stable)</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- t-Test Inflation Simulator -->
+        <section id="inflation" class="inflation-section">
+            <div class="section-header">
+                <h2>3. Pairwise t-Tests vs. ANOVA</h2>
+                <p>Why do we use the F-statistic instead of running multiple t-tests? Adjust the slider to see how the probability of making a Type I error (false alarm) explodes.</p>
+            </div>
+
+            <div class="inflation-grid glass-panel">
+                <div class="inflation-controls">
+                    <h4>Family-wise Error Rate Simulator</h4>
+                    <p class="control-desc">Select the number of experimental groups ($k$) you want to compare:</p>
+                    <div class="slider-row">
+                        <input type="range" id="slider-groups" min="2" max="10" value="3" step="1" class="custom-slider">
+                        <div class="slider-val-box">
+                            <span class="slider-k" id="lbl-slider-k">3 Groups</span>
+                        </div>
+                    </div>
+                    
+                    <div class="inflation-calculations">
+                        <div class="calc-box">
+                            <span class="calc-lbl">Pairwise t-Tests Required:</span>
+                            <span class="calc-val text-indigo" id="lbl-tests-count">3 Tests</span>
+                            <span class="calc-formula">$$m = \frac{k(k-1)}{2}$$</span>
+                        </div>
+                        <div class="calc-box">
+                            <span class="calc-lbl">Compound Error Risk (α=0.05):</span>
+                            <span class="calc-val text-error" id="lbl-compound-risk">14.3%</span>
+                            <span class="calc-formula">$$\alpha_{\text{FW}} = 1 - (1 - \alpha)^m$$</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inflation-chart">
+                    <div class="gauge-header">
+                        <span>Family-Wise Type I Error Rate ($\alpha_{\text{FW}}$)</span>
+                        <span id="gauge-warning-tag" class="warning-badge safe">Controlled</span>
+                    </div>
+                    <div class="gauge-bar-outer">
+                        <div id="gauge-bar-fill" class="gauge-bar-fill" style="width: 14.3%;"></div>
+                    </div>
+                    
+                    <div class="gauge-scale">
+                        <span>0%</span>
+                        <span>25%</span>
+                        <span>50%</span>
+                        <span>75%</span>
+                        <span>100%</span>
+                    </div>
+                    
+                    <p class="gauge-explanation" id="lbl-gauge-explanation">
+                        Comparing 3 groups requires 3 pairwise t-tests. If each test is run at $\alpha = 0.05$, the probability of getting at least one false positive compounds to <strong>14.3%</strong>. ANOVA prevents this by running one single omnibus test at a fixed 5.0% error rate.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interview Prep Hub -->
+        <section id="interview" class="interview-section">
+            <div class="section-header">
+                <h2>4. Stats Interview Prep Hub</h2>
+                <p>Master the typical questions quantitative AI leaders, decision scientists, and model validation managers encounter during high-stakes statistics loops.</p>
+            </div>
+
+            <div class="accordion-container">
+                <!-- Question 1 -->
+                <div class="accordion-item glass-panel">
+                    <button class="accordion-header">
+                        <span class="q-number">Q1</span>
+                        <span class="q-title">Why use an F-test instead of multiple pairwise t-tests?</span>
+                        <span class="q-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>
+                            Running multiple t-tests inflates the **Family-wise Error Rate (FWER)**. The probability of committing at least one Type I error (false positive) across $m$ independent tests is:
+                            $$\alpha_{\text{FW}} = 1 - (1 - \alpha)^m$$
+                            If you compare 5 groups, you have $m = \frac{5(4)}{2} = 10$ pairwise comparisons. At $\alpha=0.05$, your compound risk of a false positive rises to $1 - (0.95)^{10} \approx 40.1\%$.
+                        </p>
+                        <p>
+                            The One-Way ANOVA F-test resolves this by running a **single, joint omnibus test** that compares the variance between groups against the variance within groups. It tests the global null hypothesis $H_0: \mu_1 = \mu_2 = \dots = \mu_k$ at a constant, controlled $\alpha$ level (typically 5%).
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="accordion-item glass-panel">
+                    <button class="accordion-header">
+                        <span class="q-number">Q2</span>
+                        <span class="q-title">What are the assumptions of One-Way ANOVA, and how robust is the test to their violations?</span>
+                        <span class="q-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>
+                            ANOVA has three primary assumptions:
+                        </p>
+                        <ol>
+                            <li><strong>Independence of Observations</strong>: Observations must be independent both within and between groups. This is the most critical assumption; violations cannot be corrected and invalidate the test.</li>
+                            <li><strong>Normality</strong>: The residuals must be normally distributed within each group ($\varepsilon_{ij} \sim N(0, \sigma^2)$). ANOVA is highly robust to violations of normality when sample sizes are moderate to large ($N \ge 15$ per group) due to the Central Limit Theorem.</li>
+                            <li><strong>Homoscedasticity</strong>: The variance of residuals must be equal across all groups. ANOVA is robust to unequal variances **only if** group sample sizes are equal. If sample sizes are unequal and variances differ significantly, the Type I error rate becomes heavily distorted (Welch's ANOVA must be used instead).</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="accordion-item glass-panel">
+                    <button class="accordion-header">
+                        <span class="q-number">Q3</span>
+                        <span class="q-title">What is the exact algebraic relationship between the t-statistic and the F-statistic?</span>
+                        <span class="q-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>
+                            For a comparison between exactly two groups ($k = 2$), the F-statistic from a One-Way ANOVA is mathematically equivalent to the square of the t-statistic from a two-sample pooled t-test:
+                            $$F = t^2$$
+                            Consequently, the p-value yielded by both tests will be identical. The F-test in this setting is simply a two-tailed version of the t-test.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="accordion-item glass-panel">
+                    <button class="accordion-header">
+                        <span class="q-number">Q4</span>
+                        <span class="q-title">If the omnibus F-test is significant, what does it conclude, and what is the next step?</span>
+                        <span class="q-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>
+                            A significant F-test only rejects the null hypothesis $H_0: \mu_1 = \mu_2 = \dots = \mu_k$, meaning **at least one group mean is significantly different** from another. It does not identify *which* specific groups differ, nor how many differences exist.
+                        </p>
+                        <p>
+                            To locate the differences, you must perform **post-hoc pairwise comparisons** (such as Tukey's HSD, Scheffé's test, or Bonferroni adjustments) which are designed to control the Family-wise Error Rate while conducting multiple comparisons.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <p>&copy; 2026 Interactive Design of Experiments Guide. Built for quantitative analysts and decision scientists.</p>
+    </footer>
+
+    <!-- App Script -->
+    <script src="app.js"></script>
+</body>
+</html>
