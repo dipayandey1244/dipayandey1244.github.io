@@ -45,15 +45,31 @@
         <section id="intro" class="hero-section">
             <h1 class="gradient-text">Variance Decomposition</h1>
             <p class="hero-subtitle">
-                Unlock the geometric intuition behind Analysis of Variance (ANOVA). Understand how we separate random noise from true effects by dissecting the sum of squared differences.
+                Understand how we separate random noise from true experimental signals by dissecting the sum of squared differences.
             </p>
+            
+            <div class="case-study-narrative glass-panel" style="margin-bottom: 2.5rem; text-align: left; max-width: 900px; margin-left: auto; margin-right: auto; border-left: 4px solid var(--color-treatment);">
+                <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--color-treatment);"><i class="fa-solid fa-book-open"></i> The ShopQuick Case Study</h3>
+                <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">
+                    Imagine you are a Decision Scientist at **ShopQuick**, an e-commerce giant. The Product Team has developed two new checkout designs to reduce checkout times. To test them, they run a randomized experiment with three groups:
+                </p>
+                <ul style="font-size: 0.88rem; color: var(--text-secondary); margin-left: 1.5rem; margin-bottom: 0.75rem; display: flex; flex-direction: column; gap: 4px;">
+                    <li><strong style="color: var(--color-group-1);">Layout A (Control)</strong>: The traditional multi-step checkout form.</li>
+                    <li><strong style="color: var(--color-group-2);">Layout B (One-Click)</strong>: A streamlined single-page form with predictive auto-fill.</li>
+                    <li><strong style="color: var(--color-group-3);">Layout C (Gamified)</strong>: A checkout layout featuring progress indicators and rewards.</li>
+                </ul>
+                <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6;">
+                    The users' checkout times vary. This total variation is **$SS_{\text{Total}}$**. To determine if the layouts are truly different, we decompose this variation into **$SS_{\text{Treatment}}$** (the signal: differences caused by the layouts) and **$SS_{\text{Error}}$** (the noise: user-to-user differences due to typing speeds or connection rates).
+                </p>
+            </div>
+
             <div class="equation-showcase glass-panel">
                 <span class="eq-label">The Fundamental Identity of ANOVA:</span>
                 <div class="main-equation">
                     $$SS_{\text{Total}} = SS_{\text{Treatment}} + SS_{\text{Error}}$$
                 </div>
                 <div class="eq-explanation">
-                    The total variation in your data ($SS_{\text{Total}}$) is decomposed into variation due to treatment differences ($SS_{\text{Treatment}}$) and variation due to random error/within-group noise ($SS_{\text{Error}}$).
+                    The total variation in checkout times ($SS_{\text{Total}}$) equals the variance between layout designs ($SS_{\text{Treatment}}$) plus the random user-to-user noise within the layouts ($SS_{\text{Error}}$).
                 </div>
             </div>
         </section>
@@ -141,27 +157,27 @@
                         </div>
                         <div class="metric-value" id="val-ss-total">0.00</div>
                         <div class="metric-formula">$$SS_{\text{Total}} = \sum (y_{ij} - \bar{y})^2$$</div>
-                        <p class="metric-desc">The total squared distance from every data point to the global grand mean line.</p>
+                        <p class="metric-desc">The total squared distance from every user's checkout time to the overall average checkout time (Grand Mean).</p>
                     </div>
 
                     <div class="metric-card treatment" id="card-treatment">
                         <div class="metric-header">
                             <span class="metric-title">Treatment Sum of Squares ($SS_{\text{Treatment}}$)</span>
-                            <span class="metric-badge">Between-Group</span>
+                            <span class="metric-badge">Between-Group (Signal)</span>
                         </div>
                         <div class="metric-value" id="val-ss-treatment">0.00</div>
                         <div class="metric-formula">$$SS_{\text{Treatment}} = \sum n_j (\bar{y}_j - \bar{y})^2$$</div>
-                        <p class="metric-desc">Variation due to differences <em>between</em> the group averages and the grand mean (Signal).</p>
+                        <p class="metric-desc">Variation in checkout times caused specifically by differences <em>between</em> the layout design averages and the overall grand mean (Signal).</p>
                     </div>
 
                     <div class="metric-card error" id="card-error">
                         <div class="metric-header">
                             <span class="metric-title">Error Sum of Squares ($SS_{\text{Error}}$)</span>
-                            <span class="metric-badge">Within-Group</span>
+                            <span class="metric-badge">Within-Group (Noise)</span>
                         </div>
                         <div class="metric-value" id="val-ss-error">0.00</div>
                         <div class="metric-formula">$$SS_{\text{Error}} = \sum (y_{ij} - \bar{y}_j)^2$$</div>
-                        <p class="metric-desc">Variation <em>within</em> each group. Unexplained differences around their own group means (Noise).</p>
+                        <p class="metric-desc">Variation <em>within</em> each checkout group. Unexplained user-to-user differences around their respective design averages (Noise).</p>
                     </div>
 
                     <!-- Live Equivalence Bar -->

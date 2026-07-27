@@ -53,6 +53,16 @@
                 Move from dividing variance to testing hypotheses. Learn how the F-statistic compares experimental group signals against within-group noise to prove true effects.
             </p>
             
+            <div class="case-study-narrative glass-panel" style="margin-bottom: 2.5rem; text-align: left; max-width: 900px; margin-left: auto; margin-right: auto; border-left: 4px solid var(--color-treatment);">
+                <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--color-treatment);"><i class="fa-solid fa-book-open"></i> ShopQuick Case Study (Continued)</h3>
+                <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">
+                    Having decomposed our variance, we now perform a formal hypothesis test. The Product Team wants to prove that **at least one checkout layout is significantly faster than the others**. 
+                </p>
+                <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6;">
+                    The **One-Way ANOVA F-test** answers this by comparing the **between-design signal** (Treatment Mean Square) to the **user-to-user noise** (Error Mean Square). If the ratio ($F$) is sufficiently large, we reject the null hypothesis and conclude that the layout designs indeed perform differently.
+                </p>
+            </div>
+            
             <div class="linear-model-showcase glass-panel">
                 <span class="showcase-title">The ANOVA Linear Model:</span>
                 <div class="equation-container">
@@ -67,19 +77,19 @@
                 <div class="equation-labels">
                     <div class="label-item" id="lbl-y">
                         <span class="term-sym">$Y_{ij}$</span>
-                        <span class="term-text">Observation $i$ in group $j$</span>
+                        <span class="term-text">A user's checkout time (in seconds).</span>
                     </div>
                     <div class="label-item" id="lbl-mu">
                         <span class="term-sym">$\mu$</span>
-                        <span class="term-text">Grand Mean (baseline overall)</span>
+                        <span class="term-text">Overall average checkout time across all users.</span>
                     </div>
                     <div class="label-item" id="lbl-tau">
                         <span class="term-sym">$\tau_j$</span>
-                        <span class="term-text">Treatment Effect ($\bar{y}_j - \mu$)</span>
+                        <span class="term-text">The effect of Checkout Layout $j$ ($\bar{y}_j - \mu$). A faster layout yields a negative effect!</span>
                     </div>
                     <div class="label-item" id="lbl-epsilon">
                         <span class="term-sym">$\varepsilon_{ij}$</span>
-                        <span class="term-text">Random Error / Residual ($y_{ij} - \bar{y}_j$)</span>
+                        <span class="term-text">Individual user noise (checkout speed, connection lag) around their design average.</span>
                     </div>
                 </div>
                 <p class="hover-tip"><i class="fa-solid fa-lightbulb"></i> Hover over any equation term above to highlight its physical representation in the plot below.</p>

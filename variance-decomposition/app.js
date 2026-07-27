@@ -45,6 +45,11 @@ const STATE = {
 // Colors for branding
 const GROUP_COLORS = ['var(--color-group-1)', 'var(--color-group-2)', 'var(--color-group-3)'];
 const GROUP_COLOR_GLOWS = ['rgba(6, 182, 212, 0.4)', 'rgba(245, 158, 11, 0.4)', 'rgba(236, 72, 153, 0.4)'];
+const GROUP_NAMES = [
+    "Layout A (Multi-Step)",
+    "Layout B (One-Click)",
+    "Layout C (Gamified)"
+];
 
 // Copy of default points for resetting
 const DEFAULT_POINTS = JSON.parse(JSON.stringify(STATE.points));
@@ -207,7 +212,7 @@ function updateVisuals() {
         text.setAttribute('fill', color);
         text.setAttribute('font-size', '11');
         text.setAttribute('font-weight', '600');
-        text.textContent = `Group Mean y̅${g+1} = ${STATE.groupMeans[g].toFixed(1)}`;
+        text.textContent = `${GROUP_NAMES[g]} Mean = ${STATE.groupMeans[g].toFixed(1)}s`;
         groupMeansLayer.appendChild(text);
     }
     
