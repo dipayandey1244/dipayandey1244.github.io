@@ -3,160 +3,769 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Northstar Financial — Lakehouse Operations Control Center</title>
+<title>Modus AI — Experimentation & Decision Infrastructure for GenAI Systems</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #090a0f;
-    --surface-0: #0f111a;
-    --surface-1: #131722;
-    --surface-2: #1c2130;
-    --text-primary: #f4f0ea;
-    --text-secondary: #b0a89f;
-    --text-muted: #7c756c;
-    --border: rgba(255,255,255,0.06);
-    --border-strong: rgba(255,255,255,0.12);
-    --bg-success: #173404;
-    --text-success: #c0dd97;
-    --bg-warning: #412402;
-    --text-warning: #fac775;
-    --bg-danger: #501313;
-    --text-danger: #f7c1c1;
-    --radius: 8px;
-    --orange: #ff5630; /* Databricks Coral */
-    --accent: #2a78d6;
+    --bg: #07090e;
+    --surface-0: #0d111a;
+    --surface-1: #131824;
+    --surface-2: #1a2133;
+    --surface-3: #242d45;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --border: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.16);
+    --orange: #ff5630;
+    --orange-glow: rgba(255, 86, 48, 0.25);
+    --purple: #8b5cf6;
+    --purple-glow: rgba(139, 92, 246, 0.25);
+    --emerald: #10b981;
+    --emerald-glow: rgba(16, 185, 129, 0.25);
+    --cyan: #06b6d4;
+    --cyan-glow: rgba(6, 182, 212, 0.25);
+    --red: #ef4444;
+    --red-glow: rgba(239, 68, 68, 0.25);
+    --amber: #f59e0b;
+    --radius-sm: 6px;
+    --radius: 10px;
+    --radius-lg: 14px;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'Fira Code', 'Cascadia Code', SFMono-Regular, Consolas, monospace;
   }
 
-  html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif; background: var(--bg); color: var(--text-primary); }
+  html, body {
+    height: 100%;
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--text-primary);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
 
-  .app { display: flex; height: 100vh; overflow: hidden; position: relative; }
+  .app {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+  }
 
   /* SIDEBAR */
-  .sidebar { width: 220px; min-width: 220px; background: var(--surface-0); border-right: 0.5px solid var(--border); display: flex; flex-direction: column; padding: 0; z-index: 10; }
-  .sidebar-logo { display: flex; align-items: center; justify-content: space-between; padding: 18px 16px; border-bottom: 0.5px solid var(--border); }
-  .logo-mark { width: 26px; height: 26px; background: var(--orange); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .logo-mark svg { width: 15px; height: 15px; fill: white; }
-  .logo-text { font-size: 13.5px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.3px; }
-  .logo-sub { font-size: 9px; color: var(--text-muted); margin-top: 1px; }
+  .sidebar {
+    width: 260px;
+    min-width: 260px;
+    background: var(--surface-0);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    z-index: 20;
+  }
 
-  .sidebar-nav { padding: 12px 8px; flex: 1; overflow-y: auto; }
-  .nav-section { margin-bottom: 14px; }
-  .nav-section-label { font-size: 9.5px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.07em; padding: 0 8px 6px; }
-  .nav-item { display: flex; align-items: center; gap: 9px; padding: 7px 8px; border-radius: 6px; font-size: 12px; color: var(--text-secondary); cursor: pointer; transition: background 0.1s, color 0.1s; user-select: none; }
-  .nav-item:hover { background: var(--surface-1); color: var(--text-primary); }
-  .nav-item.active { background: rgba(255,86,48,0.1); color: var(--orange); font-weight: 500; }
-  .nav-item i { font-size: 14px; }
+  .sidebar-header {
+    padding: 18px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 
-  .sidebar-footer { padding: 12px 8px; border-top: 0.5px solid var(--border); }
-  .user-pill { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 6px; cursor: pointer; }
-  .user-pill:hover { background: var(--surface-1); }
-  .user-avatar { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,86,48,0.15); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: var(--orange); }
-  .user-name { font-size: 11.5px; font-weight: 500; color: var(--text-primary); }
-  .user-role { font-size: 9px; color: var(--text-muted); }
+  .logo-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 
-  /* MAIN */
-  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--orange), #ff7a59);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 15px var(--orange-glow);
+  }
 
-  .topbar { height: 48px; min-height: 48px; background: var(--surface-1); border-bottom: 0.5px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; }
-  .topbar-left { display: flex; align-items: center; gap: 14px; }
-  .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--text-muted); }
-  .breadcrumb span { color: var(--text-primary); font-weight: 500; }
-  .breadcrumb i { font-size: 11px; }
-  .live-pill { display: flex; align-items: center; gap: 5px; background: var(--bg-success); border: 0.5px solid rgba(63,166,84,0.3); border-radius: 20px; padding: 3px 10px; font-size: 10px; color: var(--text-success); font-weight: 500; }
-  .live-dot { width: 6px; height: 6px; border-radius: 50%; background: #3fa654; animation: blink 2s infinite; }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .logo-icon i {
+    font-size: 18px;
+    color: #fff;
+  }
 
-  .topbar-right { display: flex; align-items: center; gap: 8px; }
-  .time-btn { font-size: 11px; color: var(--text-secondary); background: var(--surface-2); border: 0.5px solid var(--border-strong); border-radius: 6px; padding: 5px 10px; cursor: pointer; display: flex; align-items: center; gap: 4px; }
-  .time-btn i { font-size: 12px; }
-  .run-btn { font-size: 11px; font-weight: 500; background: var(--orange); color: white; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: opacity 0.15s; }
-  .run-btn:hover { opacity: 0.88; }
+  .logo-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: var(--text-primary);
+  }
+
+  .logo-sub {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    padding: 16px 10px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .nav-group-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0 10px 6px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+    border: 1px solid transparent;
+  }
+
+  .nav-item:hover {
+    background: var(--surface-1);
+    color: var(--text-primary);
+  }
+
+  .nav-item.active {
+    background: rgba(255, 86, 48, 0.12);
+    color: var(--orange);
+    border-color: rgba(255, 86, 48, 0.3);
+    font-weight: 600;
+  }
+
+  .nav-item.active-tour {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(6, 182, 212, 0.2));
+    color: #c084fc;
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 0 12px rgba(139, 92, 246, 0.2);
+  }
+
+  .nav-item i {
+    font-size: 16px;
+  }
+
+  .nav-badge {
+    margin-left: auto;
+    font-size: 9.5px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.08);
+    color: var(--text-muted);
+  }
+
+  .sidebar-footer {
+    padding: 14px 12px;
+    border-top: 1px solid var(--border);
+    background: var(--surface-0);
+  }
+
+  .engine-status-card {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .status-dot-pulse {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--emerald);
+    box-shadow: 0 0 8px var(--emerald);
+    animation: pulse-ring 2s infinite;
+  }
+
+  @keyframes pulse-ring {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+  }
+
+  /* MAIN AREA */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--bg);
+  }
+
+  .topbar {
+    height: 54px;
+    min-height: 54px;
+    background: var(--surface-0);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    z-index: 10;
+  }
+
+  .topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .breadcrumb {
+    font-size: 13px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+  }
+
+  .breadcrumb-active {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: 1px solid transparent;
+    user-select: none;
+  }
+
+  .btn-primary {
+    background: var(--orange);
+    color: #fff;
+    box-shadow: 0 2px 8px var(--orange-glow);
+  }
+
+  .btn-primary:hover {
+    background: #ff6845;
+    transform: translateY(-1px);
+  }
+
+  .btn-purple {
+    background: linear-gradient(135deg, var(--purple), #a855f7);
+    color: #fff;
+    box-shadow: 0 2px 10px var(--purple-glow);
+  }
+
+  .btn-purple:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: var(--surface-2);
+    color: var(--text-secondary);
+    border-color: var(--border);
+  }
+
+  .btn-secondary:hover {
+    background: var(--surface-3);
+    color: var(--text-primary);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text-secondary);
+    border-color: var(--border-strong);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--orange);
+    color: var(--orange);
+  }
 
   /* CONTENT PANELS */
-  .content { flex: 1; overflow-y: auto; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; }
-  
-  /* KPI ROW */
-  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-  .kpi-card { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 10px; padding: 14px 16px; }
-  .kpi-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
-  .kpi-value { font-size: 24px; font-weight: 500; color: var(--text-primary); line-height: 1; letter-spacing: -0.5px; }
-  .kpi-delta { font-size: 10.5px; margin-top: 5px; display: flex; align-items: center; gap: 3px; }
-  .delta-up { color: var(--text-success); }
-  .delta-down { color: var(--text-danger); }
+  .content-panel {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
 
-  /* CHARTS ROW */
-  .charts-row { display: grid; grid-template-columns: 1.7fr 1fr; gap: 12px; }
-  .panel { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 10px; padding: 16px; display: flex; flex-direction: column; }
-  .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-  .panel-title { font-size: 12px; font-weight: 600; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.5px; }
-  .panel-legend { display: flex; gap: 14px; align-items: center; }
-  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--text-muted); }
-  .legend-dot { width: 8px; height: 8px; border-radius: 2px; }
-  .panel-action { font-size: 11px; color: var(--text-accent); cursor: pointer; font-weight: 500; }
-  .panel-action:hover { text-decoration: underline; }
-  .chart-wrap { position: relative; height: 160px; width: 100%; }
+  /* ANIMATED STEP TOUR BANNER / CONTAINER */
+  .tour-hero-card {
+    background: linear-gradient(135deg, rgba(26, 33, 51, 0.9), rgba(13, 17, 26, 0.95));
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
 
-  /* BOTTOM ROW */
-  .bottom-row { display: grid; grid-template-columns: 1.2fr 1fr; gap: 12px; }
+  .tour-hero-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
 
-  /* TRACES */
-  .trace-list { display: flex; flex-direction: column; gap: 7px; }
-  .trace-item { display: flex; align-items: flex-start; gap: 10px; padding: 9px 11px; border-radius: 8px; border: 0.5px solid var(--border); background: var(--surface-1); cursor: pointer; transition: border-color 0.12s; }
-  .trace-item:hover { border-color: var(--border-strong); }
-  .trace-badge { font-size: 9px; font-weight: 600; padding: 2px 7px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; margin-top: 1px; }
-  .badge-pass { background: var(--bg-success); color: var(--text-success); }
-  .badge-warn { background: var(--bg-warning); color: var(--text-warning); }
-  .badge-fail { background: var(--bg-danger); color: var(--text-danger); }
-  .trace-body { flex: 1; min-width: 0; }
-  .trace-q { font-size: 11.5px; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
-  .trace-meta { font-size: 9.5px; color: var(--text-muted); margin-top: 3px; display: flex; gap: 10px; }
-  .trace-score { margin-left: auto; font-size: 12px; font-weight: 500; color: var(--text-primary); flex-shrink: 0; padding-top: 1px; }
+  .tour-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
 
-  /* SYSTEM TABLES */
-  .system-table { width: 100%; border-collapse: collapse; }
-  .system-table th { font-size: 9.5px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; padding: 0 0 10px; text-align: left; }
-  .system-table th:last-child { text-align: right; }
-  .system-table tr + tr td { border-top: 0.5px solid var(--border); }
-  .system-table td { font-size: 11px; padding: 8px 0; color: var(--text-primary); }
-  .system-table td:last-child { text-align: right; }
+  .tour-title-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
 
-  /* SLIDE OVER DRAWER FOR TRACE DETAILS */
+  .tour-badge {
+    background: linear-gradient(135deg, var(--purple), var(--cyan));
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .step-stepper {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .step-tab {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: relative;
+  }
+
+  .step-tab:hover {
+    border-color: var(--purple);
+    background: var(--surface-2);
+  }
+
+  .step-tab.active {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(6, 182, 212, 0.15));
+    border-color: var(--purple);
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
+  }
+
+  .step-num {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--purple);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .step-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.3;
+  }
+
+  .step-progress-line {
+    height: 3px;
+    background: var(--surface-3);
+    border-radius: 2px;
+    margin-top: 6px;
+    overflow: hidden;
+  }
+
+  .step-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--purple), var(--cyan));
+    transition: width 0.3s ease;
+  }
+
+  .step-tab.active .step-progress-fill {
+    width: 100%;
+  }
+
+  /* CANVAS ANIMATION WINDOW */
+  .animation-viewport {
+    position: relative;
+    height: 280px;
+    background: #05070a;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #tourCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .animation-overlay-controls {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(13, 17, 26, 0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 20px;
+    z-index: 5;
+  }
+
+  .anim-ctrl-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    transition: all 0.15s;
+  }
+
+  .anim-ctrl-btn:hover {
+    background: var(--surface-2);
+    color: var(--text-primary);
+  }
+
+  /* GRID LAYOUTS */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+
+  .grid-2-1 {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+  }
+
+  .grid-1-2 {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 16px;
+  }
+
+  /* PANELS & CARDS */
+  .card {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title i {
+    color: var(--orange);
+  }
+
+  .card-subtitle {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  /* KPI CARDS */
+  .kpi-card {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .kpi-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--orange);
+  }
+
+  .kpi-card.purple::after { background: var(--purple); }
+  .kpi-card.emerald::after { background: var(--emerald); }
+  .kpi-card.cyan::after { background: var(--cyan); }
+
+  .kpi-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .kpi-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+  }
+
+  .kpi-sub {
+    font-size: 11px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .text-emerald { color: var(--emerald); }
+  .text-orange { color: var(--orange); }
+  .text-purple { color: var(--purple); }
+  .text-cyan { color: var(--cyan); }
+  .text-red { color: var(--red); }
+
+  /* CODE BOX & MONOSPACE OUTPUT */
+  .code-block {
+    background: #05070a;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #a7f3d0;
+    line-height: 1.5;
+    overflow-x: auto;
+    white-space: pre-wrap;
+  }
+
+  /* METRIC TABLE */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .data-table th {
+    text-align: left;
+    padding: 8px 10px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border-strong);
+  }
+
+  .data-table td {
+    padding: 10px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+  }
+
+  .data-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .data-table tr:hover td {
+    background: rgba(255,255,255,0.02);
+    color: var(--text-primary);
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 10.5px;
+    font-weight: 600;
+  }
+
+  .pill-success { background: rgba(16, 185, 129, 0.15); color: var(--emerald); border: 1px solid rgba(16, 185, 129, 0.3); }
+  .pill-danger { background: rgba(239, 68, 68, 0.15); color: var(--red); border: 1px solid rgba(239, 68, 68, 0.3); }
+  .pill-warning { background: rgba(245, 158, 11, 0.15); color: var(--amber); border: 1px solid rgba(245, 158, 11, 0.3); }
+  .pill-info { background: rgba(6, 182, 212, 0.15); color: var(--cyan); border: 1px solid rgba(6, 182, 212, 0.3); }
+
+  /* FORM INPUTS */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .form-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .form-control {
+    background: var(--surface-0);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+    color: var(--text-primary);
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.15s;
+    font-family: inherit;
+  }
+
+  .form-control:focus {
+    border-color: var(--orange);
+  }
+
+  /* MODAL DRAWER */
   .drawer {
     position: fixed;
     top: 0;
-    right: -460px;
-    width: 440px;
+    right: -450px;
+    width: 420px;
     height: 100%;
-    background: var(--surface-2);
-    border-left: 0.5px solid var(--border);
-    box-shadow: -8px 0 24px rgba(0,0,0,0.4);
-    transition: right 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    background: var(--surface-0);
+    border-left: 1px solid var(--border-strong);
+    box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+    transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: 100;
     display: flex;
     flex-direction: column;
-    padding: 20px;
+    padding: 24px;
   }
-  .drawer.open { right: 0; }
-  .drawer-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 0.5px solid var(--border); padding-bottom: 12px; }
-  .drawer-title { font-size: 13px; font-weight: 600; }
-  .drawer-close { font-size: 18px; cursor: pointer; color: var(--text-muted); border: none; background: none; }
-  .drawer-close:hover { color: var(--text-primary); }
-  .drawer-body { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; font-family: monospace; font-size: 10.5px; }
 
-  /* FORM CONTROLS */
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
-  .form-group label { font-size: 11px; font-weight: 500; color: var(--text-secondary); }
-  .form-select, .form-input, .form-textarea { padding: 8px 10px; border: 0.5px solid var(--border-strong); background: var(--surface-1); color: var(--text-primary); border-radius: 6px; font-size: 11.5px; outline: none; }
-  .form-select:focus, .form-input:focus, .form-textarea:focus { border-color: var(--orange); }
-  
-  .code-view { background: #07080b; color: #a9deb4; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 10px; overflow-x: auto; border: 0.5px solid var(--border); line-height: 1.4; }
-  .info-box { padding: 12px; border-radius: 6px; border: 0.5px solid var(--border); font-size: 11px; line-height: 1.5; }
-  .info-box-success { background: var(--bg-success); color: var(--text-success); border-color: rgba(63,166,84,0.2); }
-  .info-box-warning { background: var(--bg-warning); color: var(--text-warning); border-color: rgba(250,238,218,0.2); }
+  .drawer.open { right: 0; }
+
+  .drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .drawer-title {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  /* RADAR / JUDGE SCORE BARS */
+  .score-bar-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .score-bar-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .score-bar-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+  }
+
+  .score-bar-track {
+    height: 6px;
+    background: var(--surface-0);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
 </style>
 </head>
 <body>
@@ -164,1214 +773,1222 @@
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
-    <div class="sidebar-logo">
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <div class="logo-mark">
-          <svg viewBox="0 0 20 20"><path d="M10 2L2 7l8 5 8-5-8-5zM2 13l8 5 8-5M2 10l8 5 8-5" stroke="white" stroke-width="1.5" fill="none" stroke-linejoin="round"/></svg>
-        </div>
+    <div class="sidebar-header">
+      <div class="logo-box">
+        <div class="logo-icon"><i class="ti ti-flame"></i></div>
         <div>
-          <div class="logo-text">Modus AI</div>
-          <div class="logo-sub">Lakehouse Control Center</div>
+          <div class="logo-title">Modus AI</div>
+          <div class="logo-sub">GenAI Experimentation</div>
         </div>
       </div>
-      <button onclick="openSettingsModal()" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:14px; display:flex;" title="API Configuration"><i class="ti ti-settings"></i></button>
+      <button onclick="openSettings()" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:16px;" title="API Configuration">
+        <i class="ti ti-settings"></i>
+      </button>
     </div>
 
     <nav class="sidebar-nav">
-      <div class="nav-section">
-        <div class="nav-section-label">Lakehouse Monitors</div>
-        <div class="nav-item active" data-tab="overview"><i class="ti ti-layout-dashboard"></i> Telemetry Overview</div>
-        <div class="nav-item" data-tab="sql-console"><i class="ti ti-terminal"></i> Lakehouse SQL Console</div>
-        <div class="nav-item" data-tab="catalog"><i class="ti ti-database"></i> Unity Catalog Lineage</div>
+      <div>
+        <div class="nav-group-label">Interactive Step Tour</div>
+        <div class="nav-item active-tour" onclick="switchTab('tour')">
+          <i class="ti ti-player-play"></i> Step-by-Step Tour
+          <span class="nav-badge">Animated</span>
+        </div>
       </div>
-      <div class="nav-section">
-        <div class="nav-section-label">Operations &amp; ML</div>
-        <div class="nav-item" data-tab="incident-analyzer"><i class="ti ti-alert-triangle"></i> Root Cause Analyzer</div>
-        <div class="nav-item" data-tab="mlflow-experiments"><i class="ti ti-flask"></i> MLflow Experiments</div>
+
+      <div>
+        <div class="nav-group-label">Architecture Pillars</div>
+        <div class="nav-item active" onclick="switchTab('p1-eval')">
+          <i class="ti ti-scale"></i> 1. Controlled Exp Harness
+        </div>
+        <div class="nav-item" onclick="switchTab('p2-telemetry')">
+          <i class="ti ti-activity"></i> 2. Guardrail Telemetry DLT
+        </div>
+        <div class="nav-item" onclick="switchTab('p3-variant')">
+          <i class="ti ti-chart-dots"></i> 3. Retrieval Benchmarking
+        </div>
+        <div class="nav-item" onclick="switchTab('p4-governance')">
+          <i class="ti ti-shield-lock"></i> 4. Automation &amp; Unity Catalog
+        </div>
       </div>
-      <div class="nav-section">
-        <div class="nav-section-label">GenAI Engineering</div>
-        <div class="nav-item" data-tab="ai-copilot"><i class="ti ti-cpu"></i> LangGraph Co-pilot</div>
-        <div class="nav-item" data-tab="pipelines"><i class="ti ti-chart-line"></i> Medallion Ingestion</div>
-        <div class="nav-item" data-tab="deliverables"><i class="ti ti-file-text"></i> PS Deliverables</div>
+
+      <div>
+        <div class="nav-group-label">Developer Workspaces</div>
+        <div class="nav-item" onclick="switchTab('sql-console')">
+          <i class="ti ti-database-search"></i> Unity Lineage &amp; SQL
+        </div>
+        <div class="nav-item" onclick="switchTab('gateway-api')">
+          <i class="ti ti-api"></i> FastAPI Gateway Monitor
+        </div>
+        <div class="nav-item" onclick="switchTab('whitepaper')">
+          <i class="ti ti-file-text"></i> System Specs Whitepaper
+        </div>
       </div>
     </nav>
 
     <div class="sidebar-footer">
-      <div class="user-pill" onclick="openSettingsModal()">
-        <div class="user-avatar">FDE</div>
+      <div class="engine-status-card">
+        <div class="status-dot-pulse"></div>
         <div>
-          <div class="user-name">Professional Services</div>
-          <div class="user-role">Principal Forward Deployed Engineer</div>
+          <div style="font-size: 11px; font-weight: 600;">Unity Catalog Engine</div>
+          <div style="font-size: 9.5px; color: var(--text-muted);">Databricks Serverless Active</div>
         </div>
       </div>
     </div>
   </aside>
 
-  <!-- MAIN -->
-  <div class="main">
-    <div class="topbar">
+  <!-- MAIN VIEW -->
+  <main class="main">
+    <!-- TOPBAR -->
+    <header class="topbar">
       <div class="topbar-left">
         <div class="breadcrumb">
-          modus-ai <i class="ti ti-chevron-right"></i> <span id="breadcrumb-tab">telemetry overview</span>
+          <span>modus-ai</span>
+          <i class="ti ti-chevron-right" style="font-size:10px;"></i>
+          <span class="breadcrumb-active" id="breadcrumb-title">Controlled Experimentation Harness</span>
         </div>
-        <div class="live-pill"><div class="live-dot"></div> Streaming</div>
       </div>
-      <div class="topbar-right">
-        <div class="time-btn"><i class="ti ti-calendar"></i> Active Clusters <i class="ti ti-chevron-down"></i></div>
-        <button class="run-btn" id="topbar-run-btn" onclick="switchTab('ai-copilot')"><i class="ti ti-cpu"></i> AI Co-pilot</button>
+      <div class="topbar-actions">
+        <button class="btn btn-purple" onclick="switchTab('tour')">
+          <i class="ti ti-sparkles"></i> Launch Animated Tour
+        </button>
+        <button class="btn btn-outline" onclick="openSettings()">
+          <i class="ti ti-key"></i> LLM API Key
+        </button>
+      </div>
+    </header>
+
+    <!-- ================================================================= -->
+    <!-- TAB 0: INTERACTIVE STEP-BY-STEP ANIMATED TOUR -->
+    <!-- ================================================================= -->
+    <div class="content-panel" id="tab-tour">
+      <div class="tour-hero-card">
+        <div class="tour-header">
+          <div class="tour-title-group">
+            <span class="tour-badge"><i class="ti ti-player-play"></i> Interactive Step Visualizer</span>
+            <h2 style="font-size: 16px; font-weight: 700;">Modus AI Decision &amp; Experimentation Infrastructure</h2>
+          </div>
+          <div style="font-size: 11.5px; color: var(--text-secondary);">
+            Click any step to inspect high-quality visual animations of each stage.
+          </div>
+        </div>
+
+        <!-- STEPPER TABS -->
+        <div class="step-stepper">
+          <div class="step-tab active" id="tab-step-1" onclick="selectTourStep(1)">
+            <div class="step-num">Step 1</div>
+            <div class="step-name">Treatment vs Control Judge Council</div>
+            <div class="step-progress-line"><div class="step-progress-fill"></div></div>
+          </div>
+          <div class="step-tab" id="tab-step-2" onclick="selectTourStep(2)">
+            <div class="step-num">Step 2</div>
+            <div class="step-name">DLT Telemetry Guardrail Dashboard</div>
+            <div class="step-progress-line"><div class="step-progress-fill"></div></div>
+          </div>
+          <div class="step-tab" id="tab-step-3" onclick="selectTourStep(3)">
+            <div class="step-num">Step 3</div>
+            <div class="step-name">Retrieval Benchmarking &amp; Pareto Frontier</div>
+            <div class="step-progress-line"><div class="step-progress-fill"></div></div>
+          </div>
+          <div class="step-tab" id="tab-step-4" onclick="selectTourStep(4)">
+            <div class="step-num">Step 4</div>
+            <div class="step-name">Auto Drift Rollback &amp; Unity Catalog</div>
+            <div class="step-progress-line"><div class="step-progress-fill"></div></div>
+          </div>
+        </div>
+
+        <!-- ANIMATION CANVAS VIEWPORT -->
+        <div class="animation-viewport">
+          <canvas id="tourCanvas"></canvas>
+          <div class="animation-overlay-controls">
+            <button class="anim-ctrl-btn" onclick="prevTourStep()" title="Previous Step"><i class="ti ti-chevron-left"></i></button>
+            <button class="anim-ctrl-btn" id="playPauseBtn" onclick="toggleTourPlay()" title="Play / Pause"><i class="ti ti-pause"></i></button>
+            <button class="anim-ctrl-btn" onclick="nextTourStep()" title="Next Step"><i class="ti ti-chevron-right"></i></button>
+            <span style="font-size: 10px; color: var(--text-muted); padding: 0 4px;" id="tourStepIndicator">Step 1 of 4</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP NARRATIVE BREAKDOWN CARD -->
+      <div class="card" id="tourStepDescriptionCard">
+        <!-- Dynamically rendered step explanation -->
       </div>
     </div>
 
-    <!-- 1. OVERVIEW TAB -->
-    <div class="content" id="tab-overview">
-      <div id="api-key-banner" class="info-box info-box-warning" style="margin-bottom: 4px; display:none;">
-        <i class="ti ti-bulb"></i> <strong>Serverless Lakehouse Gateway</strong>: Add a <strong>Groq API Key</strong> in sidebar settings to enable live agent generation. Running in simulation mode.
+    <!-- ================================================================= -->
+    <!-- TAB 1: CONTROLLED EXPERIMENTATION FOR SHIP DECISIONS -->
+    <!-- ================================================================= -->
+    <div class="content-panel" id="tab-p1-eval" style="display:none;">
+      <div class="grid-4">
+        <div class="kpi-card orange">
+          <div class="kpi-label">Eval Pipeline Status</div>
+          <div class="kpi-value text-orange">SHIP READY</div>
+          <div class="kpi-sub"><i class="ti ti-check text-emerald"></i> Statistically significant gain (p &lt; 0.01)</div>
+        </div>
+        <div class="kpi-card purple">
+          <div class="kpi-label">Judge Council Faithfulness</div>
+          <div class="kpi-value text-purple">0.962</div>
+          <div class="kpi-sub"><i class="ti ti-trending-up text-emerald"></i> +0.084 over Control v1.2</div>
+        </div>
+        <div class="kpi-card emerald">
+          <div class="kpi-label">Context Recall</div>
+          <div class="kpi-value text-emerald">0.941</div>
+          <div class="kpi-sub"><i class="ti ti-trending-up text-emerald"></i> +0.112 over Control v1.2</div>
+        </div>
+        <div class="kpi-card cyan">
+          <div class="kpi-label">Coherence Index</div>
+          <div class="kpi-value text-cyan">0.958</div>
+          <div class="kpi-sub"><i class="ti ti-trending-up text-emerald"></i> +0.065 over Control v1.2</div>
+        </div>
       </div>
-      
-      <!-- KPIs -->
-      <div class="kpi-row">
-        <div class="kpi-card">
-          <div class="kpi-label">Ingested Data (Delta)</div>
-          <div class="kpi-value">512.4M rows</div>
-          <div class="kpi-delta delta-up"><i class="ti ti-trending-up" style="font-size:12px"></i> +14.2M rows/hr</div>
+
+      <div class="grid-2-1">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title"><i class="ti ti-scale"></i> Treatment vs Control Evaluation Harness</div>
+              <div class="card-subtitle">Scores candidate RAG pipeline changes against a held-out judge council before rollout</div>
+            </div>
+            <button class="btn btn-primary" id="runEvalBtn" onclick="runLiveEvaluationHarness()">
+              <i class="ti ti-player-play"></i> Execute XLNT Evaluation
+            </button>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Evaluation Test Benchmark Suite</label>
+            <select class="form-control" id="evalSuiteSelect" onchange="loadEvalSuite()">
+              <option value="financial">Financial RAG: Quarterly Filings &amp; Balance Sheet Extraction (500 Samples)</option>
+              <option value="tech_docs">Databricks Architecture Docs: Spark Optimization Queries (250 Samples)</option>
+              <option value="legal">Compliance &amp; Contract Analysis (300 Samples)</option>
+            </select>
+          </div>
+
+          <div style="display: flex; gap: 12px; margin-bottom: 14px;">
+            <div style="flex:1; background: var(--surface-0); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+              <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">CONTROL (Baseline Pipeline v1.2)</div>
+              <div style="font-size: 12px; color: var(--text-secondary);">Sparse BM25 + Naive Chunking (1000 tokens)</div>
+            </div>
+            <div style="flex:1; background: rgba(255, 86, 48, 0.08); padding: 12px; border-radius: var(--radius-sm); border: 1px solid rgba(255, 86, 48, 0.3);">
+              <div style="font-size: 11px; font-weight: 700; color: var(--orange); margin-bottom: 4px;">TREATMENT (Candidate Pipeline v2.0)</div>
+              <div style="font-size: 12px; color: var(--text-primary);">Matryoshka Embeddings (256d) + Cohere Rerank v3</div>
+            </div>
+          </div>
+
+          <!-- EVALUATION PROGRESS DISPLAY -->
+          <div id="evalConsoleOutput" class="code-block" style="min-height: 180px;">
+Ready for XLNT paired-evaluation run. Select benchmark suite and click "Execute XLNT Evaluation".
+          </div>
         </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Deduplication Ratio</div>
-          <div class="kpi-value">84.2%</div>
-          <div class="kpi-delta delta-up"><i class="ti ti-shield-check" style="font-size:12px"></i> 80% duplicate goal met</div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="ti ti-gavel"></i> Held-out Judge Council</div>
+          </div>
+          
+          <div class="score-bar-group">
+            <div class="score-bar-item">
+              <div class="score-bar-meta">
+                <span>Faithfulness (Hallucination Check)</span>
+                <span style="font-weight: 700; color: var(--purple);" id="score-faith">0.962 (Pass)</span>
+              </div>
+              <div class="score-bar-track">
+                <div class="score-bar-fill" id="bar-faith" style="width: 96.2%; background: var(--purple);"></div>
+              </div>
+            </div>
+
+            <div class="score-bar-item">
+              <div class="score-bar-meta">
+                <span>Context Recall (Relevance)</span>
+                <span style="font-weight: 700; color: var(--emerald);" id="score-recall">0.941 (Pass)</span>
+              </div>
+              <div class="score-bar-track">
+                <div class="score-bar-fill" id="bar-recall" style="width: 94.1%; background: var(--emerald);"></div>
+              </div>
+            </div>
+
+            <div class="score-bar-item">
+              <div class="score-bar-meta">
+                <span>Response Coherence</span>
+                <span style="font-weight: 700; color: var(--cyan);" id="score-coherence">0.958 (Pass)</span>
+              </div>
+              <div class="score-bar-track">
+                <div class="score-bar-fill" id="bar-coherence" style="width: 95.8%; background: var(--cyan);"></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 20px; padding: 12px; background: var(--surface-0); border-radius: var(--radius-sm); border: 1px solid var(--border);">
+            <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px;">XLNT STATISTICAL TEST HARNESS RESULTS</div>
+            <div style="font-size: 11.5px; line-height: 1.5; color: var(--text-secondary);" id="xlntStatsText">
+              • Paired t-test: t = 4.821 (p = 0.00034)<br>
+              • Statistically Significant: YES (Alpha = 0.01)<br>
+              • Minimum Detectable Effect (MDE): Achieved (+12.4% gain)<br>
+              • Recommendation: <strong style="color: var(--emerald);">AUTOMATED SHIP DECISION (100% Rollout Approved)</strong>
+            </div>
+          </div>
         </div>
-        <div class="kpi-card">
+      </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- TAB 2: GUARDRAIL METRICS & REAL-TIME MONITORING -->
+    <!-- ================================================================= -->
+    <div class="content-panel" id="tab-p2-telemetry" style="display:none;">
+      <div class="grid-4">
+        <div class="kpi-card emerald">
+          <div class="kpi-label">DLT Telemetry Stream</div>
+          <div class="kpi-value text-emerald">14,250 / sec</div>
+          <div class="kpi-sub"><i class="ti ti-activity text-emerald"></i> Delta Live Tables Ingest Active</div>
+        </div>
+        <div class="kpi-card purple">
+          <div class="kpi-label">Retrieval Latency p95</div>
+          <div class="kpi-value text-purple">42 ms</div>
+          <div class="kpi-sub"><i class="ti ti-arrow-down-right text-emerald"></i> 65% faster than baseline (120ms)</div>
+        </div>
+        <div class="kpi-card cyan">
+          <div class="kpi-label">Guardrail Violation Rate</div>
+          <div class="kpi-value text-cyan">0.02%</div>
+          <div class="kpi-sub"><i class="ti ti-shield-check text-emerald"></i> Under 0.5% SLA limit</div>
+        </div>
+        <div class="kpi-card orange">
           <div class="kpi-label">Active DLT Pipelines</div>
-          <div class="kpi-value">12 / 12</div>
-          <div class="kpi-delta delta-up"><i class="ti ti-check" style="font-size:12px"></i> All pipelines healthy</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Monthly Cost Savings</div>
-          <div class="kpi-value">$24,850</div>
-          <div class="kpi-delta delta-up"><i class="ti ti-trending-up" style="font-size:12px"></i> -50% infra spending</div>
+          <div class="kpi-value text-orange">4 / 4 Healthy</div>
+          <div class="kpi-sub"><i class="ti ti-database text-emerald"></i> Delta Lake Bronze/Silver/Gold</div>
         </div>
       </div>
 
-      <!-- CHARTS -->
-      <div class="charts-row">
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title">Streaming Ingestion Performance (Delta Lake Auto Loader)</div>
-            <div class="panel-legend">
-              <div class="legend-item"><div class="legend-dot" style="background:#ff5630"></div>Bronze Ingest</div>
-              <div class="legend-item"><div class="legend-dot" style="background:#2a78d6"></div>Silver Cleansed</div>
-              <div class="legend-item"><div class="legend-dot" style="background:#1baf7a"></div>Gold aggregates</div>
+      <div class="grid-2-1">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title"><i class="ti ti-chart-line"></i> Real-Time Telemetry &amp; Guardrail Metrics (Delta Live Tables)</div>
+              <div class="card-subtitle">Streams trace-level logs into Delta Lake to catch retrieval quality regressions before reaching members</div>
+            </div>
+            <button class="btn btn-outline" onclick="injectTelemetryAnomaly()">
+              <i class="ti ti-alert-triangle text-orange"></i> Inject Synthetic Regression
+            </button>
+          </div>
+          <div style="height: 220px; position: relative;">
+            <canvas id="telemetryChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="ti ti-shield-check"></i> "Metrics You Follow" Guardrails</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 10px; background:var(--surface-0); border-radius:6px;">
+              <span style="font-size:12px;">Latency p99 SLA</span>
+              <span class="pill pill-success" id="pill-lat">&lt; 80ms (Actual: 45ms)</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 10px; background:var(--surface-0); border-radius:6px;">
+              <span style="font-size:12px;">Faithfulness Threshold</span>
+              <span class="pill pill-success" id="pill-faith">&gt; 0.90 (Actual: 0.96)</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 10px; background:var(--surface-0); border-radius:6px;">
+              <span style="font-size:12px;">Context Recall SLA</span>
+              <span class="pill pill-success" id="pill-recall">&gt; 0.85 (Actual: 0.94)</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 10px; background:var(--surface-0); border-radius:6px;">
+              <span style="font-size:12px;">Drift Metric (PSI)</span>
+              <span class="pill pill-success" id="pill-drift">&lt; 0.10 (Actual: 0.02)</span>
             </div>
           </div>
-          <div class="chart-wrap">
-            <canvas id="lineChart" role="img"></canvas>
-          </div>
-        </div>
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title">Lakehouse Storage Distribution</div>
-          </div>
-          <div class="chart-wrap">
-            <canvas id="doughnutChart" role="img"></canvas>
-          </div>
         </div>
       </div>
 
-      <!-- BOTTOM -->
-      <div class="bottom-row">
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title">Active Streaming Pipelines</div>
-          </div>
-          <div class="trace-list" id="overview-pipeline-list">
-            <!-- Dynamically populated -->
-          </div>
+      <!-- LIVE TELEMETRY LOG FEEDS -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="ti ti-list"></i> Delta Live Tables Streaming Trace Stream</div>
+          <div style="font-size: 11px; color: var(--text-muted);">Real-time events written to <code>delta_lake.modus.telemetry_gold</code></div>
         </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title">Data Quality Violations (Great Expectations)</div>
-          </div>
-          <table class="system-table">
-            <thead>
-              <tr><th>Expectation Rule</th><th>Dataset</th><th>Violations</th><th>Action</th></tr>
-            </thead>
-            <tbody id="dq-tbody">
-              <!-- Dynamically populated -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- 2. LAKEHOUSE SQL CONSOLE TAB -->
-    <div class="content" id="tab-sql-console" style="display:none;">
-      <div class="grid-2" style="grid-template-columns: 1.15fr 1.5fr;">
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title">Query Editor</div>
-          </div>
-          <div class="form-group" style="border-bottom: 0.5px solid var(--border); padding-bottom: 12px; margin-bottom: 12px;">
-            <label><i class="ti ti-upload"></i> Ingest Custom CSV Dataset</label>
-            <input type="file" id="sql-csv-upload" accept=".csv" onchange="handleSQLCSVUpload()" style="font-size: 11.5px; margin-top: 4px; color: var(--text-secondary);">
-            <div id="sql-upload-status" style="font-size: 10px; color: var(--text-muted); margin-top: 4px;">Upload any RFC 4180 CSV table to query on table "custom_dataset".</div>
-          </div>
-          <div class="form-group">
-            <label>Query Templates</label>
-            <select class="form-select" id="sql-template-select" onchange="applySQLTemplate()">
-              <option value="cust_country">List average balance by country</option>
-              <option value="tx_cat">Analyze transaction sums by category</option>
-              <option value="wealth_retail">Get Wealth segment customers</option>
-              <option value="high_val_join">Join high-value transactions and customer segments</option>
-              <option value="custom_query" id="sql-template-custom-opt" style="display:none;">Query custom_dataset: SELECT * FROM custom_dataset LIMIT 10;</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>SQL Editor</label>
-            <textarea class="form-textarea" id="sql-editor-input" rows="8" style="font-family: monospace; font-size: 11px;">SELECT Country, AVG(Balance) FROM customer_master GROUP BY Country;</textarea>
-          </div>
-          <button class="run-btn" id="sql-run-btn" onclick="runSQLQuery()" style="width:100%; justify-content:center; padding:10px;">
-            <i class="ti ti-terminal"></i> Execute SQL on Lakehouse
-          </button>
-        </div>
-
-        <div class="panel" style="display:flex; flex-direction:column;">
-          <div class="panel-header">
-            <div class="panel-title">Execution Results</div>
-            <div id="sql-meta-stats" style="font-size: 10px; color: var(--text-muted);">0 rows · 0ms</div>
-          </div>
-          <div id="sql-results-view" style="overflow-x: auto; flex: 1; min-height: 250px; background: #07080b; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 10.5px; border: 0.5px solid var(--border);">
-            Execute a query to view live records from the datasets.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 3. UNITY CATALOG TAB -->
-    <div class="content" id="tab-catalog" style="display:none;">
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title">Unity Catalog Data Lineage Mapping</div>
-        </div>
-        <p style="font-size:12px; color:var(--text-secondary); margin-bottom:12px;">
-          Lineage traces data flows dynamically across Customer, Transaction, and Security tables. Select a table to view schemas and permissions.
-        </p>
-        <div class="grid-2">
-          <div class="panel" style="background:var(--surface-1);">
-            <div class="panel-title" style="font-size:11px; margin-bottom:10px;">Select Table catalog</div>
-            <div class="trace-list">
-              <div class="trace-item" onclick="showLineage('customer')">
-                <div class="trace-body"><div class="trace-q">hive_metastore.northstar.customer_master</div><div class="trace-meta">10M Rows · PII Masked</div></div>
-              </div>
-              <div class="trace-item" onclick="showLineage('transactions')">
-                <div class="trace-body"><div class="trace-q">hive_metastore.northstar.transactions_500m</div><div class="trace-meta">500M Rows · Partitioned</div></div>
-              </div>
-              <div class="trace-item" onclick="showLineage('fraud')">
-                <div class="trace-body"><div class="trace-q">hive_metastore.northstar.fraud_alerts</div><div class="trace-meta">Streaming Ingestion</div></div>
-              </div>
-            </div>
-          </div>
-          <div class="panel" style="background:var(--surface-1);" id="lineage-details-panel">
-            <div class="panel-title" style="font-size:11px; margin-bottom:10px;">Lineage & Schema Details</div>
-            <div id="lineage-content">Select a catalog table on the left to inspect lineages.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 4. ROOT CAUSE ANALYZER TAB -->
-    <div class="content" id="tab-incident-analyzer" style="display:none;">
-      <div class="grid-2">
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title">Select Simulated Incident</div>
-          </div>
-          <div class="form-group">
-            <label>Incident Log Case</label>
-            <select class="form-select" id="incident-select" onchange="runIncidentAudit()">
-              <option value="oom">OOM Spark executor failure on transaction join</option>
-              <option value="skew">Data skew / shuffle bottlenecks on credit card tables</option>
-              <option value="partition">Partition explosion on clickstream logs</option>
-              <option value="corruption">Structured Streaming checkpoint corruption</option>
-            </select>
-          </div>
-          <button class="run-btn" onclick="runIncidentAudit()" style="width:100%; justify-content:center; padding:10px;">
-            <i class="ti ti-alert-triangle"></i> Diagnose Incident
-          </button>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title">Diagnostic Reports & Recommendations</div>
-          </div>
-          <div class="code-view" id="incident-diagnostics" style="flex:1; min-height: 250px;">
-            Diagnose an incident to run root-cause analysis audits.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 5. MLFLOW EXPERIMENTS TAB -->
-    <div class="content" id="tab-mlflow-experiments" style="display:none;">
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title">MLflow Model Registry & Experiments</div>
-        </div>
-        <table class="system-table">
+        <table class="data-table">
           <thead>
-            <tr><th>Model Name</th><th>Registered Version</th><th>Status</th><th>Drift Rating</th><th>Action</th></tr>
+            <tr>
+              <th>Trace ID</th>
+              <th>Query Signature</th>
+              <th>Retrieval Strategy</th>
+              <th>Latency</th>
+              <th>Faithfulness</th>
+              <th>Status</th>
+            </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>Fraud_Surveillance_XGBoost</td>
-              <td>v4 (Production)</td>
-              <td><span style="color:var(--text-success); font-weight:bold;">Active</span></td>
-              <td><span style="color:var(--text-success);">SAFE (0.02)</span></td>
-              <td>Retrain</td>
-            </tr>
-            <tr>
-              <td>Credit_Risk_Classifier</td>
-              <td>v2 (Staging)</td>
-              <td><span style="color:var(--text-warning); font-weight:bold;">A/B Test</span></td>
-              <td><span style="color:var(--text-warning);">DRIFT DETECTED (0.14)</span></td>
-              <td>Re-calibrate</td>
-            </tr>
-            <tr>
-              <td>Customer_Churn_RandomForest</td>
-              <td>v1 (Archived)</td>
-              <td><span>Inactive</span></td>
-              <td><span>-</span></td>
-              <td>Deploy</td>
-            </tr>
+          <tbody id="telemetryTbody">
+            <!-- Dynamically populated -->
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- 6. AI CO-PILOT TAB -->
-    <div class="content" id="tab-ai-copilot" style="display:none;">
+    <!-- ================================================================= -->
+    <!-- TAB 3: WINNING-VARIANT SELECTION AT SCALE -->
+    <!-- ================================================================= -->
+    <div class="content-panel" id="tab-p3-variant" style="display:none;">
+      <div class="grid-4">
+        <div class="kpi-card purple">
+          <div class="kpi-label">Winning Strategy</div>
+          <div class="kpi-value text-purple" style="font-size: 18px;">Matryoshka + Cohere</div>
+          <div class="kpi-sub"><i class="ti ti-trophy text-emerald"></i> Ranked #1 on Pareto Frontier</div>
+        </div>
+        <div class="kpi-card emerald">
+          <div class="kpi-label">Latency Reduction</div>
+          <div class="kpi-value text-emerald">-65.0%</div>
+          <div class="kpi-sub"><i class="ti ti-bolt text-emerald"></i> 120ms reduced to 42ms</div>
+        </div>
+        <div class="kpi-card cyan">
+          <div class="kpi-label">Catalog Size Benchmarked</div>
+          <div class="kpi-value text-cyan">5,000,000</div>
+          <div class="kpi-sub"><i class="ti ti-layers text-emerald"></i> Multi-million row Databricks Delta table</div>
+        </div>
+        <div class="kpi-card orange">
+          <div class="kpi-label">NDCG@10 Score</div>
+          <div class="kpi-value text-orange">0.948</div>
+          <div class="kpi-sub"><i class="ti ti-trending-up text-emerald"></i> High relevance accuracy</div>
+        </div>
+      </div>
+
       <div class="grid-2">
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title">LangGraph Engineering Assistant</div>
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title"><i class="ti ti-chart-dots"></i> Retrieval Pareto Frontier (Relevance vs Latency)</div>
+              <div class="card-subtitle">Benchmarked dense, sparse, hybrid, and compressed Matryoshka configurations</div>
+            </div>
+          </div>
+          <div style="height: 240px; position: relative;">
+            <canvas id="paretoChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="ti ti-list-check"></i> Head-to-Head Strategy Benchmark Matrix</div>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Strategy</th>
+                <th>Dimensions</th>
+                <th>Latency (p95)</th>
+                <th>Recall@10</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Sparse BM25</strong></td>
+                <td>N/A (Lexical)</td>
+                <td>18 ms</td>
+                <td>0.682</td>
+                <td><span class="pill pill-warning">Low Recall</span></td>
+              </tr>
+              <tr>
+                <td><strong>Dense Vector (Baseline)</strong></td>
+                <td>1536-dim</td>
+                <td>120 ms</td>
+                <td>0.891</td>
+                <td><span class="pill pill-danger">High Latency</span></td>
+              </tr>
+              <tr>
+                <td><strong>Hybrid (Dense + BM25)</strong></td>
+                <td>1536-dim + RRF</td>
+                <td>145 ms</td>
+                <td>0.924</td>
+                <td><span class="pill pill-warning">Costly</span></td>
+              </tr>
+              <tr style="background: rgba(139, 92, 246, 0.12);">
+                <td><strong style="color: var(--purple);">Matryoshka (256d) + Cohere Rerank</strong></td>
+                <td>256-dim</td>
+                <td><strong style="color: var(--emerald);">42 ms (-65%)</strong></td>
+                <td><strong style="color: var(--emerald);">0.952</strong></td>
+                <td><span class="pill pill-success"><i class="ti ti-crown"></i> WINNER</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-top: 14px; padding: 10px; background: var(--surface-0); border-radius: 6px; font-size: 11px; color: var(--text-secondary);">
+            <i class="ti ti-bulb text-orange"></i> <strong>Architectural Rationale</strong>: Matryoshka Embeddings compress high-dimensional vectors down to 256 dimensions with negligible loss of semantic precision, speeding up initial ANN vector search by 4x. Cohere Rerank v3 is then applied over the top 30 candidates to ensure top-tier precision.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- TAB 4: DECISION AUTOMATION & GOVERNANCE -->
+    <!-- ================================================================= -->
+    <div class="content-panel" id="tab-p4-governance" style="display:none;">
+      <div class="grid-4">
+        <div class="kpi-card emerald">
+          <div class="kpi-label">Drift Engine Status</div>
+          <div class="kpi-value text-emerald">ACTIVE</div>
+          <div class="kpi-sub"><i class="ti ti-radar text-emerald"></i> Continuous PSI / Wasserstein Monitoring</div>
+        </div>
+        <div class="kpi-card purple">
+          <div class="kpi-label">Unity Catalog Governance</div>
+          <div class="kpi-value text-purple">GOVERNED</div>
+          <div class="kpi-sub"><i class="ti ti-lock text-emerald"></i> Fine-grained Lineage &amp; RBAC</div>
+        </div>
+        <div class="kpi-card cyan">
+          <div class="kpi-label">FastAPI Rate Limit</div>
+          <div class="kpi-value text-cyan">100 / min</div>
+          <div class="kpi-sub"><i class="ti ti-shield-check text-emerald"></i> Token Bucket Algorithmic Guard</div>
+        </div>
+        <div class="kpi-card orange">
+          <div class="kpi-label">Automated Rollbacks</div>
+          <div class="kpi-value text-orange">0 Pending</div>
+          <div class="kpi-sub"><i class="ti ti-refresh text-emerald"></i> Zero human intervention required</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title"><i class="ti ti-rotate-clockwise"></i> Automated Drift Detection &amp; Circuit Breaker</div>
+              <div class="card-subtitle">Automatically triggers pipeline rollback when performance drift exceeds safety bounds</div>
+            </div>
+            <button class="btn btn-primary" onclick="simulateMetricDriftAndRollback()">
+              <i class="ti ti-alert-triangle"></i> Simulate Production Drift
+            </button>
+          </div>
+          <div id="driftConsoleOutput" class="code-block" style="min-height: 200px;">
+Drift Monitor active on table 'unity_catalog.modus_prod.eval_telemetry'.
+Population Stability Index (PSI): 0.024 (Normal Range < 0.10).
+System healthy. Rollback trigger standing by.
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="ti ti-server"></i> Rate-Limited FastAPI Gateway Governance</div>
           </div>
           <div class="form-group">
-            <label>Select Specialist Agent</label>
-            <select class="form-select" id="copilot-agent">
-              <option value="code_generator">Spark Code Generator</option>
-              <option value="sql_optimizer">SQL Optimizer</option>
-              <option value="pipeline_debugger">Pipeline Debugger</option>
-              <option value="dq_assistant">Data Quality Assistant</option>
+            <label class="form-label">Simulate FastAPI Endpoint Request</label>
+            <div style="display:flex; gap: 8px;">
+              <input type="text" class="form-control" value="POST /api/v1/experiment/evaluate" style="flex:1;" readonly>
+              <button class="btn btn-secondary" onclick="sendGatewayRequest()">Send Request</button>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; margin-bottom: 8px; font-size:11px;">
+            <span>Token Bucket Capacity</span>
+            <span style="font-weight: 700; color: var(--cyan);" id="tokenBucketVal">100 / 100 Tokens</span>
+          </div>
+          <div class="score-bar-track" style="margin-bottom: 14px;">
+            <div class="score-bar-fill" id="tokenBucketBar" style="width: 100%; background: var(--cyan);"></div>
+          </div>
+
+          <div id="gatewayResponseOutput" class="code-block" style="min-height: 110px;">
+HTTP 200 OK
+Headers: X-RateLimit-Limit: 100, X-RateLimit-Remaining: 100
+Body: {"status": "authenticated", "governance": "UnityCatalog_v2", "audit_id": "audit_8f92a10"}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- TAB 5: UNITY CATALOG LINEAGE & SQL CONSOLE -->
+    <!-- ================================================================= -->
+    <div class="content-panel" id="tab-sql-console" style="display:none;">
+      <div class="grid-2-1">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="ti ti-terminal"></i> Unity Catalog Interactive SQL Console</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Select Prebuilt Query</label>
+            <select class="form-control" id="sqlQuerySelect" onchange="applyPrebuiltSQL()">
+              <option value="eval_history">Query Evaluation Harness History &amp; Judge Scores</option>
+              <option value="dlt_telemetry">Query DLT Streaming Telemetry &amp; Latency Percentiles</option>
+              <option value="retrieval_bench">Query Multi-Million Vector Catalog Benchmarks</option>
+              <option value="audit_logs">Query Unity Catalog Audit Decision Logs</option>
             </select>
           </div>
           <div class="form-group">
-            <label>Request Instructions</label>
-            <textarea class="form-textarea" id="copilot-prompt" rows="5" placeholder="Write Spark code to read logs with Auto Loader..."></textarea>
+            <textarea class="form-control" id="sqlInput" rows="6" style="font-family: var(--font-mono); font-size: 11px;">SELECT pipeline_variant, AVG(faithfulness_score), AVG(latency_ms) FROM modus_catalog.eval.experiments GROUP BY pipeline_variant;</textarea>
           </div>
-          <button class="run-btn" id="copilot-run-btn" onclick="runCopilotQuery()" style="width:100%; justify-content:center; padding:10px;">
-            <i class="ti ti-cpu"></i> Dispatch LangGraph Query
-          </button>
+          <button class="btn btn-primary" onclick="executeSQLQuery()"><i class="ti ti-player-play"></i> Run Query on Databricks Serverless</button>
         </div>
 
-        <div class="panel" style="display:flex; flex-direction:column;">
-          <div class="panel-header">
-            <div class="panel-title">Agentic Recommendations & Code Output</div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="ti ti-sitemap"></i> Unity Catalog Lineage</div>
           </div>
-          <div class="code-view" id="copilot-response" style="flex:1; min-height: 250px;">
-            Waiting for instruction dispatch...
+          <div style="font-size:11.5px; color:var(--text-secondary); line-height:1.6;">
+            <strong>Catalog</strong>: <code>modus_catalog</code><br>
+            <strong>Schema</strong>: <code>genai_experimentation</code><br><br>
+            <strong>Upstream Sources</strong>:<br>
+            • <code>raw_query_traces</code> (Kafka Broker)<br>
+            • <code>held_out_judge_prompts</code> (Delta Lake)<br><br>
+            <strong>Downstream Aggregates</strong>:<br>
+            • <code>dlt_gold_guardrails</code><br>
+            • <code>mlflow_experiment_registry</code>
           </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="ti ti-table"></i> Query Results</div>
+          <div style="font-size: 10px; color: var(--text-muted);" id="sqlMetaStats">4 rows returned in 12ms</div>
+        </div>
+        <div id="sqlResultsView" style="overflow-x: auto;">
+          <!-- Dynamically filled -->
         </div>
       </div>
     </div>
 
-    <!-- 7. MEDALLION INGESTION PIPELINE TAB -->
-    <div class="content" id="tab-pipelines" style="display:none;">
-      <div class="grid-2" style="grid-template-columns: 1fr 1.3fr;">
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title">Medallion Pipeline Workspace</div>
-          </div>
-          
-          <div class="form-group">
-            <label>Select Case Study Pipeline</label>
-            <select class="form-select" id="pipeline-case-select" onchange="loadPipelineCase()">
-              <option value="foxsports">Fox Sports: High-Concurrency Ingestion</option>
-              <option value="jpmc">JPMorgan Chase: 5PB Data Migration</option>
-              <option value="qualcomm">Qualcomm: Production Agentic Workflows</option>
-              <option value="spokane">City of Spokane: Automated ETL &amp; GIS</option>
-            </select>
-          </div>
-
-          <div class="info-box info-box-success" id="pipeline-case-desc" style="margin-bottom: 12px;">
-            Fox Sports co-built high-throughput search partitions, doubling search success rate during live event workloads exceeding 200,000 daily concurrent requests.
-          </div>
-
-          <div style="display:flex; justify-content:space-between; align-items:center; background:var(--surface-1); padding:12px; border-radius:6px; border:0.5px solid var(--border); margin-bottom:12px;">
-            <div style="text-align:center;">
-              <div class="trace-badge badge-pass" style="margin:0 auto 4px;">Bronze</div>
-              <span style="font-size:9.5px; color:var(--text-muted);">Auto Loader</span>
-            </div>
-            <i class="ti ti-arrow-right" style="color:var(--text-muted);"></i>
-            <div style="text-align:center;">
-              <div class="trace-badge badge-pass" style="margin:0 auto 4px;">Silver</div>
-              <span style="font-size:9.5px; color:var(--text-muted);">Deduplicated</span>
-            </div>
-            <i class="ti ti-arrow-right" style="color:var(--text-muted);"></i>
-            <div style="text-align:center;">
-              <div class="trace-badge badge-pass" style="margin:0 auto 4px;">Gold</div>
-              <span style="font-size:9.5px; color:var(--text-muted);">Aggregated</span>
-            </div>
-          </div>
-
-          <button class="run-btn" id="pipeline-run-btn" onclick="executeMedallionPipeline()" style="width:100%; justify-content:center; padding:10px;">
-            <i class="ti ti-player-play"></i> Execute Medallion Pipeline
-          </button>
+    <!-- ================================================================= -->
+    <!-- TAB 6: FASTAPI GATEWAY MONITOR -->
+    <!-- ================================================================= -->
+    <div class="content-panel" id="tab-gateway-api" style="display:none;">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="ti ti-api"></i> FastAPI Rate-Limited Decision Gateway Specifications</div>
         </div>
+        <div class="code-block" style="color: #6ee7b7;">
+from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
+from modus.security import verify_unity_catalog_jwt, RateLimiter
 
-        <div class="panel" style="display:flex; flex-direction:column;">
-          <div class="panel-header">
-            <div class="panel-title">Pipeline Log Output &amp; Gold Preview</div>
-          </div>
-          <div class="code-view" id="pipeline-logs" style="flex: 1; min-height: 250px; line-height:1.5; color:#a9deb4;">
-            Select a case study and click "Execute Medallion Pipeline" to watch log streams.
-          </div>
+app = FastAPI(title="Modus AI Governance Gateway", version="2.0")
+
+# Token bucket rate limiting: 100 requests / minute per client
+limiter = RateLimiter(requests_per_minute=100)
+
+@app.post("/api/v1/experiment/evaluate")
+async def run_evaluation(payload: EvalPayload, token: str = Depends(verify_unity_catalog_jwt)):
+    if not limiter.allow(token.client_id):
+        raise HTTPException(status_code=429, detail="Rate limit exceeded. Token bucket depleted.")
+    
+    result = await eval_harness.score_treatment_vs_control(payload)
+    unity_catalog.audit_log(payload.experiment_id, result)
+    return result
         </div>
       </div>
     </div>
 
-    <!-- 8. DELIVERABLES TAB -->
-    <div class="content" id="tab-deliverables" style="display:none;">
-      <div class="grid-2">
-        <div class="panel" style="flex: 0 0 250px;">
-          <div class="panel-header">
-            <div class="panel-title">Deliverables Catalog</div>
-          </div>
-          <div class="trace-list">
-            <div class="trace-item" onclick="loadDoc('migration')"><div class="trace-body"><div class="trace-q">Migration Strategy</div></div></div>
-            <div class="trace-item" onclick="loadDoc('dr')"><div class="trace-body"><div class="trace-q">Disaster Recovery (DR)</div></div></div>
-            <div class="trace-item" onclick="loadDoc('rbac')"><div class="trace-body"><div class="trace-q">RBAC security Model</div></div></div>
-            <div class="trace-item" onclick="loadDoc('contracts')"><div class="trace-body"><div class="trace-q">Data Contracts</div></div></div>
-          </div>
+    <!-- ================================================================= -->
+    <!-- TAB 7: SYSTEM SPECS WHITEPAPER -->
+    <!-- ================================================================= -->
+    <div class="content-panel" id="tab-whitepaper" style="display:none;">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="ti ti-book"></i> Modus AI Architecture Specifications &amp; Engineering Whitepaper</div>
         </div>
-        <div class="panel" style="flex:1;">
-          <div class="panel-header">
-            <div class="panel-title" id="doc-title">Select Document</div>
-          </div>
-          <div id="doc-content" style="font-size:12px; line-height:1.6; white-space:pre-line; max-height:450px; overflow-y:auto;">
-            Select a document on the left to read.
-          </div>
+        <div style="font-size: 12.5px; line-height: 1.7; color: var(--text-secondary); max-width: 900px;">
+          <h3 style="color: var(--text-primary); margin-bottom: 8px;">1. Executive Summary</h3>
+          <p style="margin-bottom: 14px;">
+            Modus AI brings production-grade A/B testing discipline—modeled after LinkedIn’s XLNT platform—to Generative AI systems. Replacing subjective "does this look better" evaluation with statistically rigorous ship/no-ship decisions, real-time DLT telemetry, and automated zero-downtime rollback capabilities.
+          </p>
+
+          <h3 style="color: var(--text-primary); margin-bottom: 8px;">2. Four Core Infrastructure Pillars</h3>
+          <ul style="margin-left: 20px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 8px;">
+            <li><strong>Controlled Experimentation for Ship Decisions</strong>: Treatment-vs-control evaluation harness scoring RAG changes against a held-out judge council (faithfulness, context recall, coherence). Paired t-tests dictate ship/no-ship decisions.</li>
+            <li><strong>Guardrail Metrics &amp; Real-Time Monitoring</strong>: Trace-level telemetry streamed via Delta Live Tables into Delta Lake to power live guardrail dashboard. Flags retrieval/latency regressions instantly.</li>
+            <li><strong>Winning-Variant Selection at Scale</strong>: Multi-million row catalog benchmarking across Dense Vector, Sparse BM25, and Hybrid strategies. Matryoshka reduced embeddings + Cohere Rerank cut query times by 65%.</li>
+            <li><strong>Decision Automation &amp; Governance</strong>: Automated drift detection triggering instant rollbacks governed under Databricks Unity Catalog behind a rate-limited FastAPI gateway.</li>
+          </ul>
         </div>
       </div>
     </div>
-
-  </div>
+  </main>
 </div>
 
-<!-- CONFIG MODAL -->
-<div class="drawer" id="settings-modal">
+<!-- API KEY CONFIGURATION MODAL DRAWER -->
+<div class="drawer" id="settingsDrawer">
   <div class="drawer-header">
-    <div class="drawer-title">API Configuration</div>
-    <button class="drawer-close" onclick="closeSettingsModal()"><i class="ti ti-x"></i></button>
+    <div class="drawer-title">LLM API &amp; Backend Configuration</div>
+    <button style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:18px;" onclick="closeSettings()"><i class="ti ti-x"></i></button>
   </div>
-  <div class="drawer-body">
-    <div class="form-group">
-      <label for="groq-api-key">Groq API Key</label>
-      <input type="password" class="form-input" id="groq-api-key" placeholder="gsk_...">
-    </div>
-    <div class="form-group">
-      <label for="groq-model-select">Completion Model</label>
-      <select class="form-select" id="groq-model-select">
-        <option value="llama-3.1-70b-versatile">llama-3.1-70b-versatile</option>
-        <option value="llama-3.1-8b-instant">llama-3.1-8b-instant</option>
-        <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
-        <option value="gemma2-9b-it">gemma2-9b-it</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="settings-backend-url">FastAPI Backend URL (Optional)</label>
-      <input type="text" class="form-input" id="settings-backend-url" placeholder="http://localhost:8000">
-    </div>
-    <button class="run-btn" onclick="saveSettings()" style="width: 100%; justify-content: center; padding: 10px;">Save Configuration</button>
-    <div class="info-box info-box-success" style="margin-top: 10px; font-size: 10.5px;">
-      <i class="ti ti-shield-check"></i> Keys are stored exclusively in your local browser storage (localStorage) and are never sent to any server other than Groq's official API.
-    </div>
+  <div class="form-group">
+    <label class="form-label">Groq API Key (Optional)</label>
+    <input type="password" class="form-control" id="groqApiKey" placeholder="gsk_...">
+    <span style="font-size: 10px; color: var(--text-muted); margin-top: 4px;">Used for live LLM Judge evaluations. If omitted, engine runs in instant simulation mode.</span>
   </div>
+  <div class="form-group">
+    <label class="form-label">Completion Model</label>
+    <select class="form-control" id="groqModel">
+      <option value="llama-3.1-70b-versatile">llama-3.1-70b-versatile</option>
+      <option value="llama-3.1-8b-instant">llama-3.1-8b-instant</option>
+      <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
+    </select>
+  </div>
+  <button class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 12px;" onclick="saveSettings()">Save Configuration</button>
 </div>
 
 <script>
-  // Simulation Datasets
-  let pipelinesData = [
-    { name: "bronze_raw_transactions", rate: "2,500/s", lag: "0s", status: "PASS" },
-    { name: "silver_cleansed_transactions", rate: "2,350/s", lag: "1s", status: "PASS" },
-    { name: "gold_aggregates_risk", rate: "200/s", lag: "3s", status: "PASS" }
-  ];
+  // =========================================================================
+  // APP STATE & TAB ROUTING
+  // =========================================================================
+  const state = {
+    activeTab: 'tour',
+    currentTourStep: 1,
+    isPlayingTour: true,
+    tokenBucket: 100
+  };
 
-  let dqData = [
-    { rule: "expect_column_to_not_be_null('customer_id')", dataset: "customer_master", violations: "0", action: "PASS" },
-    { rule: "expect_column_values_to_be_in_set('transaction_type')", dataset: "transactions", violations: "12 (Quarantined)", action: "WARN" }
-  ];
+  const tabTitles = {
+    'tour': 'Interactive Step-by-Step Tour',
+    'p1-eval': 'Controlled Experimentation Harness (XLNT Platform)',
+    'p2-telemetry': 'Guardrail Metrics & DLT Streaming Telemetry',
+    'p3-variant': 'Winning-Variant Retrieval Pareto Benchmarking',
+    'p4-governance': 'Decision Automation, Drift & Unity Catalog Governance',
+    'sql-console': 'Unity Catalog Interactive Lineage & SQL Console',
+    'gateway-api': 'FastAPI Rate-Limited Decision Gateway',
+    'whitepaper': 'System Specifications & Engineering Whitepaper'
+  };
 
-  // Tab navigation
-  document.querySelectorAll('.nav-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const tabName = item.getAttribute('data-tab');
-      if (tabName) switchTab(tabName);
+  function switchTab(tabId) {
+    state.activeTab = tabId;
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active', 'active-tour'));
+    
+    // Highlight matching sidebar nav item
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+      if (item.getAttribute('onclick')?.includes(tabId)) {
+        if (tabId === 'tour') item.classList.add('active-tour');
+        else item.classList.add('active');
+      }
     });
-  });
 
-  function switchTab(tabName) {
-    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-    const activeNav = document.querySelector(`.nav-item[data-tab="${tabName}"]`);
-    if (activeNav) activeNav.classList.add('active');
+    document.getElementById('breadcrumb-title').innerText = tabTitles[tabId] || tabId;
+    document.querySelectorAll('.content-panel').forEach(p => p.style.display = 'none');
+    
+    const target = document.getElementById('tab-' + tabId);
+    if (target) target.style.display = 'flex';
 
-    document.getElementById('breadcrumb-tab').innerText = tabName.replace('-', ' ');
-
-    document.querySelectorAll('.content').forEach(c => c.style.display = 'none');
-    const targetContent = document.getElementById('content-' + tabName) || document.getElementById('tab-' + tabName);
-    if (targetContent) {
-      targetContent.style.display = 'flex';
-    }
-
-    if (tabName === 'overview') {
-      setTimeout(() => {
-        initOverviewCharts();
-        checkKeyStatus();
-      }, 50);
-    }
+    if (tabId === 'p2-telemetry') initTelemetryChart();
+    if (tabId === 'p3-variant') initParetoChart();
+    if (tabId === 'sql-console') executeSQLQuery();
   }
 
-  function renderTables() {
-    const list = document.getElementById('overview-pipeline-list');
-    if (list) {
-      list.innerHTML = pipelinesData.map(p => `
-        <div class="trace-item" style="cursor:default;">
-          <div class="trace-badge badge-pass">${p.status}</div>
-          <div class="trace-body">
-            <div class="trace-q">${p.name}</div>
-            <div class="trace-meta"><span>Rate: ${p.rate}</span><span>Lag: ${p.lag}</span></div>
-          </div>
+  // =========================================================================
+  // STEP-BY-STEP ANIMATION ENGINE (CANVAS + PARTICLES)
+  // =========================================================================
+  const stepNarratives = {
+    1: {
+      title: "Step 1: Controlled Experimentation Harness & Judge Council Scoring",
+      badge: "XLNT A/B Discipline",
+      text: "Every candidate RAG pipeline change is routed into a treatment-vs-control harness. A held-out judge council evaluates candidates against Faithfulness, Context Recall, and Coherence metrics. A statistical paired t-test determines ship/no-ship decisions, eliminating subjective calls.",
+      tags: ["Judge Council", "Paired t-test", "XLNT Discipline", "Faithfulness Check"]
+    },
+    2: {
+      title: "Step 2: Guardrail Metrics & Real-Time DLT Telemetry Monitoring",
+      badge: "Delta Live Tables",
+      text: "Trace-level telemetry is streamed via Delta Live Tables into Delta Lake to power live guardrail dashboards. If a candidate pipeline causes a regression in retrieval latency or relevance, it is caught instantly before reaching members.",
+      tags: ["Delta Live Tables", "Trace Telemetry", "Latency SLA", "Metrics You Follow"]
+    },
+    3: {
+      title: "Step 3: Winning-Variant Selection at Scale & Pareto Frontier",
+      badge: "-65% Latency Cut",
+      text: "Benchmarked dense vector, sparse BM25, and hybrid strategies over multi-million-row catalogs. Rolled out the winning variant (Matryoshka-reduced 256d embeddings + Cohere Rerank v3), cutting query times by 65% while increasing NDCG@10.",
+      tags: ["Matryoshka Embeddings", "Cohere Rerank", "Pareto Frontier", "5M Vector Search"]
+    },
+    4: {
+      title: "Step 4: Decision Automation, Auto Rollback & Unity Catalog Governance",
+      badge: "FastAPI & Unity Catalog",
+      text: "Wired automated drift detection (PSI > 0.10) to trigger zero-downtime rollback decisions without manual human review. The entire pipeline is governed under Databricks Unity Catalog behind a rate-limited FastAPI gateway for auditability.",
+      tags: ["Automated Rollback", "FastAPI Rate Limiting", "Unity Catalog Lineage", "Defensible Audit"]
+    }
+  };
+
+  function selectTourStep(step) {
+    state.currentTourStep = step;
+    document.querySelectorAll('.step-tab').forEach((el, idx) => {
+      if (idx + 1 === step) el.classList.add('active');
+      else el.classList.remove('active');
+    });
+
+    document.getElementById('tourStepIndicator').innerText = `Step ${step} of 4`;
+    renderStepDescriptionCard(step);
+  }
+
+  function nextTourStep() {
+    let nextStep = state.currentTourStep + 1;
+    if (nextStep > 4) nextStep = 1;
+    selectTourStep(nextStep);
+  }
+
+  function prevTourStep() {
+    let prevStep = state.currentTourStep - 1;
+    if (prevStep < 1) prevStep = 4;
+    selectTourStep(prevStep);
+  }
+
+  function toggleTourPlay() {
+    state.isPlayingTour = !state.isPlayingTour;
+    const btn = document.getElementById('playPauseBtn');
+    btn.innerHTML = state.isPlayingTour ? '<i class="ti ti-pause"></i>' : '<i class="ti ti-player-play"></i>';
+  }
+
+  function renderStepDescriptionCard(step) {
+    const data = stepNarratives[step];
+    const card = document.getElementById('tourStepDescriptionCard');
+    if (!data || !card) return;
+
+    card.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 8px;">
+        <div>
+          <h3 style="font-size: 15px; font-weight: 700; color: var(--text-primary);">${data.title}</h3>
+          <span style="font-size: 11px; color: var(--purple); font-weight: 600;">${data.badge}</span>
         </div>
-      `).join('');
-    }
-
-    const dqTbody = document.getElementById('dq-tbody');
-    if (dqTbody) {
-      dqTbody.innerHTML = dqData.map(d => `
-        <tr>
-          <td>${d.rule}</td>
-          <td>${d.dataset}</td>
-          <td>${d.violations}</td>
-          <td><span style="color:${d.action === 'PASS' ? 'var(--text-success)' : 'var(--text-warning)'}; font-weight:bold;">${d.action}</span></td>
-        </tr>
-      `).join('');
-    }
+        <button class="btn btn-primary" onclick="jumpToPillarTab(${step})">
+          <i class="ti ti-adjustments"></i> Launch Workspace Tab
+        </button>
+      </div>
+      <p style="font-size: 12px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 12px;">${data.text}</p>
+      <div style="display:flex; gap: 8px;">
+        ${data.tags.map(t => `<span class="pill pill-info">${t}</span>`).join('')}
+      </div>
+    `;
   }
 
-  // --- INCIDENT ANALYZER ---
-  const incidents = {
-    oom: {
-      diagnose: "ROOT CAUSE: Spark Executor memory overflow (OOM) during broadcast join of Transactions (500M rows) and Customer Master (10M rows) due to partition skew.\n\nRECOMMENDED REMEDY:\n1. Enable adaptive query execution (AQE) skew join optimization.\n2. Apply Z-Order indexing on join keys to compact partition slices.",
-      code: "spark.conf.set('spark.sql.adaptive.skewJoin.enabled', 'true')\nspark.sql('OPTIMIZE transactions_500m ZORDER BY (customer_id)')"
-    },
-    skew: {
-      diagnose: "ROOT CAUSE: Data skew on transaction clustering key (routing node 102 processing 45% of total keys). Shuffling bottlenecks are starving executors.\n\nRECOMMENDED REMEDY:\n1. Implement Liquid Clustering on Transactions table.\n2. liquid clustering will automatically group key clusters dynamically, eliminating custom partition tuning.",
-      code: "CREATE TABLE transactions USING delta CLUSTERED BY (transaction_key);"
-    },
-    partition: {
-      diagnose: "ROOT CAUSE: Partition explosion on clickstream logs (15,000 hourly directory leaf structures). Small files overhead is saturating the file catalog metadata directory.\n\nRECOMMENDED REMEDY:\n1. Consolidate partitions utilizing Delta Liquid Clustering.\n2. Run Vacuum to clear historical transaction logs.",
-      code: "VACUUM clickstream_logs RETAIN 168 HOURS;\nOPTIMIZE clickstream_logs;"
-    },
-    corruption: {
-      diagnose: "ROOT CAUSE: Structured Streaming checkpoint corruption. S3/Blob store files mismatched schema schema evolution definitions.\n\nRECOMMENDED REMEDY:\n1. Enable Schema Evolution parameters on the Auto Loader streamer.\n2. Restore checkpoint files to metadata snapshots.",
-      code: "df.writeStream.format('delta')\\\n  .option('mergeSchema', 'true')\\\n  .option('checkpointLocation', '/mnt/checkpoints/')\\\n  .start('/mnt/silver/')"
-    }
-  };
+  function jumpToPillarTab(step) {
+    const tabMap = { 1: 'p1-eval', 2: 'p2-telemetry', 3: 'p3-variant', 4: 'p4-governance' };
+    switchTab(tabMap[step]);
+  }
 
-  function runIncidentAudit() {
-    const selected = document.getElementById('incident-select').value;
-    const data = incidents[selected];
-    const term = document.getElementById('incident-diagnostics');
+  // CANVAS ANIMATION LOOP
+  let canvas, ctx;
+  let animProgress = 0;
+
+  function initCanvas() {
+    canvas = document.getElementById('tourCanvas');
+    if (!canvas) return;
     
-    if (data) {
-      term.innerHTML = `Running diagnostics...\n\n${data.diagnose}\n\nOptimized PySpark Fix:\n\`\`\`python\n${data.code}\n\`\`\``;
-    }
+    // Fit canvas size
+    const rect = canvas.parentElement.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+    ctx = canvas.getContext('2d');
+
+    window.requestAnimationFrame(renderCanvasFrame);
   }
 
-  // --- UNITY CATALOG LINEAGE ---
-  const lineageData = {
-    customer: {
-      schema: "customer_id (INT, PK)\nname (STRING, PII Masked)\nsegment (STRING)\ncountry (STRING)",
-      lineage: "Source: Postgres Customer_Master\nInbound: Bronze Auto Loader\nOutbound: feature_store.customer_profiles"
-    },
-    transactions: {
-      schema: "transaction_id (BIGINT, PK)\ncustomer_id (INT, FK)\namount (DOUBLE)\ntimestamp (TIMESTAMP)\nstatus (STRING)",
-      lineage: "Source: Kafka Stream Ingest\nInbound: bronze_raw_transactions\nOutbound: gold_aggregates_risk"
-    },
-    fraud: {
-      schema: "alert_id (INT)\ntransaction_id (BIGINT, FK)\nmodel_score (DOUBLE)\nstatus (STRING)",
-      lineage: "Source: MLflow model inference stream\nInbound: gold_aggregates_risk\nOutbound: security_fraud_alerts"
+  function renderCanvasFrame() {
+    if (!ctx) return;
+    const w = canvas.width;
+    const h = canvas.height;
+
+    ctx.clearRect(0, 0, w, h);
+
+    // Background gradient grid
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+    ctx.lineWidth = 1;
+    for (let x = 0; x < w; x += 30) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
     }
-  };
-
-  function showLineage(table) {
-    const details = lineageData[table];
-    const container = document.getElementById('lineage-details-panel');
-    if (details && container) {
-      container.innerHTML = `
-        <div class="panel-title" style="font-size:11px; margin-bottom:10px;">${table.toUpperCase()} Lineage & Schema</div>
-        <div style="font-size:11px; margin-bottom:10px;"><strong>Table Schema:</strong></div>
-        <pre class="code-view" style="margin-bottom:12px;">${details.schema}</pre>
-        <div style="font-size:11px; margin-bottom:6px;"><strong>Data Flow Lineage:</strong></div>
-        <pre class="code-view">${details.lineage}</pre>
-      `;
-    }
-  }
-
-  // --- CONSULTING DOCUMENTS ---
-  const docs = {
-    migration: `Migration Strategy: Legacy Hadoop Hive to Delta Lakehouse\n\n1. Objective: Transition 5 petabytes of financial transaction tables and 500+ analytical notebooks to Delta Lake in 4 months.\n2. Ingestion pipeline: Set up Delta Lake Auto Loader (cloudFiles) streaming parquet, avro, and CSV files directly from S3/ADLS landing zones.\n3. Compute Optimization: Bind Photon execution engine over Serverless SQL warehouses to run low-latency BI aggregations on Gold Layer tables.`,
-    dr: `Disaster Recovery (DR) Plan for Northstar Lakehouse\n\n1. Target RTO: 30 minutes. Target RPO: 5 minutes.\n2. Checkpoints & Metastore: Replicate Unity Catalog schemas and metastore configurations across secondary compute workspaces in failover regions.\n3. Delta Deep Clone: Schedule daily delta tables replication via 'CREATE TABLE secondary.transactions DEEP CLONE primary.transactions' to copy binary logs.`,
-    rbac: `RBAC & Governance Access Controls (Unity Catalog)\n\n1. catalog hierarchy: Catalog (northstar_financial) -> Schema (bronze, silver, gold) -> Tables.\n2. Group Permissions:\n - data_engineers: USAGE on Catalog, CREATE on Schema.\n - business_analysts: SELECT on Gold schema tables only (PII columns masked via Unity Catalog dynamic masking functions).`,
-    contracts: `Northstar Data Contracts Schema Specifications\n\n1. Schema Contract: transactions_500m\nFields:\n - transaction_id: BIGINT (NOT NULL, UNIQUE)\n - amount: DOUBLE (positive)\n - timestamp: TIMESTAMP\n2. Quality Expectation assertions: expect_column_values_to_be_between('amount', 0.1, 100000)`
-  };
-
-  function loadDoc(docId) {
-    const text = docs[docId];
-    if (text) {
-      document.getElementById('doc-title').innerText = docId.toUpperCase() + " Specifications";
-      document.getElementById('doc-content').innerText = text;
-    }
-  }
-
-  // --- GENAI CO-PILOT ---
-  function runCopilotQuery() {
-    const agent = document.getElementById('copilot-agent').value;
-    const prompt = document.getElementById('copilot-prompt').value;
-    const output = document.getElementById('copilot-response');
-    
-    if (!prompt.trim()) {
-      alert("Please enter a query instruction first!");
-      return;
+    for (let y = 0; y < h; y += 30) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
     }
 
-    const apiKey = localStorage.getItem('groq_api_key');
-    const apiModel = localStorage.getItem('groq_model') || 'llama-3.1-70b-versatile';
-    const backendUrl = localStorage.getItem('modus_backend_url') || '';
-
-    output.innerHTML = `<i class="ti ti-loader fa-spin"></i> Dispatched query to the LangGraph specialist team...`;
-
-    // 1. Check if we route via FastAPI backend
-    if (backendUrl) {
-      fetch(`${backendUrl}/api/v1/copilot`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          agent,
-          prompt
-        })
-      })
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-      })
-      .then(data => {
-        output.innerHTML = `<strong>Specialist Agent (${agent}) response</strong>:\n\n${data.response}`;
-      })
-      .catch(err => {
-        output.innerHTML = `Backend API Error: ${err.message}`;
-      });
-      return;
+    if (state.isPlayingTour) {
+      animProgress += 0.015;
+      if (animProgress > 1) {
+        animProgress = 0;
+        // Optionally auto-advance step every full loop
+      }
     }
 
-    // 2. Direct Groq API client call fallback
-    if (apiKey) {
-      let sysPrompt = "You are a senior Forward Deployed Engineer.";
-      if (agent === 'code_generator') sysPrompt = "You are the PySpark Code Generator. Output only clean, optimized PySpark code using best practices like Auto Loader or Structured Streaming. Avoid explanations.";
-      if (agent === 'sql_optimizer') sysPrompt = "You are the SQL Optimizer. Output optimized SQL utilizing broadcast joins, caching, and Liquid Clustering with a brief execution plan description.";
-      if (agent === 'pipeline_debugger') sysPrompt = "You are the Pipeline Debugger. Help data engineers diagnose Spark failures, memory overflows, or checkpoint corruptions.";
-      if (agent === 'dq_assistant') sysPrompt = "You are the Data Quality Assistant. Generate Great Expectations rules or schema contract assertions.";
+    const step = state.currentTourStep;
 
-      const payload = {
-        model: apiModel,
-        messages: [
-          { role: "system", content: sysPrompt },
-          { role: "user", content: prompt }
-        ],
-        temperature: 0.2
-      };
+    if (step === 1) renderStep1Canvas(w, h, animProgress);
+    else if (step === 2) renderStep2Canvas(w, h, animProgress);
+    else if (step === 3) renderStep3Canvas(w, h, animProgress);
+    else if (step === 4) renderStep4Canvas(w, h, animProgress);
 
-      fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
-        },
-        body: JSON.stringify(payload)
-      })
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-      })
-      .then(data => {
-        const text = data.choices[0].message.content.trim();
-        output.innerHTML = `<strong>Specialist Agent (${agent}) response</strong>:\n\n${text}`;
-      })
-      .catch(err => {
-        output.innerHTML = `Groq API Error: ${err.message}`;
-      });
-    } else {
-      // Simulation mock
-      setTimeout(() => {
-        let code = "";
-        if (agent === 'code_generator') {
-          code = "# Auto Loader PySpark StreamIn\nspark.readStream.format('cloudFiles') \\\n  .option('cloudFiles.format', 'parquet') \\\n  .option('cloudFiles.schemaLocation', '/mnt/schema/') \\\n  .load('/mnt/raw/')";
-        } else if (agent === 'sql_optimizer') {
-          code = "-- Optimized Broadcast Join\nSELECT /*+ BROADCAST(c) */ t.*, c.name\nFROM transactions_500m t\nJOIN customer_master c ON t.customer_id = c.customer_id;";
-        } else {
-          code = "Audit completed successfully. Optimize layouts using liquid clustering configurations.";
-        }
-        output.innerHTML = `<strong>Specialist Agent (${agent}) response (Simulated)</strong>:\n\n\`\`\`python\n${code}\n\`\`\``;
-      }, 1000);
-    }
+    window.requestAnimationFrame(renderCanvasFrame);
   }
 
-  // Settings Configuration
-  function openSettingsModal() {
-    document.getElementById('settings-modal').classList.add('open');
+  // ANIMATION DRAWINGS FOR STEP 1: TREATMENT VS CONTROL JUDGE COUNCIL
+  function renderStep1Canvas(w, h, progress) {
+    const cy = h / 2;
+
+    // Node 1: Input Request
+    drawNode(ctx, 100, cy, 34, "#ff5630", "User Query");
+
+    // Node 2: Split to Control and Treatment
+    const splitX = 260;
+    drawNode(ctx, splitX, cy - 60, 28, "#94a3b8", "Control v1.2");
+    drawNode(ctx, splitX, cy + 60, 28, "#8b5cf6", "Treatment v2.0");
+
+    // Connectors
+    drawConnectingPulse(ctx, 100, cy, splitX, cy - 60, progress, "#ff5630");
+    drawConnectingPulse(ctx, 100, cy, splitX, cy + 60, progress, "#ff5630");
+
+    // Node 3: Judge Council
+    const judgeX = 480;
+    drawNode(ctx, judgeX, cy, 40, "#10b981", "Judge Council");
+
+    drawConnectingPulse(ctx, splitX, cy - 60, judgeX, cy, progress, "#94a3b8");
+    drawConnectingPulse(ctx, splitX, cy + 60, judgeX, cy, progress, "#8b5cf6");
+
+    // Node 4: Ship / No-Ship Stamp
+    const finalX = w - 120;
+    drawNode(ctx, finalX, cy, 38, "#10b981", "SHIP APPROVED");
+    drawConnectingPulse(ctx, judgeX, cy, finalX, cy, progress, "#10b981");
+
+    // Floating text annotation
+    ctx.fillStyle = "#f8fafc";
+    ctx.font = "11px Inter, sans-serif";
+    ctx.fillText("Paired t-test: t=4.82 (p < 0.01)", judgeX - 70, cy + 65);
   }
 
-  function closeSettingsModal() {
-    document.getElementById('settings-modal').classList.remove('open');
+  // ANIMATION DRAWINGS FOR STEP 2: DLT TELEMETRY STREAMING
+  function renderStep2Canvas(w, h, progress) {
+    const cy = h / 2;
+
+    // DLT Pipeline stages
+    drawNode(ctx, 100, cy, 32, "#ff5630", "Bronze Ingest");
+    drawNode(ctx, 280, cy, 32, "#06b6d4", "Silver Cleansed");
+    drawNode(ctx, 460, cy, 32, "#10b981", "Gold Telemetry");
+
+    drawConnectingPulse(ctx, 100, cy, 280, cy, progress, "#ff5630");
+    drawConnectingPulse(ctx, 280, cy, 460, cy, progress, "#06b6d4");
+
+    // Live Dashboard Node
+    const dashX = w - 120;
+    drawNode(ctx, dashX, cy, 38, "#8b5cf6", "Guardrail Dashboard");
+    drawConnectingPulse(ctx, 460, cy, dashX, cy, progress, "#10b981");
+
+    // Sparkline visual
+    ctx.strokeStyle = "#10b981";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(460, cy - 60);
+    ctx.lineTo(490, cy - 70);
+    ctx.lineTo(520, cy - 50);
+    ctx.lineTo(550, cy - 80);
+    ctx.lineTo(580, cy - 60);
+    ctx.stroke();
+
+    ctx.fillStyle = "#94a3b8";
+    ctx.font = "10px Inter";
+    ctx.fillText("Trace Telemetry: 14,250 events/sec", 260, cy + 60);
   }
 
-  function saveSettings() {
-    const key = document.getElementById('groq-api-key').value.trim();
-    const model = document.getElementById('groq-model-select').value;
-    const backendUrl = document.getElementById('settings-backend-url').value.trim();
-    
-    if (key) {
-      localStorage.setItem('groq_api_key', key);
-    } else {
-      localStorage.removeItem('groq_api_key');
-    }
-    localStorage.setItem('groq_model', model);
-    localStorage.setItem('modus_backend_url', backendUrl);
-    
-    closeSettingsModal();
-    checkKeyStatus();
-    alert('Configuration saved successfully!');
+  // ANIMATION DRAWINGS FOR STEP 3: PARETO FRONTIER RETRIEVAL
+  function renderStep3Canvas(w, h, progress) {
+    const originX = 100;
+    const originY = h - 60;
+    const maxX = w - 120;
+    const maxY = 50;
+
+    // Draw Axes
+    ctx.strokeStyle = "rgba(255,255,255,0.2)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(originX, maxY);
+    ctx.lineTo(originX, originY);
+    ctx.lineTo(maxX, originY);
+    ctx.stroke();
+
+    ctx.fillStyle = "#94a3b8";
+    ctx.font = "10px Inter";
+    ctx.fillText("Latency (Faster →)", maxX - 80, originY + 20);
+    ctx.fillText("Relevance NDCG@10 ↑", originX - 40, maxY - 10);
+
+    // Points
+    const bm25 = { x: originX + (maxX - originX) * 0.85, y: originY - (originY - maxY) * 0.4, label: "BM25 (18ms)" };
+    const dense = { x: originX + (maxX - originX) * 0.25, y: originY - (originY - maxY) * 0.8, label: "Dense (120ms)" };
+    const winner = { x: originX + (maxX - originX) * 0.72, y: originY - (originY - maxY) * 0.92, label: "Matryoshka+Rerank (42ms)" };
+
+    drawNode(ctx, bm25.x, bm25.y, 16, "#f59e0b", bm25.label);
+    drawNode(ctx, dense.x, dense.y, 16, "#ef4444", dense.label);
+    drawNode(ctx, winner.x, winner.y, 22, "#10b981", winner.label);
+
+    // Curve
+    ctx.strokeStyle = "#8b5cf6";
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(bm25.x, bm25.y);
+    ctx.quadraticCurveTo(winner.x, winner.y + 20, winner.x, winner.y);
+    ctx.stroke();
+    ctx.setLineDash([]);
   }
 
-  function loadSettings() {
-    const key = localStorage.getItem('groq_api_key') || '';
-    const model = localStorage.getItem('groq_model') || 'llama-3.1-70b-versatile';
-    const backendUrl = localStorage.getItem('modus_backend_url') || '';
-    
-    document.getElementById('groq-api-key').value = key;
-    document.getElementById('groq-model-select').value = model;
-    document.getElementById('settings-backend-url').value = backendUrl;
-    checkKeyStatus();
+  // ANIMATION DRAWINGS FOR STEP 4: AUTOMATED DRIFT & ROLLBACK
+  function renderStep4Canvas(w, h, progress) {
+    const cy = h / 2;
+
+    drawNode(ctx, 120, cy, 32, "#06b6d4", "Drift Detector");
+    drawNode(ctx, 300, cy, 34, "#ef4444", "Circuit Breaker");
+    drawNode(ctx, 480, cy, 32, "#10b981", "Auto Rollback");
+    drawNode(ctx, w - 120, cy, 36, "#8b5cf6", "Unity Catalog");
+
+    drawConnectingPulse(ctx, 120, cy, 300, cy, progress, "#06b6d4");
+    drawConnectingPulse(ctx, 300, cy, 480, cy, progress, "#ef4444");
+    drawConnectingPulse(ctx, 480, cy, w - 120, cy, progress, "#10b981");
+
+    ctx.fillStyle = "#64748b";
+    ctx.font = "11px Fira Code, monospace";
+    ctx.fillText("FastAPI Gateway Token Bucket: 100 req/min", 200, cy + 65);
   }
 
-  function checkKeyStatus() {
-    const key = localStorage.getItem('groq_api_key');
-    const banner = document.getElementById('api-key-banner');
-    if (banner) {
-      if (key) {
-        banner.className = "info-box info-box-success";
-        banner.innerHTML = `<i class="ti ti-shield-check"></i> <strong>Real-time API Mode Active</strong>: Successfully loaded Groq completions key. Running live evaluations.`;
-        banner.style.display = "block";
+  // HELPER CANVAS UTILS
+  function drawNode(ctx, x, y, r, color, label) {
+    ctx.save();
+    ctx.fillStyle = color;
+    ctx.shadowColor = color;
+    ctx.shadowBlur = 15;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 10px Inter, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(label, x, y);
+    ctx.restore();
+  }
+
+  function drawConnectingPulse(ctx, x1, y1, x2, y2, progress, color) {
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.globalAlpha = 0.3;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+
+    // Pulse particle
+    const px = x1 + (x2 - x1) * progress;
+    const py = y1 + (y2 - y1) * progress;
+
+    ctx.globalAlpha = 1.0;
+    ctx.fillStyle = "#ffffff";
+    ctx.shadowColor = color;
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.arc(px, py, 4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // =========================================================================
+  // PILLAR 1: LIVE EVALUATION HARNESS LOGIC
+  // =========================================================================
+  function runLiveEvaluationHarness() {
+    const btn = document.getElementById('runEvalBtn');
+    const out = document.getElementById('evalConsoleOutput');
+
+    btn.disabled = true;
+    out.innerText = "[XLNT Engine] Initializing Treatment vs Control Evaluation Harness...\n[Dataset] Loading held-out Judge Council prompts (500 samples)...";
+
+    let step = 0;
+    const steps = [
+      "[Control v1.2] Executing Sparse BM25 retrieval over target catalog...",
+      "[Treatment v2.0] Executing Matryoshka (256d) + Cohere Rerank v3...",
+      "[Judge Council] LLM Judge Scoring: Faithfulness, Recall, Coherence...",
+      "[Stat Test] Computing Paired t-test statistics & 95% Confidence Intervals...",
+      "[RESULT] t-stat: 4.821 | p-value: 0.00034 | Delta Faithfulness: +0.084",
+      "[DECISION] AUTOMATED SHIP RECOMMENDATION: ROLLOUT TO PRODUCTION APPROVED!"
+    ];
+
+    const timer = setInterval(() => {
+      if (step < steps.length) {
+        out.innerText += "\n" + steps[step];
+        step++;
       } else {
-        banner.className = "info-box info-box-warning";
-        banner.innerHTML = `<i class="ti ti-bulb"></i> <strong>Real-time API Mode</strong>: Click the settings gear in the sidebar to add a <strong>Groq API Key</strong> for live LLM evaluations. Currently running in simulation fallback mode.`;
-        banner.style.display = "block";
+        clearInterval(timer);
+        btn.disabled = false;
       }
-    }
+    }, 600);
   }
 
-  // Charts
-  let lineChartInst = null;
-  let doughnutChartInst = null;
+  // =========================================================================
+  // PILLAR 2: DLT TELEMETRY CHART & LOG FEEDS
+  // =========================================================================
+  let telemetryChartInst;
+  function initTelemetryChart() {
+    if (telemetryChartInst) return;
+    const ctx = document.getElementById('telemetryChart')?.getContext('2d');
+    if (!ctx) return;
 
-  function initOverviewCharts() {
-    if (lineChartInst) lineChartInst.destroy();
-    if (doughnutChartInst) doughnutChartInst.destroy();
+    const labels = Array.from({length: 20}, (_, i) => `${i*2}s`);
+    const latData = Array.from({length: 20}, () => Math.floor(38 + Math.random()*10));
 
-    const labels = ['06:00','08:00','10:00','12:00','14:00','16:00','18:00','20:00','22:00','00:00','02:00','04:00'];
-    
-    const lineCtx = document.getElementById('lineChart');
-    if (lineCtx) {
-      lineChartInst = new Chart(lineCtx, {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [
-            { label: 'Bronze Ingestion', data: [12000, 14000, 15000, 14500, 16000, 17500, 16000, 18000, 17000, 17500, 18500, 17800], borderColor: '#ff5630', backgroundColor: 'transparent', borderWidth: 2, tension: 0.3 },
-            { label: 'Silver Cleansed', data: [10000, 12000, 13000, 12800, 14000, 15000, 14200, 16000, 15100, 15500, 16200, 15800], borderColor: '#2a78d6', backgroundColor: 'transparent', borderWidth: 2, tension: 0.3 },
-            { label: 'Gold Aggregates', data: [8000,  9500,  11000, 10500, 12000, 13000, 12000, 14000, 13000, 13500, 14000, 13700], borderColor: '#1baf7a', backgroundColor: 'transparent', borderWidth: 2, tension: 0.3 }
-          ]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            x: { grid: { color: 'rgba(255,255,255,0.06)' }, ticks: { color: '#7c756c', font: { size: 9 } } },
-            y: { grid: { color: 'rgba(255,255,255,0.06)' }, ticks: { color: '#7c756c', font: { size: 9 } } }
-          }
+    telemetryChartInst = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Latency p95 (ms)',
+          data: latData,
+          borderColor: '#10b981',
+          backgroundColor: 'rgba(16, 185, 129, 0.1)',
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b' } },
+          y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b' } }
         }
-      });
-    }
-
-    const doughnutCtx = document.getElementById('doughnutChart');
-    if (doughnutCtx) {
-      doughnutChartInst = new Chart(doughnutCtx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Bronze Raw', 'Silver Clean', 'Gold Aggregate'],
-          datasets: [{ data: [50, 30, 20], backgroundColor: ['#ff5630','#2a78d6','#1baf7a'], borderWidth: 2, borderColor: '#0f111a' }]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false, cutout: '70%',
-          plugins: { legend: { display: false } }
-        }
-      });
-    }
-  }
-
-  // --- SQL QUERY CONSOLE ENGINE ---
-  const localCustomers = [
-    { Customer_ID: 10001, Name: "Customer_10001", Segment: "Retail", Country: "USA", Join_Date: "2024-01-15", Balance: 45000.50 },
-    { Customer_ID: 10002, Name: "Customer_10002", Segment: "Wealth", Country: "USA", Join_Date: "2023-11-22", Balance: 154000.00 },
-    { Customer_ID: 10003, Name: "Customer_10003", Segment: "Corporate", Country: "India", Join_Date: "2024-03-01", Balance: 890000.20 },
-    { Customer_ID: 10004, Name: "Customer_10004", Segment: "Retail", Country: "India", Join_Date: "2025-05-12", Balance: 12000.00 },
-    { Customer_ID: 10005, Name: "Customer_10005", Segment: "SME", Country: "UK", Join_Date: "2023-08-19", Balance: 62000.10 },
-    { Customer_ID: 10006, Name: "Customer_10006", Segment: "Wealth", Country: "UK", Join_Date: "2024-02-10", Balance: 320000.00 },
-    { Customer_ID: 10007, Name: "Customer_10007", Segment: "Retail", Country: "Germany", Join_Date: "2025-01-05", Balance: 8400.00 },
-    { Customer_ID: 10008, Name: "Customer_10008", Segment: "SME", Country: "Germany", Join_Date: "2024-07-21", Balance: 145000.80 },
-    { Customer_ID: 10009, Name: "Customer_10009", Segment: "Retail", Country: "Singapore", Join_Date: "2023-10-30", Balance: 23000.40 },
-    { Customer_ID: 10010, Name: "Customer_10010", Segment: "Wealth", Country: "Singapore", Join_Date: "2024-06-14", Balance: 480000.00 }
-  ];
-
-  const localTransactions = [
-    { Transaction_ID: 500001, Customer_ID: 10001, Amount: 150.25, Category: "Shopping", Timestamp: "2026-06-01 10:20:00", Status: "Completed" },
-    { Transaction_ID: 500002, Customer_ID: 10001, Amount: 45.50, Category: "Dining", Timestamp: "2026-06-02 18:45:00", Status: "Completed" },
-    { Transaction_ID: 500003, Customer_ID: 10002, Amount: 1200.00, Category: "Investment", Timestamp: "2026-06-02 09:00:00", Status: "Completed" },
-    { Transaction_ID: 500004, Customer_ID: 10003, Amount: 15000.00, Category: "Transfer", Timestamp: "2026-06-03 14:15:00", Status: "Completed" },
-    { Transaction_ID: 500005, Customer_ID: 10004, Amount: 85.10, Category: "Utilities", Timestamp: "2026-06-03 11:30:00", Status: "Completed" },
-    { Transaction_ID: 500006, Customer_ID: 10005, Amount: 320.00, Category: "Shopping", Timestamp: "2026-06-04 16:00:00", Status: "Pending" },
-    { Transaction_ID: 500007, Customer_ID: 10006, Amount: 5000.00, Category: "Investment", Timestamp: "2026-06-04 10:05:00", Status: "Completed" },
-    { Transaction_ID: 500008, Customer_ID: 10007, Amount: 12.40, Category: "Dining", Timestamp: "2026-06-05 20:30:00", Status: "Completed" },
-    { Transaction_ID: 500009, Customer_ID: 10008, Amount: 2450.00, Category: "Transfer", Timestamp: "2026-06-05 13:50:00", Status: "Completed" },
-    { Transaction_ID: 500010, Customer_ID: 10009, Amount: 95.00, Category: "Utilities", Timestamp: "2026-06-06 08:10:00", Status: "Failed" }
-  ];
-
-  const sqlTemplates = {
-    cust_country: "SELECT Country, AVG(Balance) FROM customer_master GROUP BY Country;",
-    tx_cat: "SELECT Category, SUM(Amount) FROM transactions GROUP BY Category;",
-    wealth_retail: "SELECT Name, Segment, Country, Balance FROM customer_master WHERE Segment = 'Wealth' LIMIT 5;",
-    high_val_join: "SELECT c.Name, t.Category, t.Amount FROM transactions t JOIN customer_master c ON t.Customer_ID = c.Customer_ID LIMIT 10;",
-    custom_query: "SELECT * FROM custom_dataset LIMIT 10;"
-  };
-
-  let customDatasetRows = [];
-
-  function handleSQLCSVUpload() {
-    const fileInput = document.getElementById('sql-csv-upload');
-    const statusText = document.getElementById('sql-upload-status');
-    const customOpt = document.getElementById('sql-template-custom-opt');
-    const file = fileInput.files[0];
-    
-    if (!file) return;
-    
-    statusText.innerHTML = `<i class="ti ti-loader fa-spin"></i> Parsing CSV file...`;
-    
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      try {
-        const text = e.target.result;
-        const rows = parseCSV(text);
-        if (rows.length < 2) throw new Error("Dataset contains insufficient rows or columns.");
-        
-        const headers = rows[0];
-        customDatasetRows = [];
-        for (let i = 1; i < rows.length; i++) {
-          let row = {};
-          headers.forEach((h, idx) => {
-            row[h.trim()] = rows[i][idx] ? rows[i][idx].trim() : "";
-          });
-          customDatasetRows.push(row);
-        }
-        
-        statusText.style.color = "var(--text-success)";
-        statusText.innerHTML = `<i class="ti ti-circle-check"></i> Loaded <strong>custom_dataset</strong> (${customDatasetRows.length} rows) successfully!`;
-        customOpt.style.display = "block";
-        
-        document.getElementById('sql-template-select').value = "custom_query";
-        applySQLTemplate();
-      } catch (err) {
-        statusText.style.color = "var(--text-danger)";
-        statusText.innerHTML = `<i class="ti ti-alert-triangle"></i> Upload Error: ${err.message}`;
       }
-    };
-    reader.readAsText(file);
+    });
+
+    renderTelemetryTable();
   }
 
-  function applySQLTemplate() {
-    const template = document.getElementById('sql-template-select').value;
-    if (sqlTemplates[template]) {
-      document.getElementById('sql-editor-input').value = sqlTemplates[template];
+  function injectTelemetryAnomaly() {
+    if (telemetryChartInst) {
+      telemetryChartInst.data.datasets[0].data.push(145);
+      telemetryChartInst.data.datasets[0].borderColor = '#ef4444';
+      telemetryChartInst.update();
+
+      document.getElementById('pill-lat').className = "pill pill-danger";
+      document.getElementById('pill-lat').innerText = "> 80ms (REGRESSION: 145ms)";
     }
   }
 
-  function runSQLQuery() {
-    const sql = document.getElementById('sql-editor-input').value;
-    const view = document.getElementById('sql-results-view');
-    const stats = document.getElementById('sql-meta-stats');
-    const runBtn = document.getElementById('sql-run-btn');
+  function renderTelemetryTable() {
+    const tbody = document.getElementById('telemetryTbody');
+    if (!tbody) return;
 
-    if (!sql.trim()) {
-      alert("Please enter a SQL query!");
-      return;
-    }
+    const rows = [
+      { id: 'tr_9f81a', q: 'Extract EBITDA ratio for Q2', strategy: 'Matryoshka+Cohere', lat: '41ms', score: '0.97', status: 'PASS' },
+      { id: 'tr_7b22c', q: 'Databricks DLT checkpoint retention', strategy: 'Matryoshka+Cohere', lat: '39ms', score: '0.95', status: 'PASS' },
+      { id: 'tr_3a19e', q: 'Synthesize contract liability clause', strategy: 'Matryoshka+Cohere', lat: '44ms', score: '0.96', status: 'PASS' }
+    ];
 
-    runBtn.disabled = true;
-    view.innerHTML = `<i class="ti ti-loader fa-spin"></i> Executing SQL on Northstar cluster compute...`;
+    tbody.innerHTML = rows.map(r => `
+      <tr>
+        <td><code>${r.id}</code></td>
+        <td>${r.q}</td>
+        <td><span class="pill pill-info">${r.strategy}</span></td>
+        <td>${r.lat}</td>
+        <td>${r.score}</td>
+        <td><span class="pill pill-success">${r.status}</span></td>
+      </tr>
+    `).join('');
+  }
 
-    const backendUrl = localStorage.getItem('modus_backend_url') || '';
-    const queryLower = sql.toLowerCase();
+  // =========================================================================
+  // PILLAR 3: PARETO CHART
+  // =========================================================================
+  function initParetoChart() {
+    const ctx = document.getElementById('paretoChart')?.getContext('2d');
+    if (!ctx) return;
 
-    if (backendUrl && !queryLower.includes("custom_dataset")) {
-      fetch(`${backendUrl}/api/v1/query-data`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sql })
-      })
-      .then(res => {
-        if (!res.ok) return res.json().then(err => { throw new Error(err.detail || 'Query failed') });
-        return res.json();
-      })
-      .then(data => {
-        stats.innerText = `${data.total_rows} rows · ${data.elapsed_ms}ms`;
-        renderSQLResultTable(data.columns, data.records);
-        runBtn.disabled = false;
-      })
-      .catch(err => {
-        view.innerHTML = `<span style="color:var(--text-danger);"><i class="ti ti-alert-triangle"></i> SQL Error: ${err.message}</span>`;
-        runBtn.disabled = false;
-      });
-      return;
-    }
+    new Chart(ctx, {
+      type: 'bubble',
+      data: {
+        datasets: [
+          { label: 'Sparse BM25', data: [{x: 18, y: 0.68, r: 8}], backgroundColor: '#f59e0b' },
+          { label: 'Dense Vector', data: [{x: 120, y: 0.89, r: 10}], backgroundColor: '#ef4444' },
+          { label: 'Hybrid (Dense+BM25)', data: [{x: 145, y: 0.92, r: 12}], backgroundColor: '#06b6d4' },
+          { label: 'Matryoshka + Cohere', data: [{x: 42, y: 0.95, r: 15}], backgroundColor: '#8b5cf6' }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { title: { display: true, text: 'Latency p95 (ms) - Lower is Faster', color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+          y: { title: { display: true, text: 'Relevance NDCG@10', color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+        }
+      }
+    });
+  }
+
+  // =========================================================================
+  // PILLAR 4: AUTOMATED DRIFT & RATE LIMITER
+  // =========================================================================
+  function simulateMetricDriftAndRollback() {
+    const out = document.getElementById('driftConsoleOutput');
+    out.innerText = "[Drift Engine] Injecting synthetic metric drift into production stream...\n[ALERT] Population Stability Index (PSI) spiked to 0.142 (Threshold: 0.10)!";
 
     setTimeout(() => {
-      try {
-        const start = performance.now();
-        const res = executeLocalSQL(sql);
-        const elapsed = Math.round(performance.now() - start);
-        
-        if (res.error) {
-          view.innerHTML = `<span style="color:var(--text-danger);"><i class="ti ti-alert-triangle"></i> SQL Error: ${res.error}</span>`;
-        } else {
-          stats.innerText = `${res.records.length} rows · ${elapsed}ms (Static Sandbox)`;
-          renderSQLResultTable(res.columns, res.records);
-        }
-      } catch (e) {
-        view.innerHTML = `<span style="color:var(--text-danger);"><i class="ti ti-alert-triangle"></i> Parser Error: ${e.message}</span>`;
-      }
-      runBtn.disabled = false;
-    }, 400);
+      out.innerText += "\n[Circuit Breaker] AUTOMATED ROLLBACK TRIGGERED! Zero human review required.\n[Rollback] Reverting pipeline route to stable snapshot 'modus_prod_v1.9'...\n[Unity Catalog] Auditable rollback record logged. Security hash: #roll_92a8e10.";
+    }, 800);
   }
 
-  function executeLocalSQL(sql) {
-    let cleanSql = sql.replace(/\s+/g, ' ').trim();
-    let queryLower = cleanSql.toLowerCase();
+  function sendGatewayRequest() {
+    if (state.tokenBucket > 0) state.tokenBucket -= 10;
+    const val = document.getElementById('tokenBucketVal');
+    const bar = document.getElementById('tokenBucketBar');
+    if (val) val.innerText = `${state.tokenBucket} / 100 Tokens`;
+    if (bar) bar.style.width = `${state.tokenBucket}%`;
 
-    let table = "";
-    if (queryLower.includes("customer_master")) table = "customer_master";
-    else if (queryLower.includes("transactions")) table = "transactions";
-    else if (queryLower.includes("custom_dataset")) table = "custom_dataset";
-    else if (queryLower.includes("fox_sports_search")) table = "fox_sports_search";
-    else if (queryLower.includes("jpmc_migration")) table = "jpmc_migration";
-    else if (queryLower.includes("qualcomm_agentic")) table = "qualcomm_agentic";
-    else if (queryLower.includes("spokane_etl")) table = "spokane_etl";
-    else return { error: "Table not found. Supported tables: customer_master, transactions, custom_dataset, fox_sports_search, jpmc_migration, qualcomm_agentic, spokane_etl" };
-
-    let sourceData;
-    if (table === "customer_master") sourceData = localCustomers;
-    else if (table === "transactions") sourceData = localTransactions;
-    else if (table === "fox_sports_search") sourceData = caseSportsData;
-    else if (table === "jpmc_migration") sourceData = caseJpmcData;
-    else if (table === "qualcomm_agentic") sourceData = caseQualcommData;
-    else if (table === "spokane_etl") sourceData = caseSpokaneData;
-    else {
-      if (customDatasetRows.length === 0) return { error: "custom_dataset is empty. Please upload a CSV dataset file first!" };
-      sourceData = customDatasetRows;
+    const out = document.getElementById('gatewayResponseOutput');
+    if (state.tokenBucket > 0) {
+      out.innerText = `HTTP 200 OK\nHeaders: X-RateLimit-Limit: 100, X-RateLimit-Remaining: ${state.tokenBucket}\nBody: {"status": "authenticated", "governance": "UnityCatalog_v2", "timestamp": "${new Date().toISOString()}"}`;
+    } else {
+      out.innerText = `HTTP 429 Too Many Requests\nHeaders: Retry-After: 60\nBody: {"error": "Rate limit exceeded. Token bucket empty."}`;
     }
-    let data = JSON.parse(JSON.stringify(sourceData));
-
-    if (queryLower.includes("where")) {
-      let wherePart = cleanSql.split(/where/i)[1].split(/group by|limit/i)[0].trim();
-      let parts = wherePart.split("=");
-      if (parts.length === 2) {
-        let col = parts[0].trim();
-        let val = parts[1].replace(/['"]/g, "").trim();
-        data = data.filter(r => String(r[col]) === val);
-      }
-    }
-
-    if (queryLower.includes("join")) {
-      let joined = [];
-      localTransactions.forEach(tx => {
-        let cust = localCustomers.find(c => c.Customer_ID === tx.Customer_ID);
-        if (cust) {
-          joined.push({
-            "Name": cust.Name,
-            "Segment": cust.Segment,
-            "Category": tx.Category,
-            "Amount": tx.Amount,
-            "Status": tx.Status
-          });
-        }
-      });
-      data = joined;
-    }
-
-    if (queryLower.includes("group by")) {
-      let groupByPart = cleanSql.split(/group by/i)[1].split(/limit/i)[0].trim().replace(";", "");
-      let selectFields = cleanSql.split(/select/i)[1].split(/from/i)[0].trim().split(",");
-      
-      let aggCol = "", aggFunc = "";
-      selectFields.forEach(f => {
-        let fl = f.toLowerCase();
-        if (fl.includes("sum(")) { aggFunc = "sum"; aggCol = f.match(/\(([^)]+)\)/)[1].trim(); }
-        if (fl.includes("avg(")) { aggFunc = "avg"; aggCol = f.match(/\(([^)]+)\)/)[1].trim(); }
-        if (fl.includes("count(")) { aggFunc = "count"; }
-      });
-
-      let groups = {};
-      data.forEach(r => {
-        let key = r[groupByPart];
-        if (!groups[key]) groups[key] = [];
-        groups[key].push(r);
-      });
-
-      let results = [];
-      for (let key in groups) {
-        let row = {};
-        row[groupByPart] = key;
-        let vals = groups[key];
-        
-        if (aggFunc === "sum") {
-          let sum = vals.reduce((s, x) => s + (parseFloat(x[aggCol]) || 0), 0);
-          row[`SUM(${aggCol})`] = parseFloat(sum.toFixed(2));
-        } else if (aggFunc === "avg") {
-          let sum = vals.reduce((s, x) => s + (parseFloat(x[aggCol]) || 0), 0);
-          row[`AVG(${aggCol})`] = parseFloat((sum / vals.length).toFixed(2));
-        } else if (aggFunc === "count") {
-          row["COUNT(*)"] = vals.length;
-        } else {
-          row["Records"] = vals.length;
-        }
-        results.push(row);
-      }
-      data = results;
-    }
-
-    if (queryLower.includes("limit")) {
-      let limitParts = cleanSql.split(/limit/i);
-      let limitVal = parseInt(limitParts[1].replace(";", "").trim());
-      if (!isNaN(limitVal)) {
-        data = data.slice(0, limitVal);
-      }
-    }
-
-    return { columns: Object.keys(data[0] || {}), records: data };
   }
 
-  function renderSQLResultTable(columns, records) {
-    const view = document.getElementById('sql-results-view');
-    if (!records || records.length === 0) {
-      view.innerHTML = `<span style="color:var(--text-secondary);">Query returned 0 records.</span>`;
-      return;
+  // =========================================================================
+  // SQL CONSOLE logic
+  // =========================================================================
+  const sqlMockData = {
+    eval_history: {
+      cols: ['experiment_id', 'variant_name', 'faithfulness', 'context_recall', 'coherence', 'decision'],
+      rows: [
+        ['exp_001', 'Sparse BM25', 0.74, 0.68, 0.81, 'REJECTED'],
+        ['exp_002', 'Dense Vector (1536d)', 0.88, 0.89, 0.90, 'REJECTED (Latency)'],
+        ['exp_003', 'Matryoshka + Cohere', 0.96, 0.94, 0.95, 'SHIP APPROVED']
+      ]
     }
+  };
 
-    let html = `<table class="system-table" style="width: 100%; border-collapse: collapse;">`;
-    html += `<thead><tr>` + columns.map(c => `<th style="border-bottom: 2px solid var(--border-strong); padding: 6px 12px; text-align: left;">${c}</th>`).join('') + `</tr></thead>`;
-    html += `<tbody>`;
-    records.forEach(r => {
-      html += `<tr>` + columns.map(c => `<td style="padding: 6px 12px; border-bottom: 0.5px solid var(--border);">${r[c] !== undefined ? r[c] : ''}</td>`).join('') + `</tr>`;
+  function applyPrebuiltSQL() {
+    const val = document.getElementById('sqlQuerySelect').value;
+    const input = document.getElementById('sqlInput');
+    if (val === 'eval_history') input.value = "SELECT experiment_id, variant_name, faithfulness, context_recall, decision FROM modus_catalog.eval.experiments;";
+    if (val === 'dlt_telemetry') input.value = "SELECT trace_id, latency_ms, faithfulness_score FROM modus_catalog.telemetry.dlt_gold WHERE latency_ms < 50;";
+    if (val === 'retrieval_bench') input.value = "SELECT strategy, dimensions, latency_p95, recall_at_10 FROM modus_catalog.benchmarks.catalog_5m;";
+    if (val === 'audit_logs') input.value = "SELECT event_id, event_type, triggered_by, audit_hash FROM modus_catalog.governance.audit_log;";
+  }
+
+  function executeSQLQuery() {
+    const view = document.getElementById('sqlResultsView');
+    if (!view) return;
+
+    const data = sqlMockData.eval_history;
+    let html = `<table class="data-table"><thead><tr>` + data.cols.map(c => `<th>${c}</th>`).join('') + `</tr></thead><tbody>`;
+    data.rows.forEach(r => {
+      html += `<tr>` + r.map(cell => `<td>${cell}</td>`).join('') + `</tr>`;
     });
     html += `</tbody></table>`;
     view.innerHTML = html;
   }
 
-  // --- PIPELINE CASE STUDY DATA ---
-  const caseSportsData = [
-    { query_id: 1, search_query: "Live Game Stream", concurrent_requests: 120000, latency_ms: 12, success_rate_pct: 99.8 },
-    { query_id: 2, search_query: "Live Game Stream", concurrent_requests: 150000, latency_ms: 14, success_rate_pct: 99.7 },
-    { query_id: 3, search_query: "Player Stats", concurrent_requests: 45000, latency_ms: 8, success_rate_pct: 99.9 },
-    { query_id: 4, search_query: "Player Stats", concurrent_requests: 60000, latency_ms: 9, success_rate_pct: 99.9 },
-    { query_id: 5, search_query: "Highlights Video", concurrent_requests: 80000, latency_ms: 22, success_rate_pct: 99.2 },
-    { query_id: 6, search_query: "Highlights Video", concurrent_requests: 95000, latency_ms: 25, success_rate_pct: 99.1 }
-  ];
-
-  const caseJpmcData = [
-    { notebook_id: 101, migration_phase: "Phase 1 - Ingest", data_volume_tb: 120.5, is_delta_format: 1, duration_hrs: 12 },
-    { notebook_id: 102, migration_phase: "Phase 1 - Ingest", data_volume_tb: 450.0, is_delta_format: 1, duration_hrs: 24 },
-    { notebook_id: 103, migration_phase: "Phase 2 - Cleansing", data_volume_tb: 890.2, is_delta_format: 1, duration_hrs: 48 },
-    { notebook_id: 104, migration_phase: "Phase 2 - Cleansing", data_volume_tb: 1200.0, is_delta_format: 1, duration_hrs: 72 },
-    { notebook_id: 105, migration_phase: "Phase 3 - Analytics", data_volume_tb: 50.4, is_delta_format: 1, duration_hrs: 6 },
-    { notebook_id: 106, migration_phase: "Phase 3 - Analytics", data_volume_tb: 95.8, is_delta_format: 1, duration_hrs: 10 }
-  ];
-
-  const caseQualcommData = [
-    { task_id: 1, task_name: "Workflow Synthesis", manual_time_hours: 48.0, agent_time_minutes: 15.5, accuracy_pct: 98.4 },
-    { task_id: 2, task_name: "Workflow Synthesis", manual_time_hours: 72.0, agent_time_minutes: 22.0, accuracy_pct: 98.6 },
-    { task_id: 3, task_name: "Code Refactoring", manual_time_hours: 24.0, agent_time_minutes: 5.2, accuracy_pct: 99.1 },
-    { task_id: 4, task_name: "Code Refactoring", manual_time_hours: 36.0, agent_time_minutes: 8.0, accuracy_pct: 99.2 },
-    { task_id: 5, task_name: "Verification Logs", manual_time_hours: 12.0, agent_time_minutes: 2.1, accuracy_pct: 97.8 }
-  ];
-
-  const caseSpokaneData = [
-    { record_id: 1, department_source: "GIS Maps", is_duplicate: 1, infrastructure_cost_usd: 1200.00 },
-    { record_id: 2, department_source: "GIS Maps", is_duplicate: 0, infrastructure_cost_usd: 450.00 },
-    { record_id: 3, department_source: "Financials", is_duplicate: 1, infrastructure_cost_usd: 3500.00 },
-    { record_id: 4, department_source: "Financials", is_duplicate: 0, infrastructure_cost_usd: 800.00 },
-    { record_id: 5, department_source: "Permits Portal", is_duplicate: 1, infrastructure_cost_usd: 4500.00 },
-    { record_id: 6, department_source: "Permits Portal", is_duplicate: 0, infrastructure_cost_usd: 900.00 }
-  ];
-
-  const pipelineCaseStudies = {
-    foxsports: {
-      name: "Fox Sports Search Ingestion",
-      table: "fox_sports_search",
-      query: "SELECT search_query, AVG(latency_ms), MAX(concurrent_requests) FROM fox_sports_search GROUP BY search_query;",
-      logs: [
-        "[Bronze] Initializing Auto Loader file discovery on s3://foxsports-raw-ingest/...",
-        "[Bronze] Ingested 150,000 raw search JSON logs from streaming broker.",
-        "[Silver] Mapping JSON schema to structured Delta partition columns...",
-        "[Silver] Deduplication: removed 14,230 duplicate log items.",
-        "[Silver] Great Expectations assertion passed: query_latency_ms < 1000.",
-        "[Gold] Creating consolidated feature store aggregates...",
-        "[Gold] Delta Optimization: applying Z-Order clustering by (search_query).",
-        "[Success] Gold Table 'fox_sports_search' successfully updated in memory catalog!"
-      ]
-    },
-    jpmc: {
-      name: "JPMorgan Chase Data Migration",
-      table: "jpmc_migration",
-      query: "SELECT migration_phase, COUNT(*), SUM(data_volume_tb) FROM jpmc_migration GROUP BY migration_phase;",
-      logs: [
-        "[Bronze] Scanning s3://jpmc-lakehouse-migration-source/ for legacy Hadoop tables...",
-        "[Bronze] Discovered 5.2 petabytes of data assets and 512 statistical model notebooks.",
-        "[Silver] Migrating raw structures to transactional Silver Delta Lake tables...",
-        "[Silver] Data quality checks: verified Schema Evolution compatibility.",
-        "[Silver] Masking customer PII columns using dynamic cell-level privacy filters.",
-        "[Gold] Materializing historical analytical features for ML models...",
-        "[Gold] Compacted layout: optimized storage using Liquid Clustering.",
-        "[Success] Gold Table 'jpmc_migration' successfully registered in Unity Catalog!"
-      ]
-    },
-    qualcomm: {
-      name: "Qualcomm Agentic Workflows",
-      table: "qualcomm_agentic",
-      query: "SELECT task_name, manual_time_hours, agent_time_minutes FROM qualcomm_agentic;",
-      logs: [
-        "[Bronze] Reading raw verification logs from Qualcomm silicon testing boards...",
-        "[Bronze] Ingested 12,000 test executions via cloud parquet storage.",
-        "[Silver] Extracting error signatures and compiling agentic prompts...",
-        "[Silver] Validation check: checked test accuracy ratios > 95%.",
-        "[Gold] Constructing multi-agent reasoning graphs (LangGraph orchestra)...",
-        "[Gold] Aggregated execution durations and calculated total cost savings.",
-        "[Success] Gold Table 'qualcomm_agentic' successfully populated in analytics store!"
-      ]
-    },
-    spokane: {
-      name: "City of Spokane Automated ETL",
-      table: "spokane_etl",
-      query: "SELECT department_source, is_duplicate, COUNT(*) FROM spokane_etl GROUP BY department_source, is_duplicate;",
-      logs: [
-        "[Bronze] Ingesting files from disparate GIS, finance, and permits servers...",
-        "[Bronze] Discovered 85,000 unorganized cross-department database records.",
-        "[Silver] Running ETL cross-matching algorithms for deduplication...",
-        "[Silver] Cleansing complete: removed 68,000 duplicate permit and financial records (80% cut).",
-        "[Gold] Loading clean normalized records to centralized financial schemas...",
-        "[Gold] Calculated monthly infrastructure savings: 50% cluster reduction.",
-        "[Success] Gold Table 'spokane_etl' successfully compiled and loaded!"
-      ]
-    }
-  };
-
-  function loadPipelineCase() {
-    const selected = document.getElementById('pipeline-case-select').value;
-    const c = pipelineCaseStudies[selected];
-    const desc = document.getElementById('pipeline-case-desc');
-    const casesDescMap = {
-      foxsports: "Fox Sports co-built high-throughput search partitions, doubling search success rate during live event workloads exceeding 200,000 daily concurrent requests.",
-      jpmc: "JPMC migrated over 5 petabytes of compliance tables and 500+ statistical analysis notebooks to the Serverless Lakehouse Platform in just 4 months with full transactional checks.",
-      qualcomm: "Qualcomm transitioned isolated AI experiments into production-grade multi-agent reasoning models, successfully compressing multi-day validation workflows to minutes.",
-      spokane: "Spokane automated ETL pipelines across GIS, financials, and permits, reducing duplicate data records by 80% and slashing infrastructure cluster costs by 50%."
-    };
-    if (c && desc) {
-      desc.innerHTML = casesDescMap[selected];
-      document.getElementById('pipeline-logs').innerHTML = `Select a case study and click "Execute Medallion Pipeline" to watch log streams.`;
-    }
+  // =========================================================================
+  // SETTINGS MODAL
+  // =========================================================================
+  function openSettings() { document.getElementById('settingsDrawer').classList.add('open'); }
+  function closeSettings() { document.getElementById('settingsDrawer').classList.remove('open'); }
+  function saveSettings() {
+    const key = document.getElementById('groqApiKey').value;
+    if (key) localStorage.setItem('groq_key', key);
+    closeSettings();
+    alert('Configuration saved!');
   }
 
-  function executeMedallionPipeline() {
-    const selected = document.getElementById('pipeline-case-select').value;
-    const c = pipelineCaseStudies[selected];
-    const logBox = document.getElementById('pipeline-logs');
-    const runBtn = document.getElementById('pipeline-run-btn');
+  // INIT ON LOAD
+  window.addEventListener('DOMContentLoaded', () => {
+    initCanvas();
+    renderStepDescriptionCard(1);
+    switchTab('tour');
+  });
 
-    if (!c) return;
-
-    runBtn.disabled = true;
-    logBox.innerHTML = "";
-    
-    let index = 0;
-    
-    function appendLogLine() {
-      if (index < c.logs.length) {
-        logBox.innerHTML += `<div>${c.logs[index]}</div>`;
-        logBox.scrollTop = logBox.scrollHeight;
-        index++;
-        setTimeout(appendLogLine, 600);
-      } else {
-        logBox.innerHTML += `<div style="color:var(--text-success); font-weight:bold; margin-top:8px;"><i class="ti ti-circle-check"></i> Pipeline run complete! Loaded dataset into console.</div>`;
-        runBtn.disabled = false;
-        
-        // Auto load dataset query into SQL Editor
-        document.getElementById('sql-editor-input').value = c.query;
-        
-        // Render preview table inside logBox
-        let previewTableHtml = `<div style="margin-top:12px; font-weight:bold;">Gold Dataset Preview (Table: ${c.table}):</div>`;
-        const res = executeLocalSQL(c.query);
-        if (res && res.records) {
-          previewTableHtml += `<table class="system-table" style="width:100%; border-collapse:collapse; margin-top:6px; font-size:9.5px; background:var(--surface-0); border:0.5px solid var(--border);">`;
-          previewTableHtml += `<thead><tr>` + res.columns.map(col => `<th style="padding:4px 8px; border-bottom:1px solid var(--border-strong); text-align:left;">${col}</th>`).join('') + `</tr></thead>`;
-          previewTableHtml += `<tbody>`;
-          res.records.slice(0, 4).forEach(row => {
-            previewTableHtml += `<tr>` + res.columns.map(col => `<td style="padding:4px 8px; border-bottom:0.5px solid var(--border);">${row[col]}</td>`).join('') + `</tr>`;
-          });
-          previewTableHtml += `</tbody></table>`;
-          previewTableHtml += `<div style="margin-top:8px;"><button class="run-btn" onclick="switchTab('sql-console'); runSQLQuery();" style="padding:4px 8px; font-size:10px;"><i class="ti ti-terminal"></i> Query live in SQL Console →</button></div>`;
-          logBox.innerHTML += previewTableHtml;
-        }
-      }
+  window.addEventListener('resize', () => {
+    if (canvas) {
+      canvas.width = canvas.parentElement.getBoundingClientRect().width;
+      canvas.height = canvas.parentElement.getBoundingClientRect().height;
     }
-    
-    appendLogLine();
-  }
-
-  // Startup Init
-  loadSettings();
-  renderTables();
-  initOverviewCharts();
-  runSQLQuery();
+  });
 </script>
 </body>
 </html>
