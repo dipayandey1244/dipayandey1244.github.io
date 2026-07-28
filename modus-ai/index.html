@@ -56,8 +56,8 @@
 
   /* SIDEBAR */
   .sidebar {
-    width: 260px;
-    min-width: 260px;
+    width: 270px;
+    min-width: 270px;
     background: var(--surface-0);
     border-right: 1px solid var(--border);
     display: flex;
@@ -80,8 +80,8 @@
   }
 
   .logo-icon {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     background: linear-gradient(135deg, var(--orange), #ff7a59);
     border-radius: 8px;
     display: flex;
@@ -160,6 +160,13 @@
     color: #c084fc;
     border-color: rgba(139, 92, 246, 0.4);
     box-shadow: 0 0 12px rgba(139, 92, 246, 0.2);
+  }
+
+  .nav-item.active-interview {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(245, 158, 11, 0.2));
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.4);
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
   }
 
   .nav-item i {
@@ -285,6 +292,17 @@
   }
 
   .btn-purple:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+  }
+
+  .btn-emerald {
+    background: linear-gradient(135deg, var(--emerald), #059669);
+    color: #fff;
+    box-shadow: 0 2px 10px var(--emerald-glow);
+  }
+
+  .btn-emerald:hover {
     opacity: 0.92;
     transform: translateY(-1px);
   }
@@ -486,35 +504,11 @@
   }
 
   /* GRID LAYOUTS */
-  .grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-
-  .grid-3 {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-  }
-
-  .grid-4 {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-  }
-
-  .grid-2-1 {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 16px;
-  }
-
-  .grid-1-2 {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 16px;
-  }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+  .grid-1-2 { display: grid; grid-template-columns: 1fr 2fr; gap: 16px; }
 
   /* PANELS & CARDS */
   .card {
@@ -545,14 +539,8 @@
     gap: 8px;
   }
 
-  .card-title i {
-    color: var(--orange);
-  }
-
-  .card-subtitle {
-    font-size: 11px;
-    color: var(--text-muted);
-  }
+  .card-title i { color: var(--orange); }
+  .card-subtitle { font-size: 11px; color: var(--text-muted); }
 
   /* KPI CARDS */
   .kpi-card {
@@ -609,6 +597,7 @@
   .text-purple { color: var(--purple); }
   .text-cyan { color: var(--cyan); }
   .text-red { color: var(--red); }
+  .text-amber { color: var(--amber); }
 
   /* CODE BOX & MONOSPACE OUTPUT */
   .code-block {
@@ -648,14 +637,8 @@
     color: var(--text-secondary);
   }
 
-  .data-table tr:last-child td {
-    border-bottom: none;
-  }
-
-  .data-table tr:hover td {
-    background: rgba(255,255,255,0.02);
-    color: var(--text-primary);
-  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: rgba(255,255,255,0.02); color: var(--text-primary); }
 
   .pill {
     display: inline-flex;
@@ -673,19 +656,8 @@
   .pill-info { background: rgba(6, 182, 212, 0.15); color: var(--cyan); border: 1px solid rgba(6, 182, 212, 0.3); }
 
   /* FORM INPUTS */
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-bottom: 12px;
-  }
-
-  .form-label {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-secondary);
-  }
-
+  .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+  .form-label { font-size: 11px; font-weight: 600; color: var(--text-secondary); }
   .form-control {
     background: var(--surface-0);
     border: 1px solid var(--border-strong);
@@ -697,10 +669,7 @@
     transition: border-color 0.15s;
     font-family: inherit;
   }
-
-  .form-control:focus {
-    border-color: var(--orange);
-  }
+  .form-control:focus { border-color: var(--orange); }
 
   /* MODAL DRAWER */
   .drawer {
@@ -718,7 +687,6 @@
     flex-direction: column;
     padding: 24px;
   }
-
   .drawer.open { right: 0; }
 
   .drawer-header {
@@ -729,43 +697,29 @@
     padding-bottom: 12px;
     border-bottom: 1px solid var(--border);
   }
-
-  .drawer-title {
-    font-size: 15px;
-    font-weight: 700;
-  }
+  .drawer-title { font-size: 15px; font-weight: 700; }
 
   /* RADAR / JUDGE SCORE BARS */
-  .score-bar-group {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
+  .score-bar-group { display: flex; flex-direction: column; gap: 10px; }
+  .score-bar-item { display: flex; flex-direction: column; gap: 4px; }
+  .score-bar-meta { display: flex; justify-content: space-between; font-size: 11px; }
+  .score-bar-track { height: 6px; background: var(--surface-0); border-radius: 3px; overflow: hidden; }
+  .score-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
 
-  .score-bar-item {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+  /* INTERVIEW FLASHCARD STYLES */
+  .qa-card {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
   }
-
-  .score-bar-meta {
-    display: flex;
-    justify-content: space-between;
-    font-size: 11px;
-  }
-
-  .score-bar-track {
-    height: 6px;
-    background: var(--surface-0);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-
-  .score-bar-fill {
-    height: 100%;
-    border-radius: 3px;
-    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  }
+  .qa-card:hover { border-color: var(--emerald); background: var(--surface-2); }
+  .qa-q { font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .qa-a { font-size: 12px; line-height: 1.6; color: var(--text-secondary); display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+  .qa-card.open .qa-a { display: block; }
 </style>
 </head>
 <body>
@@ -788,7 +742,11 @@
 
     <nav class="sidebar-nav">
       <div>
-        <div class="nav-group-label">Interactive Step Tour</div>
+        <div class="nav-group-label">Interview &amp; Guided Mode</div>
+        <div class="nav-item active-interview" onclick="switchTab('interview-playbook')">
+          <i class="ti ti-target"></i> Interview Playbook
+          <span class="nav-badge" style="background:rgba(16,185,129,0.2); color:#34d399;">Prep</span>
+        </div>
         <div class="nav-item active-tour" onclick="switchTab('tour')">
           <i class="ti ti-player-play"></i> Step-by-Step Tour
           <span class="nav-badge">Animated</span>
@@ -844,10 +802,13 @@
         <div class="breadcrumb">
           <span>modus-ai</span>
           <i class="ti ti-chevron-right" style="font-size:10px;"></i>
-          <span class="breadcrumb-active" id="breadcrumb-title">Controlled Experimentation Harness</span>
+          <span class="breadcrumb-active" id="breadcrumb-title">Decision Scientist Interview Playbook</span>
         </div>
       </div>
       <div class="topbar-actions">
+        <button class="btn btn-emerald" onclick="switchTab('interview-playbook')">
+          <i class="ti ti-target"></i> Interview Playbook
+        </button>
         <button class="btn btn-purple" onclick="switchTab('tour')">
           <i class="ti ti-sparkles"></i> Launch Animated Tour
         </button>
@@ -858,9 +819,100 @@
     </header>
 
     <!-- ================================================================= -->
+    <!-- TAB -1: INTERVIEW PLAYBOOK & TALKING POINTS (DECISION SCIENTIST) -->
+    <!-- ================================================================= -->
+    <div class="content-panel" id="tab-interview-playbook">
+      <!-- ELEVATOR PITCH BANNER -->
+      <div class="card" style="background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(13,17,26,0.95)); border-color: rgba(16,185,129,0.3);">
+        <div class="card-header" style="border-bottom:none; margin-bottom:4px; padding-bottom:0;">
+          <div class="card-title" style="color: var(--emerald); font-size:15px;">
+            <i class="ti ti-trophy text-emerald"></i> Executive Elevator Pitch (60-Second Answer)
+          </div>
+          <span class="pill pill-success">Decision Scientist / Quant AI Lead</span>
+        </div>
+        <p style="font-size:12.5px; line-height:1.7; color: var(--text-secondary);">
+          "At Modus AI, I designed and built an end-to-end <strong>experimentation and decision infrastructure for Generative AI</strong> pipelines. We replaced subjective prompt checks with a <strong>statistically grounded treatment-vs-control evaluation harness</strong> that scores candidate RAG changes against a held-out LLM Judge Council using paired $t$-tests ($p < 0.01$)—bringing the same A/B discipline that LinkedIn's XLNT platform applies to product features. I streamed trace-level telemetry into <strong>Delta Live Tables (DLT)</strong> for real-time SLA guardrails, benchmarked retrieval strategies to roll out <strong>Matryoshka-reduced embeddings + Cohere Rerank</strong> (cutting query times by 65%), and wired automated Population Stability Index (PSI) drift detection to trigger zero-downtime rollbacks under <strong>Databricks Unity Catalog</strong>."
+        </p>
+      </div>
+
+      <!-- INTERVIEW CASE SCENARIO SIMULATOR -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title"><i class="ti ti-adjustments-horizontal"></i> Interactive Interview Scenario Simulator</div>
+            <div class="card-subtitle">Click a technical interview challenge to run the live decision logic and view quantitative formulas</div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap;">
+          <button class="btn btn-secondary" onclick="runInterviewScenario('ab_test')"><i class="ti ti-scale"></i> 1. Paired A/B Test &amp; CUPED</button>
+          <button class="btn btn-secondary" onclick="runInterviewScenario('pareto')"><i class="ti ti-chart-dots"></i> 2. Pareto Vector Reduction (-65%)</button>
+          <button class="btn btn-secondary" onclick="runInterviewScenario('psi')"><i class="ti ti-rotate-clockwise"></i> 3. PSI Drift &amp; Auto-Rollback</button>
+          <button class="btn btn-secondary" onclick="runInterviewScenario('judge_kappa')"><i class="ti ti-gavel"></i> 4. Judge Inter-Annotator Kappa ($\kappa$)</button>
+        </div>
+
+        <div id="interviewScenarioOutput" class="code-block" style="min-height: 180px;">
+Select an interview challenge above to run the live statistical decision engine and inspect mathematical formulations.
+        </div>
+      </div>
+
+      <!-- INTERVIEW FLASHCARDS & STAR STORY -->
+      <div class="grid-2">
+        <!-- STAR METHOD CASE STORY -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="ti ti-file-certificate"></i> STAR Method Story Structure</div>
+          </div>
+          <div style="font-size:12px; line-height:1.6; color:var(--text-secondary); display:flex; flex-direction:column; gap:12px;">
+            <div>
+              <strong style="color:var(--orange);">SITUATION:</strong> RAG pipeline changes were deployed based on subjective human intuition (*"looks good to me"*), leading to undetected hallucination regressions and latency spikes in production.
+            </div>
+              <div>
+              <strong style="color:var(--purple);">TASK:</strong> Build a statistically defensible ship/no-ship evaluation framework, real-time telemetry guardrails, and automated rollback governance for GenAI workloads.
+            </div>
+            <div>
+              <strong style="color:var(--cyan);">ACTION:</strong> Built a treatment-vs-control harness scoring candidates against a held-out Judge Council via paired $t$-tests ($p < 0.01$), streamed DLT telemetry, benchmarked Matryoshka vector compression, and enforced Unity Catalog audit logging.
+            </div>
+            <div>
+              <strong style="color:var(--emerald);">RESULT:</strong> Replaced subjective decisions with statistical rigor, **cut query latency by 65%** (120ms $\rightarrow$ 42ms), achieved 96.2% faithfulness, and automated zero-downtime rollbacks upon metric drift.
+            </div>
+          </div>
+        </div>
+
+        <!-- TECHNICAL DEEP-DIVE FLASHCARDS -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="ti ti-help-circle"></i> High-Probability Interview Q&amp;A (Click to Reveal)</div>
+          </div>
+          
+          <div class="qa-card" onclick="toggleQA(this)">
+            <div class="qa-q"><i class="ti ti-chevron-right text-emerald"></i> Q1: Why use a paired t-test over an independent two-sample t-test?</div>
+            <div class="qa-a">
+              <strong>Answer:</strong> In our evaluation harness, the exact same held-out test prompts are evaluated by both Treatment ($T$) and Control ($C$). Because the inputs are identical, query-level difficulty acts as a confounder. A paired $t$-test evaluates differences $D_i = S_{T,i} - S_{C,i}$, eliminating query-to-query variance and drastically increasing statistical power ($\text{Var}(\bar{D}) = \frac{\sigma_T^2 + \sigma_C^2 - 2\text{Cov}(T,C)}{N}$).
+            </div>
+          </div>
+
+          <div class="qa-card" onclick="toggleQA(this)">
+            <div class="qa-q"><i class="ti ti-chevron-right text-emerald"></i> Q2: How does Matryoshka Embedding (256d) achieve a 65% latency cut?</div>
+            <div class="qa-a">
+              <strong>Answer:</strong> Matryoshka Representation Learning (MRL) enforces nested vector spaces during training. By truncating 1536-dim embeddings down to 256-dim, initial Approximate Nearest Neighbor (ANN) search over 5M vectors requires 83% less memory bandwidth and distance computations. Top 30 candidates are then passed to Cohere Rerank v3, preserving high precision ($NDCG@10 = 0.952$) while cutting query times from 120ms to 42ms.
+            </div>
+          </div>
+
+          <div class="qa-card" onclick="toggleQA(this)">
+            <div class="qa-q"><i class="ti ti-chevron-right text-emerald"></i> Q3: How do you prevent false-positive rollbacks in automated drift detection?</div>
+            <div class="qa-a">
+              <strong>Answer:</strong> We use Population Stability Index (PSI) with a multi-window confirmation logic. A single transient spike ($PSI > 0.10$) triggers a warning state, but an automated rollback is only dispatched if $PSI > 0.10$ persists for 3 consecutive 5-minute windows or if guardrail faithfulness falls below 0.90, preventing unnecessary circuit-breaker trips.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================= -->
     <!-- TAB 0: INTERACTIVE STEP-BY-STEP ANIMATED TOUR -->
     <!-- ================================================================= -->
-    <div class="content-panel" id="tab-tour">
+    <div class="content-panel" id="tab-tour" style="display:none;">
       <div class="tour-hero-card">
         <div class="tour-header">
           <div class="tour-title-group">
@@ -973,7 +1025,6 @@
             </div>
           </div>
 
-          <!-- EVALUATION PROGRESS DISPLAY -->
           <div id="evalConsoleOutput" class="code-block" style="min-height: 180px;">
 Ready for XLNT paired-evaluation run. Select benchmark suite and click "Execute XLNT Evaluation".
           </div>
@@ -1097,7 +1148,6 @@ Ready for XLNT paired-evaluation run. Select benchmark suite and click "Execute 
         </div>
       </div>
 
-      <!-- LIVE TELEMETRY LOG FEEDS -->
       <div class="card">
         <div class="card-header">
           <div class="card-title"><i class="ti ti-list"></i> Delta Live Tables Streaming Trace Stream</div>
@@ -1423,13 +1473,14 @@ async def run_evaluation(payload: EvalPayload, token: str = Depends(verify_unity
   // APP STATE & TAB ROUTING
   // =========================================================================
   const state = {
-    activeTab: 'tour',
+    activeTab: 'interview-playbook',
     currentTourStep: 1,
     isPlayingTour: true,
     tokenBucket: 100
   };
 
   const tabTitles = {
+    'interview-playbook': 'Decision Scientist Interview Playbook & Interactive Simulator',
     'tour': 'Interactive Step-by-Step Tour',
     'p1-eval': 'Controlled Experimentation Harness (XLNT Platform)',
     'p2-telemetry': 'Guardrail Metrics & DLT Streaming Telemetry',
@@ -1442,13 +1493,14 @@ async def run_evaluation(payload: EvalPayload, token: str = Depends(verify_unity
 
   function switchTab(tabId) {
     state.activeTab = tabId;
-    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active', 'active-tour'));
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active', 'active-tour', 'active-interview'));
     
     // Highlight matching sidebar nav item
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => {
       if (item.getAttribute('onclick')?.includes(tabId)) {
-        if (tabId === 'tour') item.classList.add('active-tour');
+        if (tabId === 'interview-playbook') item.classList.add('active-interview');
+        else if (tabId === 'tour') item.classList.add('active-tour');
         else item.classList.add('active');
       }
     });
@@ -1462,6 +1514,65 @@ async def run_evaluation(payload: EvalPayload, token: str = Depends(verify_unity
     if (tabId === 'p2-telemetry') initTelemetryChart();
     if (tabId === 'p3-variant') initParetoChart();
     if (tabId === 'sql-console') executeSQLQuery();
+  }
+
+  // INTERVIEW PLAYBOOK LOGIC
+  function runInterviewScenario(type) {
+    const out = document.getElementById('interviewScenarioOutput');
+    if (!out) return;
+
+    if (type === 'ab_test') {
+      out.innerText = `[SCENARIO 1: Paired A/B Test & CUPED Variance Reduction]
+Problem: Evaluate candidate RAG v2.0 vs Control v1.2 across 500 test queries.
+Statistical Model: Paired t-test on Score Differences D_i = S_{Treatment, i} - S_{Control, i}
+
+Formula: t = \bar{D} / (s_D / \sqrt{N})
+Sample Size N = 500 | Mean Diff \bar{D} = +0.084 | s_D = 0.390
+Calculated t-stat = 4.821 | p-value = 0.00034 < 0.01
+
+Variance Reduction: Applying CUPED (Controlled-experiments Using Pre-Experiment Data) using pre-experiment prompt historical score X:
+S_{CUPED} = Y - \theta (X - E[X])  where \theta = Cov(Y,X) / Var(X)
+CUPED reduced variance by 34.2%, lowering required sample size from 500 to 329 queries.
+
+Decision: SHIP APPROVED (Statistically significant + MDE threshold met).`;
+    } else if (type === 'pareto') {
+      out.innerText = `[SCENARIO 2: Vector Dimensionality Reduction & Pareto Frontier Optimization]
+Problem: Vector search over 5,000,000 documents using OpenAI 1536-dim embeddings takes 120ms (violates <80ms SLA).
+
+Solution Architecture:
+1. Train Matryoshka Representation Learning (MRL) loss function enforcing nested vector dimensions.
+2. Truncate 1536d -> 256d for initial ANN HNSW vector index search.
+3. Pass top-30 candidates to Cohere Rerank v3 model.
+
+Results Matrix:
+- Baseline (Dense 1536d): Latency = 120ms | NDCG@10 = 0.891
+- Matryoshka 256d + Cohere: Latency = 42ms  | NDCG@10 = 0.952
+- Speedup: (120ms - 42ms) / 120ms = 65.0% LATENCY CUT!`;
+    } else if (type === 'psi') {
+      out.innerText = `[SCENARIO 3: Population Stability Index (PSI) & Zero-Downtime Rollback]
+Problem: Live LLM prompt injection attack or distribution shift alters context relevance in production.
+
+Drift Formula: PSI = \sum (Actual_k - Expected_k) * ln(Actual_k / Expected_k)
+Current 15-min Window PSI: 0.142 (Threshold: 0.10)
+
+Automated Response:
+1. PSI > 0.10 trigger received by Drift Detector.
+2. Circuit Breaker updates Unity Catalog routing pointer to snapshot 'v1.9_stable'.
+3. Zero manual engineering review required. Audit log written to Delta Lake.`;
+    } else if (type === 'judge_kappa') {
+      out.innerText = `[SCENARIO 4: Judge Council Inter-Annotator Agreement (Fleiss' Kappa)]
+Problem: Verify whether 3 LLM Judges (GPT-4o, Llama-3.1-70B, Claude-3.5-Sonnet) agree on Faithfulness scores.
+
+Fleiss' Kappa Formula: \kappa = (P - P_e) / (1 - P_e)
+Observed Agreement P = 0.924 | Expected Chance Agreement P_e = 0.333
+Calculated \kappa = 0.886 (Substantial Inter-Judge Agreement > 0.80)
+
+Conclusion: Judge Council consensus is statistically reliable for automated ship decisions.`;
+    }
+  }
+
+  function toggleQA(card) {
+    card.classList.toggle('open');
   }
 
   // =========================================================================
@@ -1588,7 +1699,6 @@ async def run_evaluation(payload: EvalPayload, token: str = Depends(verify_unity
       animProgress += 0.015;
       if (animProgress > 1) {
         animProgress = 0;
-        // Optionally auto-advance step every full loop
       }
     }
 
@@ -1606,31 +1716,25 @@ async def run_evaluation(payload: EvalPayload, token: str = Depends(verify_unity
   function renderStep1Canvas(w, h, progress) {
     const cy = h / 2;
 
-    // Node 1: Input Request
     drawNode(ctx, 100, cy, 34, "#ff5630", "User Query");
 
-    // Node 2: Split to Control and Treatment
     const splitX = 260;
     drawNode(ctx, splitX, cy - 60, 28, "#94a3b8", "Control v1.2");
     drawNode(ctx, splitX, cy + 60, 28, "#8b5cf6", "Treatment v2.0");
 
-    // Connectors
     drawConnectingPulse(ctx, 100, cy, splitX, cy - 60, progress, "#ff5630");
     drawConnectingPulse(ctx, 100, cy, splitX, cy + 60, progress, "#ff5630");
 
-    // Node 3: Judge Council
     const judgeX = 480;
     drawNode(ctx, judgeX, cy, 40, "#10b981", "Judge Council");
 
     drawConnectingPulse(ctx, splitX, cy - 60, judgeX, cy, progress, "#94a3b8");
     drawConnectingPulse(ctx, splitX, cy + 60, judgeX, cy, progress, "#8b5cf6");
 
-    // Node 4: Ship / No-Ship Stamp
     const finalX = w - 120;
     drawNode(ctx, finalX, cy, 38, "#10b981", "SHIP APPROVED");
     drawConnectingPulse(ctx, judgeX, cy, finalX, cy, progress, "#10b981");
 
-    // Floating text annotation
     ctx.fillStyle = "#f8fafc";
     ctx.font = "11px Inter, sans-serif";
     ctx.fillText("Paired t-test: t=4.82 (p < 0.01)", judgeX - 70, cy + 65);
@@ -1640,7 +1744,6 @@ async def run_evaluation(payload: EvalPayload, token: str = Depends(verify_unity
   function renderStep2Canvas(w, h, progress) {
     const cy = h / 2;
 
-    // DLT Pipeline stages
     drawNode(ctx, 100, cy, 32, "#ff5630", "Bronze Ingest");
     drawNode(ctx, 280, cy, 32, "#06b6d4", "Silver Cleansed");
     drawNode(ctx, 460, cy, 32, "#10b981", "Gold Telemetry");
@@ -1648,12 +1751,10 @@ async def run_evaluation(payload: EvalPayload, token: str = Depends(verify_unity
     drawConnectingPulse(ctx, 100, cy, 280, cy, progress, "#ff5630");
     drawConnectingPulse(ctx, 280, cy, 460, cy, progress, "#06b6d4");
 
-    // Live Dashboard Node
     const dashX = w - 120;
     drawNode(ctx, dashX, cy, 38, "#8b5cf6", "Guardrail Dashboard");
     drawConnectingPulse(ctx, 460, cy, dashX, cy, progress, "#10b981");
 
-    // Sparkline visual
     ctx.strokeStyle = "#10b981";
     ctx.lineWidth = 2;
     ctx.beginPath();
@@ -1676,7 +1777,6 @@ async def run_evaluation(payload: EvalPayload, token: str = Depends(verify_unity
     const maxX = w - 120;
     const maxY = 50;
 
-    // Draw Axes
     ctx.strokeStyle = "rgba(255,255,255,0.2)";
     ctx.lineWidth = 2;
     ctx.beginPath();
@@ -1690,7 +1790,6 @@ async def run_evaluation(payload: EvalPayload, token: str = Depends(verify_unity
     ctx.fillText("Latency (Faster →)", maxX - 80, originY + 20);
     ctx.fillText("Relevance NDCG@10 ↑", originX - 40, maxY - 10);
 
-    // Points
     const bm25 = { x: originX + (maxX - originX) * 0.85, y: originY - (originY - maxY) * 0.4, label: "BM25 (18ms)" };
     const dense = { x: originX + (maxX - originX) * 0.25, y: originY - (originY - maxY) * 0.8, label: "Dense (120ms)" };
     const winner = { x: originX + (maxX - originX) * 0.72, y: originY - (originY - maxY) * 0.92, label: "Matryoshka+Rerank (42ms)" };
@@ -1699,7 +1798,6 @@ async def run_evaluation(payload: EvalPayload, token: str = Depends(verify_unity
     drawNode(ctx, dense.x, dense.y, 16, "#ef4444", dense.label);
     drawNode(ctx, winner.x, winner.y, 22, "#10b981", winner.label);
 
-    // Curve
     ctx.strokeStyle = "#8b5cf6";
     ctx.setLineDash([4, 4]);
     ctx.beginPath();
@@ -1756,7 +1854,6 @@ async def run_evaluation(payload: EvalPayload, token: str = Depends(verify_unity
     ctx.lineTo(x2, y2);
     ctx.stroke();
 
-    // Pulse particle
     const px = x1 + (x2 - x1) * progress;
     const py = y1 + (y2 - y1) * progress;
 
@@ -1929,7 +2026,7 @@ async def run_evaluation(payload: EvalPayload, token: str = Depends(verify_unity
   }
 
   // =========================================================================
-  // SQL CONSOLE logic
+  // SQL CONSOLE LOGIC
   // =========================================================================
   const sqlMockData = {
     eval_history: {
@@ -1980,7 +2077,8 @@ async def run_evaluation(payload: EvalPayload, token: str = Depends(verify_unity
   window.addEventListener('DOMContentLoaded', () => {
     initCanvas();
     renderStepDescriptionCard(1);
-    switchTab('tour');
+    switchTab('interview-playbook');
+    runInterviewScenario('ab_test');
   });
 
   window.addEventListener('resize', () => {
